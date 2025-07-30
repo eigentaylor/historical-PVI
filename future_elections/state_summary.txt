@@ -1,0 +1,58 @@
+State Summary Log
+
+
+Safely Blue states:
+  CA
+  CT
+  DE
+  IL
+  MA
+  MD
+  NY
+  OR
+  RI
+  WA
+
+Safely Red states:
+  ID
+  IN
+  KS
+  KY
+  MT
+  ND
+  NE
+  OK
+  SD
+  UT
+  WY
+
+Consistent Swing (never swings) states:
+
+Swing (swings between parties) states:
+
+Almost swing (never swings) states:
+  MO
+  NJ
+  NM
+  TN
+  VT
+  WV
+
+States that flip:
+  AK: Flips from Red to Blue (flips in 2032, 2036, 2040, 2044)
+  DC: Flips from Red to Blue (flips in 2032, 2036, 2040, 2044)
+  FL: Flips from Blue to Red (flips in 2040)
+  GA: Flips from Blue to Red (flips in 2040)
+  HI: Flips from Red to Blue (flips in 2032, 2036, 2040, 2044)
+  IA: Flips from Blue to Red (flips in 2032)
+  MI: Flips from Blue to Red (flips in 2032, 2036, 2044)
+  NC: Flips from Blue to Red (flips in 2040)
+  NV: Flips from Blue to Red (flips in 2036)
+  OH: Flips from Blue to Red (flips in 2032)
+  PA: Flips from Blue to Red (flips in 2032, 2036, 2044)
+  VA: Flips from Blue to Red (flips in 2040)
+  WI: Flips from Blue to Red (flips in 2032, 2036, 2044)
+
+Swing states that swing (list years and party):
+
+Consistent swing states (never swing):
