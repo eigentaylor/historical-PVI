@@ -1,11 +1,16 @@
 import csv
+from collections import defaultdict
+
+import numpy as np
 import utils
 
 def run_import_house(start_year=1976):
-    input_file = "1976-2022-house.csv"
+    input_file = "data/1976-2022-house.csv"
     output_file = "house_margins.csv"
 
-    results = {}
+    full_results = {}
+    mark_for_uncontested_scaling = {}
+    number_of_contested_districts = defaultdict(int)
 
     # Import House data
     with open(input_file, newline='', encoding='utf-8') as f:
@@ -14,29 +19,37 @@ def run_import_house(start_year=1976):
         header_row = next(reader)
         next(reader)
         for row in reader:
-            if row[13] == "TRUE":  # write-in
-                continue  # Skip write-in candidates
             year = int(row[0])
             if year < start_year:
                 continue
             state_po = row[2]
             district = row[7]
+            total_votes = row[16]
             party = row[12]
+            if total_votes == '1':
+                mark_for_uncontested_scaling[(year, state_po, district)] = party
             votes = int(row[15])
 
             # Only consider Democrat and Republican
-            if party == "DEMOCRAT":
-                key = (year, state_po)
-                results.setdefault(key, {}).setdefault("D", 0)
-                results[key]["D"] += votes
-            elif party == "REPUBLICAN":
-                key = (year, state_po)
-                results.setdefault(key, {}).setdefault("R", 0)
-                results[key]["R"] += votes
+            if "DEMOCRAT" in party:
+                key = (year, state_po, district)
+                full_results.setdefault(key, {}).setdefault("D", 0)
+                full_results[key]["D"] += votes
+            elif "REPUBLICAN" in party:
+                key = (year, state_po, district)
+                full_results.setdefault(key, {}).setdefault("R", 0)
+                full_results[key]["R"] += votes
+
+    # Aggregate contested results by (year, state_po)
+    aggregated_contested_results = defaultdict(lambda: {"D": 0, "R": 0})
+    for (year, state_po, district), votes_dict in full_results.items():
+        if "D" in votes_dict and "R" in votes_dict and votes_dict["D"] > 0 and votes_dict["R"] > 0:
+            aggregated_contested_results[(year, state_po)]["D"] += votes_dict["D"]
+            aggregated_contested_results[(year, state_po)]["R"] += votes_dict["R"]
 
     # Prepare output rows
     output_rows = []
-    for (year, state_po), votes_dict in results.items():
+    for (year, state_po), votes_dict in aggregated_contested_results.items():
         D = votes_dict.get("D", 0)
         R = votes_dict.get("R", 0)
         total = D + R
