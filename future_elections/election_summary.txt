@@ -1,26 +1,96 @@
 Election Summary (Future Years >2024)
 
 Year: 2028
-  Popular Vote: D+3.4
-  Democratic EC: 354
-  Republican EC: 174
+  Popular Vote: D+1.7
+  Democratic EC: 310
+  Republican EC: 228
 
 Year: 2032
-  Popular Vote: D+1.6
-  Democratic EC: 343
-  Republican EC: 185
+  Popular Vote: R+0.4
+  Democratic EC: 233
+  Republican EC: 305
 
 Year: 2036
-  Popular Vote: D+0.6
-  Democratic EC: 375
-  Republican EC: 153
+  Popular Vote: D+0.3
+  Democratic EC: 244
+  Republican EC: 294
 
 Year: 2040
-  Popular Vote: D+0.5
-  Democratic EC: 226
-  Republican EC: 302
+  Popular Vote: R+0.1
+  Democratic EC: 243
+  Republican EC: 295
 
 Year: 2044
-  Popular Vote: R+4.1
-  Democratic EC: 206
-  Republican EC: 322
+  Popular Vote: R+0.7
+  Democratic EC: 247
+  Republican EC: 291
+
+Year: 2048
+  Popular Vote: R+1.2
+  Democratic EC: 213
+  Republican EC: 325
+
+Year: 2052
+  Popular Vote: D+2.0
+  Democratic EC: 298
+  Republican EC: 240
+
+Year: 2056
+  Popular Vote: D+2.5
+  Democratic EC: 339
+  Republican EC: 199
+
+Year: 2060
+  Popular Vote: R+0.1
+  Democratic EC: 243
+  Republican EC: 295
+
+Year: 2064
+  Popular Vote: D+1.4
+  Democratic EC: 329
+  Republican EC: 209
+
+Year: 2068
+  Popular Vote: D+0.7
+  Democratic EC: 266
+  Republican EC: 272
+
+Year: 2072
+  Popular Vote: R+0.1
+  Democratic EC: 218
+  Republican EC: 320
+
+Year: 2076
+  Popular Vote: D+1.1
+  Democratic EC: 276
+  Republican EC: 262
+
+Year: 2080
+  Popular Vote: R+0.2
+  Democratic EC: 243
+  Republican EC: 295
+
+Year: 2084
+  Popular Vote: D+1.7
+  Democratic EC: 292
+  Republican EC: 246
+
+Year: 2088
+  Popular Vote: D+1.1
+  Democratic EC: 270
+  Republican EC: 268
+
+Year: 2092
+  Popular Vote: R+1.5
+  Democratic EC: 196
+  Republican EC: 342
+
+Year: 2096
+  Popular Vote: D+0.4
+  Democratic EC: 276
+  Republican EC: 262
+
+Year: 2100
+  Popular Vote: R+0.5
+  Democratic EC: 241
+  Republican EC: 297

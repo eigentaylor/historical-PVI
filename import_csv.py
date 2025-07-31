@@ -1,4 +1,3 @@
-
 import csv
 import utils
 
@@ -44,10 +43,12 @@ def run_import_csv(start_year=1976):
             # Only consider Democrat and Republican
             if party == "DEMOCRAT":
                 key = (year, state_po)
-                results.setdefault(key, {})["D"] = votes
+                results.setdefault(key, {}).setdefault("D", 0)
+                results[key]["D"] += votes
             elif party == "REPUBLICAN":
                 key = (year, state_po)
-                results.setdefault(key, {})["R"] = votes
+                results.setdefault(key, {}).setdefault("R", 0)
+                results[key]["R"] += votes
 
     # Load electoral votes from 1900_2024_election_results.csv
     ev_map = {}

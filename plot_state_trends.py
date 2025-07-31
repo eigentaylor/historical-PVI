@@ -1,11 +1,14 @@
-
 import pandas as pd
 import matplotlib.pyplot as plt
 import os
 
 # Option to enable subplot mode
 subplot_mode = True  # Set to True for subplot, False for single plot
-USE_FUTURE = True  # Set to True to use the future simulation data
+USE_FUTURE = False  # Set to True to use the future simulation data
+
+# Option to enable house margins
+plot_house_margins = True  # Set to True to include house margins
+house_on_same_plot = False  # Set to True to plot house and pres on the same plot
 
 
 # Read and combine historical and future data if USE_FUTURE is True
@@ -15,6 +18,11 @@ if USE_FUTURE:
     df = df_future#pd.concat([df_hist[df_hist['year'] <= 2024], df_future], ignore_index=True)
 else:
     df = pd.read_csv('presidential_margins.csv')
+
+# Read house margins if enabled
+if plot_house_margins:
+    house_df = pd.read_csv('house_margins.csv')
+    house_df = house_df[house_df['year'] <= 2024]  # Only use years <= 2024
 
 # Ensure output directory exists
 output_dir = 'state_trends'
@@ -37,6 +45,13 @@ for state in states:
     national_margin = state_df['national_margin']
     relative_margin = state_df['relative_margin']
 
+    if plot_house_margins:
+        house_state_df = house_df[house_df['abbr'] == state]
+        house_years = house_state_df['year']
+        house_margin = house_state_df['house_margin']
+        house_national_margin = house_state_df['national_margin']
+        house_relative_margin = house_state_df['relative_margin']
+
     # Find where the future years start (first year > 2024)
     future_start = None
     if USE_FUTURE:
@@ -47,42 +62,96 @@ for state in states:
                 break
 
     if subplot_mode:
-        fig, axes = plt.subplots(1, 2, figsize=(16, 6))
-        # Left plot: line plot
-        # Color pres_margin points by party
-        pres_colors = ['blue' if m > 0 else 'red' for m in pres_margin]
-        axes[0].plot(years, pres_margin, label='Presidential Margin', marker='o', linestyle='-')
-        #axes[0].scatter(years, pres_margin, c=pres_colors, s=60, zorder=3, label='Pres Margin Points')
-        axes[0].plot(years, national_margin, label='National Margin', marker='o', color='gold')
-        axes[0].set_title(f'{state} Presidential vs National Margin')
-        axes[0].set_xlabel('Year')
-        axes[0].set_ylabel('Margin')
-        axes[0].legend()
-        axes[0].grid(True, alpha=0.3)
-        axes[0].axhline(0, color='red', linestyle='--', linewidth=1)
-        axes[0].set_xticks(years)
-        axes[0].set_xticklabels(years, rotation=45)
-        # Add yellow dashed vertical line between 2024 and first future year
-        if USE_FUTURE and future_start is not None:
-            axes[0].axvline(x=2026, color='yellow', linestyle='--', linewidth=3, label='Future Boundary')
+        if house_on_same_plot:
+            fig, axes = plt.subplots(1, 2, figsize=(16, 6))
+            # Left plot: line plot
+            # Color pres_margin points by party
+            pres_colors = ['blue' if m > 0 else 'red' for m in pres_margin]
+            house_colors = ['blue' if m > 0 else 'red' for m in house_margin]
+            axes[0].plot(years, pres_margin, label='Presidential Margin', marker='o', linestyle='-')
+            axes[0].plot(house_years, house_margin, label='House Margin', marker='o', linestyle='--')
+            axes[0].plot(years, national_margin, label='Pres National Margin', marker='o', color='gold')
+            axes[0].plot(house_years, house_national_margin, label='House National Margin', marker='o', color='silver')
+            axes[0].set_title(f'{state} Margins')
+            axes[0].set_xlabel('Year')
+            axes[0].set_ylabel('Margin')
+            axes[0].legend()
+            axes[0].grid(True, alpha=0.3)
+            axes[0].axhline(0, color='red', linestyle='--', linewidth=1)
+            axes[0].set_xticks(years)
+            axes[0].set_xticklabels(years, rotation=45)
+            # Add yellow dashed vertical line between 2024 and first future year
+            if USE_FUTURE and future_start is not None:
+                axes[0].axvline(x=2026, color='yellow', linestyle='--', linewidth=3, label='Future Boundary')
 
-        # Right plot: bar graph of relative margin
-        # Color bars by pres_margin sign
-        bar_colors = ['deepskyblue' if m > 0 else 'red' for m in pres_margin]
-        axes[1].bar(years, relative_margin, color=bar_colors)
-        axes[1].set_title(f'{state} Relative Margin (Bar)')
-        axes[1].set_xlabel('Year')
-        axes[1].set_ylabel('Relative Margin')
-        axes[1].grid(True, alpha=0.3)
-        axes[1].axhline(0, color='red', linestyle='--', linewidth=1)
-        axes[1].set_xticks(years)
-        axes[1].set_xticklabels(years, rotation=45)
-        if USE_FUTURE and future_start is not None:
-            axes[1].axvline(x=2026, color='yellow', linestyle='--', linewidth=3, label='Future Boundary')
+            # Right plot: bar graph of relative margin
+            bar_width = 0.4
+            x_indices = range(len(years))
+            axes[1].bar([x - bar_width / 2 for x in x_indices], relative_margin, width=bar_width, label='Pres Relative Margin', color='deepskyblue')
+            axes[1].bar([x + bar_width / 2 for x in x_indices], house_relative_margin, width=bar_width, label='House Relative Margin', color='orange')
+            axes[1].set_title(f'{state} Relative Margins')
+            axes[1].set_xlabel('Year')
+            axes[1].set_ylabel('Relative Margin')
+            axes[1].legend()
+            axes[1].grid(True, alpha=0.3)
+            axes[1].axhline(0, color='red', linestyle='--', linewidth=1)
+            axes[1].set_xticks(x_indices)
+            axes[1].set_xticklabels(years, rotation=45)
+            if USE_FUTURE and future_start is not None:
+                axes[1].axvline(x=2026, color='yellow', linestyle='--', linewidth=3, label='Future Boundary')
 
-        plt.tight_layout()
-        fig.savefig(os.path.join(output_dir, f'{state}_trend_subplot.png'))
-        plt.close(fig)
+            plt.tight_layout()
+            fig.savefig(os.path.join(output_dir, f'{state}_trend_subplot.png'))
+            plt.close(fig)
+        else:
+            fig, axes = plt.subplots(2, 2, figsize=(16, 12))
+            # Top row: Presidential margins
+            pres_colors = ['blue' if m > 0 else 'red' for m in pres_margin]
+            axes[0, 0].plot(years, pres_margin, label='Presidential Margin', marker='o', linestyle='-')
+            axes[0, 0].plot(years, national_margin, label='National Margin', marker='o', color='gold')
+            axes[0, 0].set_title(f'{state} Presidential Margins')
+            axes[0, 0].set_xlabel('Year')
+            axes[0, 0].set_ylabel('Margin')
+            axes[0, 0].legend()
+            axes[0, 0].grid(True, alpha=0.3)
+            axes[0, 0].axhline(0, color='red', linestyle='--', linewidth=1)
+            axes[0, 0].set_xticks(years)
+            axes[0, 0].set_xticklabels(years, rotation=45)
+
+            axes[0, 1].bar(years, relative_margin, color=pres_colors)
+            axes[0, 1].set_title(f'{state} Presidential Relative Margins')
+            axes[0, 1].set_xlabel('Year')
+            axes[0, 1].set_ylabel('Relative Margin')
+            axes[0, 1].grid(True, alpha=0.3)
+            axes[0, 1].axhline(0, color='red', linestyle='--', linewidth=1)
+            axes[0, 1].set_xticks(years)
+            axes[0, 1].set_xticklabels(years, rotation=45)
+
+            # Bottom row: House margins
+            house_colors = ['blue' if m > 0 else 'red' for m in house_margin]
+            axes[1, 0].plot(house_years, house_margin, label='House Margin', marker='o', linestyle='--')
+            axes[1, 0].plot(house_years, house_national_margin, label='House National Margin', marker='o', color='silver')
+            axes[1, 0].set_title(f'{state} House Margins')
+            axes[1, 0].set_xlabel('Year')
+            axes[1, 0].set_ylabel('Margin')
+            axes[1, 0].legend()
+            axes[1, 0].grid(True, alpha=0.3)
+            axes[1, 0].axhline(0, color='red', linestyle='--', linewidth=1)
+            axes[1, 0].set_xticks(house_years)
+            axes[1, 0].set_xticklabels(house_years, rotation=45)
+
+            axes[1, 1].bar(house_years, house_relative_margin, color=house_colors)
+            axes[1, 1].set_title(f'{state} House Relative Margins')
+            axes[1, 1].set_xlabel('Year')
+            axes[1, 1].set_ylabel('Relative Margin')
+            axes[1, 1].grid(True, alpha=0.3)
+            axes[1, 1].axhline(0, color='red', linestyle='--', linewidth=1)
+            axes[1, 1].set_xticks(house_years)
+            axes[1, 1].set_xticklabels(house_years, rotation=45)
+
+            plt.tight_layout()
+            fig.savefig(os.path.join(output_dir, f'{state}_trend_subplot.png'))
+            plt.close(fig)
     else:
         fig, ax = plt.subplots(figsize=(10, 6))
         pres_colors = ['blue' if m > 0 else 'red' for m in pres_margin]
