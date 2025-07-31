@@ -2,14 +2,14 @@ import csv
 import utils
 
 def run_import_csv(start_year=1976):
-    input_file = "1976-2020-president.csv"
+    input_file = "data/1976-2020-president.csv"
     output_file = "presidential_margins.csv"
 
     results = {}
 
     # Import pre-1976 data if needed
     if start_year < 1976:
-        with open("1900_2024_election_results.csv", newline='', encoding='utf-8') as f:
+        with open("data/1900_2024_election_results.csv", newline='', encoding='utf-8') as f:
             reader = csv.DictReader(f)
             for row in reader:
                 year = int(row['year'])
@@ -52,7 +52,7 @@ def run_import_csv(start_year=1976):
 
     # Load electoral votes from 1900_2024_election_results.csv
     ev_map = {}
-    with open("1900_2024_election_results.csv", newline='', encoding='utf-8') as f:
+    with open("data/1900_2024_election_results.csv", newline='', encoding='utf-8') as f:
         reader = csv.DictReader(f)
         for row in reader:
             ev_map[(int(row['year']), row['state_po'])] = int(row['electoral_votes']) if row['electoral_votes'] else 0
@@ -74,7 +74,7 @@ def run_import_csv(start_year=1976):
         output_rows.append([int(year), state_po, D, R, margin, margin_str, ev])
 
     # Read 2024 margins from the trends file
-    trends_file = "State_Two-Party_Votes__2024_.csv"
+    trends_file = "data/State_Two-Party_Votes__2024_.csv"
     state_2024_margin = {}
     with open(trends_file, newline='', encoding='utf-8') as f:
         reader = csv.DictReader(f)

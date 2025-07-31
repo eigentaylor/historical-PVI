@@ -8,7 +8,8 @@ def run_fourier_future(end_year=2048, REDO_EACH_STEP=False, INCLUDE_HISTORICAL=T
     # Parameters
     # -----------------------------
     future_steps = (end_year - 2024) // 4  # Number of future elections (ex. 2028–2048)
-
+    if future_steps <= 0:
+        return  # No future steps needed if end_year is before 2028
     # -----------------------------
     # Load data
     # -----------------------------

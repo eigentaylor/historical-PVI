@@ -3,7 +3,7 @@ import sys
 
 # Set start and end years here
 START_YEAR = 1976
-END_YEAR = 2100
+END_YEAR = 2024
 REDO_EACH_STEP = False
 USE_FFT2 = True  # Set to True to use FFT2 for national margin and relative margins
 
