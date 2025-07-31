@@ -3,7 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import utils
 
-def calculate_pvi(start_year, end_year):
+def calculate_pvi(start_year, end_year, pres_weight=0.5, last_pres_weight=0.25, house_weight=0.25):
     # Ensure the PVIs folder exists
     os.makedirs("PVIs", exist_ok=True)
     # clear files in the PVIs directory
@@ -42,9 +42,9 @@ def calculate_pvi(start_year, end_year):
             house_margin_avg = house_margins.mean() if not house_margins.empty else 0
 
             # Calculate PVI
-            pvi = 0.50 * (pres_margin_current if not pd.isna(pres_margin_current) else 0) + \
-                  0.25 * (pres_margin_previous if not pd.isna(pres_margin_previous) else 0) + \
-                  0.25 * house_margin_avg
+            pvi = pres_weight * (pres_margin_current if not pd.isna(pres_margin_current) else 0) + \
+                  last_pres_weight * (pres_margin_previous if not pd.isna(pres_margin_previous) else 0) + \
+                  house_weight * house_margin_avg
 
             year_results[state] = (pvi, evs_current)
 
@@ -80,6 +80,8 @@ def calculate_pvi(start_year, end_year):
         EV_dot = 0.0
         # Write rankings to a text file
         with open(f"{rankings_folder}/{year}_rankings.txt", "w") as f:
+            for state, pvi in rankings:
+                EV_dot += pvi[0] * pvi[1]
             # Add a summary line
             f.write(f"\nSUMMARY:\n")
             # write the state with the smallest magnitude PVI
@@ -89,7 +91,7 @@ def calculate_pvi(start_year, end_year):
             
             for state, pvi in rankings:
                 f.write(f"{state} {utils.lean_str(pvi[0])} (EVs: {int(pvi[1])})\n")
-                EV_dot += pvi[0] * pvi[1]
+                #EV_dot += pvi[0] * pvi[1]
 
     # Generate plots
     for state in presidential_data['abbr'].unique():
@@ -97,14 +99,26 @@ def calculate_pvi(start_year, end_year):
         years = list(state_pvis.keys())
         pvis = [float(pvi[0]) for pvi in state_pvis.values()]
 
+        # Determine colors for points based on the sign of the pres_margin of that year
+        pres_margins = {}
+        for year in years:
+            df = presidential_data[(presidential_data['year'] == year) & (presidential_data['abbr'] == state)]
+            if not df.empty and 'pres_margin' in df.columns:
+                pres_margins[year] = df['pres_margin'].values[0]
+            else:
+                pres_margins[year] = 0  # or np.nan if you prefer
+        colors = ['deepskyblue' if pres_margins[year] > 0 else 'red' for year in years if year % 4 == 0]
+
         plt.figure(figsize=(10, 6), dpi=300)
-        plt.plot(years, pvis, marker='o', label=f"PVI ({state})")
+        plt.plot(years, pvis, color='green', linestyle='-', linewidth=1, label=f"PVI Line ({state})")
+        plt.scatter([year for year in years if year % 4 == 0], [pvis[years.index(year)] for year in years if year % 4 == 0], color=colors, edgecolor='black', zorder=5, label=f"Pres. Election Results ({state})")
+
         plt.title(f"PVI Over Time for {state}", color='white')
         plt.xlabel("Year", color='white')
         plt.ylabel("PVI", color='white')
         plt.grid(True, linestyle='--', alpha=0.6)
-        # plot red dashed line at y=0
-        plt.axhline(0, color='red', linestyle='--', linewidth=1, label='National Average')
+        # plot purple dashed line at y=0
+        plt.axhline(0, color='purple', linestyle='--', linewidth=1, label='National Average')
         plt.xticks(years, rotation=45, color='white')
         
         # Update y-axis tick labels to use utils.lean_str
@@ -125,4 +139,4 @@ if __name__ == "__main__":
     import sys
     start_year = 1984
     end_year = 2024
-    calculate_pvi(start_year, end_year)
+    calculate_pvi(start_year, end_year, pres_weight=0.5, last_pres_weight=0.4, house_weight=0.1)

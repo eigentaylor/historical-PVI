@@ -9,7 +9,7 @@ def lean_str(lean):
     elif lean < 0:
         return f"R+{abs(lean * 100):.1f}"
     else:
-        return "T+0.0"
+        return "EVEN"
 
 def emoji_from_lean(
     lean,
