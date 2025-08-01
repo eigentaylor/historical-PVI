@@ -92,6 +92,41 @@ def calculate_pvi(start_year, end_year, pres_weight=0.5, last_pres_weight=0.25, 
             for state, pvi in rankings:
                 f.write(f"{state} {utils.lean_str(pvi[0])} (EVs: {int(pvi[1])})\n")
                 #EV_dot += pvi[0] * pvi[1]
+    # create a csv for the 2024 PVIs
+    pvi_2024 = {state: results[2024].get(state, (0, 0))[0] for state in presidential_data['abbr'].unique()}
+    
+    # Gather additional data for the 2024 CSV
+    pvi_2024_data = []
+
+    # Calculate the national margin for 2024
+    national_margin_2024 = presidential_data[presidential_data['year'] == 2024]['national_margin'].mean()
+
+    for state in presidential_data['abbr'].unique():
+        pvi_value = pvi_2024.get(state, 0)
+        state_data = presidential_data[(presidential_data['year'] == 2024) & (presidential_data['abbr'] == state)]
+        
+        # Extract relevant data
+        margin_2024 = state_data['relative_margin'].mean() + national_margin_2024 if not state_data.empty else 0
+        evs_2024 = state_data['electoral_votes'].mean().astype(int) if not state_data.empty else 0
+        relative_margin_2024 = state_data['relative_margin'].mean()
+        pvi_label = utils.lean_str(pvi_value)
+
+        # Append to the data list
+        pvi_2024_data.append({
+            'abbreviation': state,
+            'pvi_2024': pvi_value,
+            '2024_margin': margin_2024,
+            'evs_2024': evs_2024,
+            '2024_relative_margin': relative_margin_2024,
+            '2024_national_margin': national_margin_2024,
+            'pvi_2024_label': pvi_label
+        })
+
+    # Create the DataFrame
+    pvi_2024_df = pd.DataFrame(pvi_2024_data)
+
+    # Save to CSV
+    pvi_2024_df.to_csv("PVIs/state_pvi_2024.csv", index=False)
 
     # Generate plots
     for state in presidential_data['abbr'].unique():
@@ -123,7 +158,7 @@ def calculate_pvi(start_year, end_year, pres_weight=0.5, last_pres_weight=0.25, 
         
         # Update y-axis tick labels to use utils.lean_str
         y_vals = plt.gca().get_yticks()
-        plt.gca().set_yticklabels([utils.lean_str(y_val) for y_val in y_vals], color='white')
+        plt.gca().set_yticklabels([utils.lean_str(y_val) if y_val != 0 else "NATIONAL AVG" for y_val in y_vals], color='white')
 
         plt.legend()
         plt.gca().set_facecolor("#2E2E2E")
@@ -139,4 +174,4 @@ if __name__ == "__main__":
     import sys
     start_year = 1984
     end_year = 2024
-    calculate_pvi(start_year, end_year, pres_weight=0.5, last_pres_weight=0.4, house_weight=0.1)
+    calculate_pvi(start_year, end_year, pres_weight=0.96, last_pres_weight=0.03, house_weight=0.01)
