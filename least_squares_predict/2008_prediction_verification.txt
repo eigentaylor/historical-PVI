@@ -1,0 +1,316 @@
+TRAINED COEFFICIENTS:
+	rel_margin[year + 4] ~
+		0.9430379670790879 * rel_margin[year - 0]
+		0.031788067473337275 * rel_margin[year - 4]
+Prediction Verification for 2008
+=================================
+Predicted Electoral College: D: 356, R: 183 (Winner: D)
+Actual Electoral College: D: 365, R: 174 (Winner: D)
+Prediction Correct: (EC CORRECT)
+=================================
+AK: Predicted final margin R+16.2 (Actual R+22.1), EVs: 3 (CORRECT)
+		-0.237769~
+			0.943038 * -0.239865(2008)
+			0.031788 * -0.363872(2004)
+		Predicted relative: R+23.8 + national D+7.5 = R+16.2
+		Actual relative: R+29.7 + national D+7.5 = R+22.1
+AL: Predicted final margin R+15.0 (Actual R+21.8), EVs: 9 (CORRECT)
+		-0.225006~
+			0.943038 * -0.233295(2008)
+			0.031788 * -0.157272(2004)
+		Predicted relative: R+22.5 + national D+7.5 = R+15.0
+		Actual relative: R+29.3 + national D+7.5 = R+21.8
+AR: Predicted final margin D+0.4 (Actual R+20.3), EVs: 6 (INCORRECT)
+		-0.071780~
+			0.943038 * -0.074055(2008)
+			0.031788 * -0.061147(2004)
+		Predicted relative: R+7.2 + national D+7.5 = D+0.4
+		Actual relative: R+27.9 + national D+7.5 = R+20.3
+AZ: Predicted final margin R+0.3 (Actual R+8.6), EVs: 10 (CORRECT)
+		-0.078485~
+			0.943038 * -0.080840(2008)
+			0.031788 * -0.070785(2004)
+		Predicted relative: R+7.8 + national D+7.5 = R+0.3
+		Actual relative: R+16.2 + national D+7.5 = R+8.6
+CA: Predicted final margin D+19.8 (Actual D+24.6), EVs: 55 (CORRECT)
+		0.122119~
+			0.943038 * 0.125487(2008)
+			0.031788 * 0.118926(2004)
+		Predicted relative: D+12.2 + national D+7.5 = D+19.8
+		Actual relative: D+17.0 + national D+7.5 = D+24.6
+CO: Predicted final margin D+5.1 (Actual D+9.1), EVs: 9 (CORRECT)
+		-0.024388~
+			0.943038 * -0.022664(2008)
+			0.031788 * -0.094852(2004)
+		Predicted relative: R+2.4 + national D+7.5 = D+5.1
+		Actual relative: D+1.6 + national D+7.5 = D+9.1
+CT: Predicted final margin D+20.4 (Actual D+22.6), EVs: 7 (CORRECT)
+		0.128466~
+			0.943038 * 0.130159(2008)
+			0.031788 * 0.179980(2004)
+		Predicted relative: D+12.8 + national D+7.5 = D+20.4
+		Actual relative: D+15.1 + national D+7.5 = D+22.6
+DC: Predicted final margin D+88.8 (Actual D+86.8), EVs: 3 (CORRECT)
+		0.813076~
+			0.943038 * 0.835066(2008)
+			0.031788 * 0.804620(2004)
+		Predicted relative: D+81.3 + national D+7.5 = D+88.8
+		Actual relative: D+79.3 + national D+7.5 = D+86.8
+DE: Predicted final margin D+17.5 (Actual D+25.3), EVs: 3 (CORRECT)
+		0.099643~
+			0.943038 * 0.101290(2008)
+			0.031788 * 0.129668(2004)
+		Predicted relative: D+10.0 + national D+7.5 = D+17.5
+		Actual relative: D+17.7 + national D+7.5 = D+25.3
+FL: Predicted final margin D+5.1 (Actual D+2.8), EVs: 27 (CORRECT)
+		-0.024509~
+			0.943038 * -0.025813(2008)
+			0.031788 * -0.005226(2004)
+		Predicted relative: R+2.5 + national D+7.5 = D+5.1
+		Actual relative: R+4.7 + national D+7.5 = D+2.8
+GA: Predicted final margin R+6.3 (Actual R+5.3), EVs: 15 (CORRECT)
+		-0.138279~
+			0.943038 * -0.142424(2008)
+			0.031788 * -0.124809(2004)
+		Predicted relative: R+13.8 + national D+7.5 = R+6.3
+		Actual relative: R+12.8 + national D+7.5 = R+5.3
+HI: Predicted final margin D+18.8 (Actual D+46.0), EVs: 4 (CORRECT)
+		0.112411~
+			0.943038 * 0.112749(2008)
+			0.031788 * 0.191412(2004)
+		Predicted relative: D+11.2 + national D+7.5 = D+18.8
+		Actual relative: D+38.4 + national D+7.5 = D+46.0
+IA: Predicted final margin D+9.2 (Actual D+9.7), EVs: 7 (CORRECT)
+		0.016846~
+			0.943038 * 0.017927(2008)
+			0.031788 * -0.001878(2004)
+		Predicted relative: D+1.7 + national D+7.5 = D+9.2
+		Actual relative: D+2.2 + national D+7.5 = D+9.7
+ID: Predicted final margin R+27.9 (Actual R+26.0), EVs: 4 (CORRECT)
+		-0.354604~
+			0.943038 * -0.361794(2008)
+			0.031788 * -0.422103(2004)
+		Predicted relative: R+35.5 + national D+7.5 = R+27.9
+		Actual relative: R+33.6 + national D+7.5 = R+26.0
+IL: Predicted final margin D+20.1 (Actual D+25.5), EVs: 21 (CORRECT)
+		0.125260~
+			0.943038 * 0.128833(2008)
+			0.031788 * 0.118467(2004)
+		Predicted relative: D+12.5 + national D+7.5 = D+20.1
+		Actual relative: D+17.9 + national D+7.5 = D+25.5
+IN: Predicted final margin R+10.3 (Actual D+1.0), EVs: 11 (INCORRECT)
+		-0.178591~
+			0.943038 * -0.183809(2008)
+			0.031788 * -0.165229(2004)
+		Predicted relative: R+17.9 + national D+7.5 = R+10.3
+		Actual relative: R+6.5 + national D+7.5 = D+1.0
+KS: Predicted final margin R+15.1 (Actual R+15.2), EVs: 6 (CORRECT)
+		-0.226531~
+			0.943038 * -0.232682(2008)
+			0.031788 * -0.223472(2004)
+		Predicted relative: R+22.7 + national D+7.5 = R+15.1
+		Actual relative: R+22.8 + national D+7.5 = R+15.2
+KY: Predicted final margin R+9.5 (Actual R+16.5), EVs: 8 (CORRECT)
+		-0.170572~
+			0.943038 * -0.175492(2008)
+			0.031788 * -0.159686(2004)
+		Predicted relative: R+17.1 + national D+7.5 = R+9.5
+		Actual relative: R+24.0 + national D+7.5 = R+16.5
+LA: Predicted final margin R+4.2 (Actual R+18.9), EVs: 9 (CORRECT)
+		-0.117679~
+			0.943038 * -0.121959(2008)
+			0.031788 * -0.083918(2004)
+		Predicted relative: R+11.8 + national D+7.5 = R+4.2
+		Actual relative: R+26.5 + national D+7.5 = R+18.9
+MA: Predicted final margin D+34.8 (Actual D+26.4), EVs: 12 (CORRECT)
+		0.272835~
+			0.943038 * 0.279517(2008)
+			0.031788 * 0.290653(2004)
+		Predicted relative: D+27.3 + national D+7.5 = D+34.8
+		Actual relative: D+18.9 + national D+7.5 = D+26.4
+MD: Predicted final margin D+22.8 (Actual D+25.9), EVs: 10 (CORRECT)
+		0.152285~
+			0.943038 * 0.155972(2008)
+			0.031788 * 0.163513(2004)
+		Predicted relative: D+15.2 + national D+7.5 = D+22.8
+		Actual relative: D+18.3 + national D+7.5 = D+25.9
+ME: Predicted final margin D+18.7 (Actual D+17.7), EVs: 5 (CORRECT)
+		0.111279~
+			0.943038 * 0.116321(2008)
+			0.031788 * 0.049823(2004)
+		Predicted relative: D+11.1 + national D+7.5 = D+18.7
+		Actual relative: D+10.1 + national D+7.5 = D+17.7
+MI: Predicted final margin D+13.3 (Actual D+16.7), EVs: 17 (CORRECT)
+		0.057318~
+			0.943038 * 0.059177(2008)
+			0.031788 * 0.047559(2004)
+		Predicted relative: D+5.7 + national D+7.5 = D+13.3
+		Actual relative: D+9.2 + national D+7.5 = D+16.7
+MN: Predicted final margin D+13.3 (Actual D+10.5), EVs: 10 (CORRECT)
+		0.057122~
+			0.943038 * 0.059879(2008)
+			0.031788 * 0.020595(2004)
+		Predicted relative: D+5.7 + national D+7.5 = D+13.3
+		Actual relative: D+2.9 + national D+7.5 = D+10.5
+MO: Predicted final margin D+2.9 (Actual R+0.1), EVs: 11 (INCORRECT)
+		-0.046267~
+			0.943038 * -0.047734(2008)
+			0.031788 * -0.039372(2004)
+		Predicted relative: R+4.6 + national D+7.5 = D+2.9
+		Actual relative: R+7.7 + national D+7.5 = R+0.1
+MS: Predicted final margin R+8.6 (Actual R+13.3), EVs: 6 (CORRECT)
+		-0.161650~
+			0.943038 * -0.165440(2008)
+			0.031788 * -0.177243(2004)
+		Predicted relative: R+16.2 + national D+7.5 = R+8.6
+		Actual relative: R+20.8 + national D+7.5 = R+13.3
+MT: Predicted final margin R+10.8 (Actual R+2.3), EVs: 3 (CORRECT)
+		-0.183629~
+			0.943038 * -0.185341(2008)
+			0.031788 * -0.278261(2004)
+		Predicted relative: R+18.4 + national D+7.5 = R+10.8
+		Actual relative: R+9.9 + national D+7.5 = R+2.3
+NC: Predicted final margin R+2.3 (Actual D+0.3), EVs: 15 (INCORRECT)
+		-0.098745~
+			0.943038 * -0.100179(2008)
+			0.031788 * -0.134413(2004)
+		Predicted relative: R+9.9 + national D+7.5 = R+2.3
+		Actual relative: R+7.2 + national D+7.5 = D+0.3
+ND: Predicted final margin R+17.3 (Actual R+8.8), EVs: 3 (CORRECT)
+		-0.248612~
+			0.943038 * -0.253527(2008)
+			0.031788 * -0.299681(2004)
+		Predicted relative: R+24.9 + national D+7.5 = R+17.3
+		Actual relative: R+16.4 + national D+7.5 = R+8.8
+NE: Predicted final margin R+22.9 (Actual R+15.2), EVs: 5 (CORRECT)
+		-0.304312~
+			0.943038 * -0.312286(2008)
+			0.031788 * -0.308723(2004)
+		Predicted relative: R+30.4 + national D+7.5 = R+22.9
+		Actual relative: R+22.8 + national D+7.5 = R+15.2
+NH: Predicted final margin D+11.1 (Actual D+9.7), EVs: 4 (CORRECT)
+		0.035687~
+			0.943038 * 0.038466(2008)
+			0.031788 * -0.018489(2004)
+		Predicted relative: D+3.6 + national D+7.5 = D+11.1
+		Actual relative: D+2.2 + national D+7.5 = D+9.7
+NJ: Predicted final margin D+16.7 (Actual D+15.7), EVs: 15 (CORRECT)
+		0.091884~
+			0.943038 * 0.092071(2008)
+			0.031788 * 0.159095(2004)
+		Predicted relative: D+9.2 + national D+7.5 = D+16.7
+		Actual relative: D+8.2 + national D+7.5 = D+15.7
+NM: Predicted final margin D+9.1 (Actual D+15.3), EVs: 5 (CORRECT)
+		0.015562~
+			0.943038 * 0.016654(2008)
+			0.031788 * -0.004495(2004)
+		Predicted relative: D+1.6 + national D+7.5 = D+9.1
+		Actual relative: D+7.8 + national D+7.5 = D+15.3
+NV: Predicted final margin D+7.2 (Actual D+12.8), EVs: 5 (CORRECT)
+		-0.002939~
+			0.943038 * -0.001692(2008)
+			0.031788 * -0.042270(2004)
+		Predicted relative: R+0.3 + national D+7.5 = D+7.2
+		Actual relative: D+5.2 + national D+7.5 = D+12.8
+NY: Predicted final margin D+29.3 (Actual D+31.5), EVs: 31 (CORRECT)
+		0.217121~
+			0.943038 * 0.221256(2008)
+			0.031788 * 0.266386(2004)
+		Predicted relative: D+21.7 + national D+7.5 = D+29.3
+		Actual relative: D+24.0 + national D+7.5 = D+31.5
+OH: Predicted final margin D+7.7 (Actual D+4.7), EVs: 20 (CORRECT)
+		0.001955~
+			0.943038 * 0.003485(2008)
+			0.031788 * -0.041908(2004)
+		Predicted relative: D+0.2 + national D+7.5 = D+7.7
+		Actual relative: R+2.9 + national D+7.5 = D+4.7
+OK: Predicted final margin R+20.2 (Actual R+31.3), EVs: 7 (CORRECT)
+		-0.277622~
+			0.943038 * -0.286748(2008)
+			0.031788 * -0.226747(2004)
+		Predicted relative: R+27.8 + national D+7.5 = R+20.2
+		Actual relative: R+38.8 + national D+7.5 = R+31.3
+OR: Predicted final margin D+13.8 (Actual D+16.8), EVs: 7 (CORRECT)
+		0.063013~
+			0.943038 * 0.066833(2008)
+			0.031788 * -0.000416(2004)
+		Predicted relative: D+6.3 + national D+7.5 = D+13.8
+		Actual relative: D+9.3 + national D+7.5 = D+16.8
+PA: Predicted final margin D+12.4 (Actual D+10.5), EVs: 21 (CORRECT)
+		0.048190~
+			0.943038 * 0.049826(2008)
+			0.031788 * 0.037836(2004)
+		Predicted relative: D+4.8 + national D+7.5 = D+12.4
+		Actual relative: D+2.9 + national D+7.5 = D+10.5
+RI: Predicted final margin D+30.8 (Actual D+28.4), EVs: 4 (CORRECT)
+		0.232541~
+			0.943038 * 0.236211(2008)
+			0.031788 * 0.307849(2004)
+		Predicted relative: D+23.3 + national D+7.5 = D+30.8
+		Actual relative: D+20.9 + national D+7.5 = D+28.4
+SC: Predicted final margin R+7.0 (Actual R+9.1), EVs: 8 (CORRECT)
+		-0.144987~
+			0.943038 * -0.148069(2008)
+			0.031788 * -0.168376(2004)
+		Predicted relative: R+14.5 + national D+7.5 = R+7.0
+		Actual relative: R+16.6 + national D+7.5 = R+9.1
+SD: Predicted final margin R+11.5 (Actual R+8.6), EVs: 3 (CORRECT)
+		-0.190125~
+			0.943038 * -0.193606(2008)
+			0.031788 * -0.237428(2004)
+		Predicted relative: R+19.0 + national D+7.5 = R+11.5
+		Actual relative: R+16.1 + national D+7.5 = R+8.6
+TN: Predicted final margin R+3.8 (Actual R+15.3), EVs: 11 (CORRECT)
+		-0.113678~
+			0.943038 * -0.119049(2008)
+			0.031788 * -0.044391(2004)
+		Predicted relative: R+11.4 + national D+7.5 = R+3.8
+		Actual relative: R+22.8 + national D+7.5 = R+15.3
+TX: Predicted final margin R+12.6 (Actual R+11.9), EVs: 34 (CORRECT)
+		-0.200964~
+			0.943038 * -0.205544(2008)
+			0.031788 * -0.224259(2004)
+		Predicted relative: R+20.1 + national D+7.5 = R+12.6
+		Actual relative: R+19.4 + national D+7.5 = R+11.9
+UT: Predicted final margin R+35.6 (Actual R+29.1), EVs: 5 (CORRECT)
+		-0.431051~
+			0.943038 * -0.442268(2008)
+			0.031788 * -0.439644(2004)
+		Predicted relative: R+43.1 + national D+7.5 = R+35.6
+		Actual relative: R+36.6 + national D+7.5 = R+29.1
+VA: Predicted final margin D+1.8 (Actual D+6.4), EVs: 13 (CORRECT)
+		-0.057509~
+			0.943038 * -0.058014(2008)
+			0.031788 * -0.088078(2004)
+		Predicted relative: R+5.8 + national D+7.5 = D+1.8
+		Actual relative: R+1.2 + national D+7.5 = D+6.4
+VT: Predicted final margin D+29.6 (Actual D+37.8), EVs: 3 (CORRECT)
+		0.220836~
+			0.943038 * 0.230680(2008)
+			0.031788 * 0.103674(2004)
+		Predicted relative: D+22.1 + national D+7.5 = D+29.6
+		Actual relative: D+30.3 + national D+7.5 = D+37.8
+WA: Predicted final margin D+16.9 (Actual D+17.5), EVs: 11 (CORRECT)
+		0.093741~
+			0.943038 * 0.097591(2008)
+			0.031788 * 0.053762(2004)
+		Predicted relative: D+9.4 + national D+7.5 = D+16.9
+		Actual relative: D+10.0 + national D+7.5 = D+17.5
+WI: Predicted final margin D+10.2 (Actual D+14.1), EVs: 10 (CORRECT)
+		0.026783~
+			0.943038 * 0.028496(2008)
+			0.031788 * -0.002832(2004)
+		Predicted relative: D+2.7 + national D+7.5 = D+10.2
+		Actual relative: D+6.6 + national D+7.5 = D+14.1
+WV: Predicted final margin R+2.6 (Actual R+13.3), EVs: 5 (CORRECT)
+		-0.101181~
+			0.943038 * -0.104934(2008)
+			0.031788 * -0.069975(2004)
+		Predicted relative: R+10.1 + national D+7.5 = R+2.6
+		Actual relative: R+20.9 + national D+7.5 = R+13.3
+WY: Predicted final margin R+29.8 (Actual R+33.1), EVs: 3 (CORRECT)
+		-0.373360~
+			0.943038 * -0.381594(2008)
+			0.031788 * -0.424780(2004)
+		Predicted relative: R+37.3 + national D+7.5 = R+29.8
+		Actual relative: R+40.7 + national D+7.5 = R+33.1

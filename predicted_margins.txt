@@ -1,0 +1,373 @@
+TRAINED COEFFICIENTS: [0.9781959327534387, -0.08613130202630703, 0.11617394616050312]
+Formula:
+	rel_margin[year+4] ~ 0.978 * rel_margin[year] + -0.086 * rel_margin[year-4] + 0.116 * rel_margin[year-8]
+
+Predicted Margins for 2024 and 2028
+=================================
+2024 Predictions:
+AK: Predicted final margin R+16.8 (Actual R+13.7), EVs: 3 (CORRECT)
+		Predicted relative: R+15.3 + national R+1.5 = R+16.8
+		Actual relative: R+12.2 + national R+1.5 = R+13.7
+AL: Predicted final margin R+31.6 (Actual R+30.9), EVs: 9 (CORRECT)
+		Predicted relative: R+30.1 + national R+1.5 = R+31.6
+		Actual relative: R+29.4 + national R+1.5 = R+30.9
+AR: Predicted final margin R+34.4 (Actual R+31.3), EVs: 6 (CORRECT)
+		Predicted relative: R+32.9 + national R+1.5 = R+34.4
+		Actual relative: R+29.8 + national R+1.5 = R+31.3
+AZ: Predicted final margin R+6.6 (Actual R+5.6), EVs: 11 (CORRECT)
+		Predicted relative: R+5.1 + national R+1.5 = R+6.6
+		Actual relative: R+4.1 + national R+1.5 = R+5.6
+CA: Predicted final margin D+22.9 (Actual D+20.8), EVs: 54 (CORRECT)
+		Predicted relative: D+24.4 + national R+1.5 = D+22.9
+		Actual relative: D+22.3 + national R+1.5 = D+20.8
+CO: Predicted final margin D+7.5 (Actual D+11.3), EVs: 10 (CORRECT)
+		Predicted relative: D+9.0 + national R+1.5 = D+7.5
+		Actual relative: D+12.8 + national R+1.5 = D+11.3
+CT: Predicted final margin D+14.6 (Actual D+14.8), EVs: 7 (CORRECT)
+		Predicted relative: D+16.0 + national R+1.5 = D+14.6
+		Actual relative: D+16.3 + national R+1.5 = D+14.8
+DC: Predicted final margin D+82.8 (Actual D+86.6), EVs: 3 (CORRECT)
+		Predicted relative: D+84.3 + national R+1.5 = D+82.8
+		Actual relative: D+88.1 + national R+1.5 = D+86.6
+DE: Predicted final margin D+13.8 (Actual D+15.0), EVs: 3 (CORRECT)
+		Predicted relative: D+15.3 + national R+1.5 = D+13.8
+		Actual relative: D+16.5 + national R+1.5 = D+15.0
+FL: Predicted final margin R+9.3 (Actual R+13.2), EVs: 30 (CORRECT)
+		Predicted relative: R+7.8 + national R+1.5 = R+9.3
+		Actual relative: R+11.7 + national R+1.5 = R+13.2
+GA: Predicted final margin R+6.4 (Actual R+2.2), EVs: 16 (CORRECT)
+		Predicted relative: R+4.9 + national R+1.5 = R+6.4
+		Actual relative: R+0.7 + national R+1.5 = R+2.2
+HI: Predicted final margin D+25.2 (Actual D+23.6), EVs: 4 (CORRECT)
+		Predicted relative: D+26.7 + national R+1.5 = D+25.2
+		Actual relative: D+25.1 + national R+1.5 = D+23.6
+IA: Predicted final margin R+12.8 (Actual R+13.4), EVs: 6 (CORRECT)
+		Predicted relative: R+11.3 + national R+1.5 = R+12.8
+		Actual relative: R+11.9 + national R+1.5 = R+13.4
+ID: Predicted final margin R+37.9 (Actual R+37.5), EVs: 4 (CORRECT)
+		Predicted relative: R+36.4 + national R+1.5 = R+37.9
+		Actual relative: R+36.0 + national R+1.5 = R+37.5
+IL: Predicted final margin D+11.2 (Actual D+11.1), EVs: 19 (CORRECT)
+		Predicted relative: D+12.7 + national R+1.5 = D+11.2
+		Actual relative: D+12.6 + national R+1.5 = D+11.1
+IN: Predicted final margin R+21.7 (Actual R+19.3), EVs: 11 (CORRECT)
+		Predicted relative: R+20.2 + national R+1.5 = R+21.7
+		Actual relative: R+17.8 + national R+1.5 = R+19.3
+KS: Predicted final margin R+21.5 (Actual R+16.4), EVs: 6 (CORRECT)
+		Predicted relative: R+20.0 + national R+1.5 = R+21.5
+		Actual relative: R+14.9 + national R+1.5 = R+16.4
+KY: Predicted final margin R+32.0 (Actual R+31.0), EVs: 8 (CORRECT)
+		Predicted relative: R+30.5 + national R+1.5 = R+32.0
+		Actual relative: R+29.5 + national R+1.5 = R+31.0
+LA: Predicted final margin R+25.0 (Actual R+22.4), EVs: 8 (CORRECT)
+		Predicted relative: R+23.5 + national R+1.5 = R+25.0
+		Actual relative: R+20.9 + national R+1.5 = R+22.4
+MA: Predicted final margin D+27.5 (Actual D+25.9), EVs: 11 (CORRECT)
+		Predicted relative: D+29.0 + national R+1.5 = D+27.5
+		Actual relative: D+27.4 + national R+1.5 = D+25.9
+MD: Predicted final margin D+27.8 (Actual D+29.5), EVs: 10 (CORRECT)
+		Predicted relative: D+29.3 + national R+1.5 = D+27.8
+		Actual relative: D+31.0 + national R+1.5 = D+29.5
+ME: Predicted final margin D+4.5 (Actual D+7.1), EVs: 4 (CORRECT)
+		Predicted relative: D+6.0 + national R+1.5 = D+4.5
+		Actual relative: D+8.6 + national R+1.5 = D+7.1
+MI: Predicted final margin R+2.3 (Actual R+1.4), EVs: 15 (CORRECT)
+		Predicted relative: R+0.8 + national R+1.5 = R+2.3
+		Actual relative: D+0.1 + national R+1.5 = R+1.4
+MN: Predicted final margin D+1.7 (Actual D+4.3), EVs: 10 (CORRECT)
+		Predicted relative: D+3.2 + national R+1.5 = D+1.7
+		Actual relative: D+5.8 + national R+1.5 = D+4.3
+MO: Predicted final margin R+21.0 (Actual R+18.7), EVs: 10 (CORRECT)
+		Predicted relative: R+19.5 + national R+1.5 = R+21.0
+		Actual relative: R+17.2 + national R+1.5 = R+18.7
+MS: Predicted final margin R+22.4 (Actual R+23.1), EVs: 6 (CORRECT)
+		Predicted relative: R+20.9 + national R+1.5 = R+22.4
+		Actual relative: R+21.6 + national R+1.5 = R+23.1
+MT: Predicted final margin R+22.4 (Actual R+20.6), EVs: 4 (CORRECT)
+		Predicted relative: R+20.9 + national R+1.5 = R+22.4
+		Actual relative: R+19.1 + national R+1.5 = R+20.6
+NC: Predicted final margin R+7.5 (Actual R+3.3), EVs: 16 (CORRECT)
+		Predicted relative: R+6.0 + national R+1.5 = R+7.5
+		Actual relative: R+1.8 + national R+1.5 = R+3.3
+ND: Predicted final margin R+38.8 (Actual R+37.4), EVs: 3 (CORRECT)
+		Predicted relative: R+37.3 + national R+1.5 = R+38.8
+		Actual relative: R+35.9 + national R+1.5 = R+37.4
+NE: Predicted final margin R+25.6 (Actual R+20.8), EVs: 5 (CORRECT)
+		Predicted relative: R+24.1 + national R+1.5 = R+25.6
+		Actual relative: R+19.3 + national R+1.5 = R+20.8
+NH: Predicted final margin D+1.8 (Actual D+2.8), EVs: 4 (CORRECT)
+		Predicted relative: D+3.3 + national R+1.5 = D+1.8
+		Actual relative: D+4.3 + national R+1.5 = D+2.8
+NJ: Predicted final margin D+10.4 (Actual D+6.0), EVs: 14 (CORRECT)
+		Predicted relative: D+11.9 + national R+1.5 = D+10.4
+		Actual relative: D+7.5 + national R+1.5 = D+6.0
+NM: Predicted final margin D+5.0 (Actual D+6.1), EVs: 5 (CORRECT)
+		Predicted relative: D+6.5 + national R+1.5 = D+5.0
+		Actual relative: D+7.6 + national R+1.5 = D+6.1
+NV: Predicted final margin R+3.2 (Actual R+3.2), EVs: 6 (CORRECT)
+		Predicted relative: R+1.7 + national R+1.5 = R+3.2
+		Actual relative: R+1.7 + national R+1.5 = R+3.2
+NY: Predicted final margin D+18.1 (Actual D+12.7), EVs: 28 (CORRECT)
+		Predicted relative: D+19.6 + national R+1.5 = D+18.1
+		Actual relative: D+14.2 + national R+1.5 = D+12.7
+OH: Predicted final margin R+13.1 (Actual R+11.3), EVs: 17 (CORRECT)
+		Predicted relative: R+11.6 + national R+1.5 = R+13.1
+		Actual relative: R+9.8 + national R+1.5 = R+11.3
+OK: Predicted final margin R+39.9 (Actual R+34.9), EVs: 7 (CORRECT)
+		Predicted relative: R+38.4 + national R+1.5 = R+39.9
+		Actual relative: R+33.4 + national R+1.5 = R+34.9
+OR: Predicted final margin D+10.4 (Actual D+14.9), EVs: 8 (CORRECT)
+		Predicted relative: D+11.9 + national R+1.5 = D+10.4
+		Actual relative: D+16.4 + national R+1.5 = D+14.9
+PA: Predicted final margin R+4.4 (Actual R+1.7), EVs: 19 (CORRECT)
+		Predicted relative: R+2.9 + national R+1.5 = R+4.4
+		Actual relative: R+0.2 + national R+1.5 = R+1.7
+RI: Predicted final margin D+16.4 (Actual D+14.2), EVs: 4 (CORRECT)
+		Predicted relative: D+17.9 + national R+1.5 = D+16.4
+		Actual relative: D+15.7 + national R+1.5 = D+14.2
+SC: Predicted final margin R+17.7 (Actual R+18.1), EVs: 9 (CORRECT)
+		Predicted relative: R+16.2 + national R+1.5 = R+17.7
+		Actual relative: R+16.6 + national R+1.5 = R+18.1
+SD: Predicted final margin R+31.9 (Actual R+29.9), EVs: 3 (CORRECT)
+		Predicted relative: R+30.4 + national R+1.5 = R+31.9
+		Actual relative: R+28.4 + national R+1.5 = R+29.9
+TN: Predicted final margin R+29.4 (Actual R+30.1), EVs: 11 (CORRECT)
+		Predicted relative: R+27.9 + national R+1.5 = R+29.4
+		Actual relative: R+28.6 + national R+1.5 = R+30.1
+TX: Predicted final margin R+12.8 (Actual R+13.9), EVs: 40 (CORRECT)
+		Predicted relative: R+11.3 + national R+1.5 = R+12.8
+		Actual relative: R+12.4 + national R+1.5 = R+13.9
+UT: Predicted final margin R+30.7 (Actual R+22.2), EVs: 6 (CORRECT)
+		Predicted relative: R+29.2 + national R+1.5 = R+30.7
+		Actual relative: R+20.7 + national R+1.5 = R+22.2
+VA: Predicted final margin D+3.9 (Actual D+5.9), EVs: 13 (CORRECT)
+		Predicted relative: D+5.4 + national R+1.5 = D+3.9
+		Actual relative: D+7.4 + national R+1.5 = D+5.9
+VT: Predicted final margin D+31.2 (Actual D+32.8), EVs: 3 (CORRECT)
+		Predicted relative: D+32.7 + national R+1.5 = D+31.2
+		Actual relative: D+34.3 + national R+1.5 = D+32.8
+WA: Predicted final margin D+13.5 (Actual D+18.9), EVs: 12 (CORRECT)
+		Predicted relative: D+15.0 + national R+1.5 = D+13.5
+		Actual relative: D+20.4 + national R+1.5 = D+18.9
+WI: Predicted final margin R+4.7 (Actual R+0.9), EVs: 10 (CORRECT)
+		Predicted relative: R+3.2 + national R+1.5 = R+4.7
+		Actual relative: D+0.6 + national R+1.5 = R+0.9
+WV: Predicted final margin R+44.3 (Actual R+42.7), EVs: 4 (CORRECT)
+		Predicted relative: R+42.8 + national R+1.5 = R+44.3
+		Actual relative: R+41.2 + national R+1.5 = R+42.7
+WY: Predicted final margin R+50.7 (Actual R+47.0), EVs: 3 (CORRECT)
+		Predicted relative: R+49.2 + national R+1.5 = R+50.7
+		Actual relative: R+45.5 + national R+1.5 = R+47.0
+
+2028 Predictions:
+AK: Predicted relative R+12.8, EVs: 3
+	From 2024 actual relative R+12.2 -> R+12.8 (diff: R+0.7, TREND RIGHT)
+AL: Predicted relative R+29.7, EVs: 9
+	From 2024 actual relative R+29.4 -> R+29.7 (diff: R+0.4, TREND RIGHT)
+AR: Predicted relative R+29.9, EVs: 6
+	From 2024 actual relative R+29.8 -> R+29.9 (diff: R+0.1, TREND RIGHT)
+AZ: Predicted relative R+4.3, EVs: 11
+	From 2024 actual relative R+4.1 -> R+4.3 (diff: R+0.3, TREND RIGHT)
+CA: Predicted relative D+23.1, EVs: 54
+	From 2024 actual relative D+22.3 -> D+23.1 (diff: D+0.8, TREND LEFT)
+CO: Predicted relative D+12.1, EVs: 10
+	From 2024 actual relative D+12.8 -> D+12.1 (diff: R+0.7, TREND RIGHT)
+CT: Predicted relative D+15.9, EVs: 7
+	From 2024 actual relative D+16.3 -> D+15.9 (diff: R+0.3, TREND RIGHT)
+DC: Predicted relative D+89.3, EVs: 3
+	From 2024 actual relative D+88.1 -> D+89.3 (diff: D+1.2, TREND LEFT)
+DE: Predicted relative D+16.0, EVs: 3
+	From 2024 actual relative D+16.5 -> D+16.0 (diff: R+0.5, TREND RIGHT)
+FL: Predicted relative R+11.2, EVs: 30
+	From 2024 actual relative R+11.7 -> R+11.2 (diff: D+0.5, TREND LEFT)
+GA: Predicted relative R+1.2, EVs: 16
+	From 2024 actual relative R+0.7 -> R+1.2 (diff: R+0.5, TREND RIGHT)
+HI: Predicted relative D+26.1, EVs: 4
+	From 2024 actual relative D+25.1 -> D+26.1 (diff: D+1.0, TREND LEFT)
+IA: Predicted relative R+12.0, EVs: 6
+	From 2024 actual relative R+11.9 -> R+12.0 (diff: R+0.1, TREND RIGHT)
+ID: Predicted relative R+36.6, EVs: 4
+	From 2024 actual relative R+36.0 -> R+36.6 (diff: R+0.6, TREND RIGHT)
+IL: Predicted relative D+13.1, EVs: 19
+	From 2024 actual relative D+12.6 -> D+13.1 (diff: D+0.4, TREND LEFT)
+IN: Predicted relative R+18.2, EVs: 11
+	From 2024 actual relative R+17.8 -> R+18.2 (diff: R+0.4, TREND RIGHT)
+KS: Predicted relative R+15.8, EVs: 6
+	From 2024 actual relative R+14.9 -> R+15.8 (diff: R+0.8, TREND RIGHT)
+KY: Predicted relative R+30.1, EVs: 8
+	From 2024 actual relative R+29.5 -> R+30.1 (diff: R+0.6, TREND RIGHT)
+LA: Predicted relative R+21.0, EVs: 8
+	From 2024 actual relative R+20.9 -> R+21.0 (diff: R+0.2, TREND RIGHT)
+MA: Predicted relative D+27.4, EVs: 11
+	From 2024 actual relative D+27.4 -> D+27.4 (diff: R+0.0, TREND RIGHT)
+MD: Predicted relative D+30.8, EVs: 10
+	From 2024 actual relative D+31.0 -> D+30.8 (diff: R+0.2, TREND RIGHT)
+ME: Predicted relative D+8.1, EVs: 4
+	From 2024 actual relative D+8.6 -> D+8.1 (diff: R+0.5, TREND RIGHT)
+MI: Predicted relative R+0.1, EVs: 15
+	From 2024 actual relative D+0.1 -> R+0.1 (diff: R+0.2, TREND RIGHT)
+MN: Predicted relative D+5.4, EVs: 10
+	From 2024 actual relative D+5.8 -> D+5.4 (diff: R+0.4, TREND RIGHT)
+MO: Predicted relative R+17.6, EVs: 10
+	From 2024 actual relative R+17.2 -> R+17.6 (diff: R+0.4, TREND RIGHT)
+MS: Predicted relative R+21.7, EVs: 6
+	From 2024 actual relative R+21.6 -> R+21.7 (diff: R+0.1, TREND RIGHT)
+MT: Predicted relative R+19.7, EVs: 4
+	From 2024 actual relative R+19.1 -> R+19.7 (diff: R+0.6, TREND RIGHT)
+NC: Predicted relative R+1.9, EVs: 16
+	From 2024 actual relative R+1.8 -> R+1.9 (diff: R+0.2, TREND RIGHT)
+ND: Predicted relative R+36.6, EVs: 3
+	From 2024 actual relative R+35.9 -> R+36.6 (diff: R+0.7, TREND RIGHT)
+NE: Predicted relative R+20.3, EVs: 5
+	From 2024 actual relative R+19.3 -> R+20.3 (diff: R+0.9, TREND RIGHT)
+NH: Predicted relative D+3.7, EVs: 4
+	From 2024 actual relative D+4.3 -> D+3.7 (diff: R+0.6, TREND RIGHT)
+NJ: Predicted relative D+7.8, EVs: 14
+	From 2024 actual relative D+7.5 -> D+7.8 (diff: D+0.3, TREND LEFT)
+NM: Predicted relative D+7.7, EVs: 5
+	From 2024 actual relative D+7.6 -> D+7.7 (diff: D+0.1, TREND LEFT)
+NV: Predicted relative R+1.4, EVs: 6
+	From 2024 actual relative R+1.7 -> R+1.4 (diff: D+0.2, TREND LEFT)
+NY: Predicted relative D+15.1, EVs: 28
+	From 2024 actual relative D+14.2 -> D+15.1 (diff: D+0.9, TREND LEFT)
+OH: Predicted relative R+9.8, EVs: 17
+	From 2024 actual relative R+9.8 -> R+9.8 (diff: D+0.0, TREND LEFT)
+OK: Predicted relative R+34.2, EVs: 7
+	From 2024 actual relative R+33.4 -> R+34.2 (diff: R+0.7, TREND RIGHT)
+OR: Predicted relative D+16.1, EVs: 8
+	From 2024 actual relative D+16.4 -> D+16.1 (diff: R+0.2, TREND RIGHT)
+PA: Predicted relative R+0.3, EVs: 19
+	From 2024 actual relative R+0.2 -> R+0.3 (diff: R+0.1, TREND RIGHT)
+RI: Predicted relative D+15.5, EVs: 4
+	From 2024 actual relative D+15.7 -> D+15.5 (diff: R+0.1, TREND RIGHT)
+SC: Predicted relative R+16.9, EVs: 9
+	From 2024 actual relative R+16.6 -> R+16.9 (diff: R+0.2, TREND RIGHT)
+SD: Predicted relative R+29.0, EVs: 3
+	From 2024 actual relative R+28.4 -> R+29.0 (diff: R+0.7, TREND RIGHT)
+TN: Predicted relative R+29.0, EVs: 11
+	From 2024 actual relative R+28.6 -> R+29.0 (diff: R+0.4, TREND RIGHT)
+TX: Predicted relative R+12.6, EVs: 40
+	From 2024 actual relative R+12.4 -> R+12.6 (diff: R+0.2, TREND RIGHT)
+UT: Predicted relative R+21.2, EVs: 6
+	From 2024 actual relative R+20.7 -> R+21.2 (diff: R+0.5, TREND RIGHT)
+VA: Predicted relative D+7.1, EVs: 13
+	From 2024 actual relative D+7.4 -> D+7.1 (diff: R+0.3, TREND RIGHT)
+VT: Predicted relative D+34.0, EVs: 3
+	From 2024 actual relative D+34.3 -> D+34.0 (diff: R+0.3, TREND RIGHT)
+WA: Predicted relative D+20.4, EVs: 12
+	From 2024 actual relative D+20.4 -> D+20.4 (diff: D+0.0, TREND LEFT)
+WI: Predicted relative D+0.6, EVs: 10
+	From 2024 actual relative D+0.6 -> D+0.6 (diff: R+0.0, TREND RIGHT)
+WV: Predicted relative R+41.9, EVs: 4
+	From 2024 actual relative R+41.2 -> R+41.9 (diff: R+0.7, TREND RIGHT)
+WY: Predicted relative R+46.4, EVs: 3
+	From 2024 actual relative R+45.5 -> R+46.4 (diff: R+1.0, TREND RIGHT)
+
+Tipping Point National Margin for 2028: D+1.0
+Electoral College at Tipping Point:
+	D:270
+	R:268
+
+States sorted by relative margin under tipping point:
+WY: Final Margin R+45.4, EVs: 3
+	Predicted relative: R+46.4 + national D+1.0 = R+45.4
+WV: Final Margin R+40.9, EVs: 4
+	Predicted relative: R+41.9 + national D+1.0 = R+40.9
+ID: Final Margin R+35.6, EVs: 4
+	Predicted relative: R+36.6 + national D+1.0 = R+35.6
+ND: Final Margin R+35.6, EVs: 3
+	Predicted relative: R+36.6 + national D+1.0 = R+35.6
+OK: Final Margin R+33.2, EVs: 7
+	Predicted relative: R+34.2 + national D+1.0 = R+33.2
+KY: Final Margin R+29.1, EVs: 8
+	Predicted relative: R+30.1 + national D+1.0 = R+29.1
+AR: Final Margin R+28.9, EVs: 6
+	Predicted relative: R+29.9 + national D+1.0 = R+28.9
+AL: Final Margin R+28.7, EVs: 9
+	Predicted relative: R+29.7 + national D+1.0 = R+28.7
+SD: Final Margin R+28.0, EVs: 3
+	Predicted relative: R+29.0 + national D+1.0 = R+28.0
+TN: Final Margin R+28.0, EVs: 11
+	Predicted relative: R+29.0 + national D+1.0 = R+28.0
+MS: Final Margin R+20.7, EVs: 6
+	Predicted relative: R+21.7 + national D+1.0 = R+20.7
+UT: Final Margin R+20.2, EVs: 6
+	Predicted relative: R+21.2 + national D+1.0 = R+20.2
+LA: Final Margin R+20.0, EVs: 8
+	Predicted relative: R+21.0 + national D+1.0 = R+20.0
+NE: Final Margin R+19.3, EVs: 5
+	Predicted relative: R+20.3 + national D+1.0 = R+19.3
+MT: Final Margin R+18.7, EVs: 4
+	Predicted relative: R+19.7 + national D+1.0 = R+18.7
+IN: Final Margin R+17.2, EVs: 11
+	Predicted relative: R+18.2 + national D+1.0 = R+17.2
+MO: Final Margin R+16.6, EVs: 10
+	Predicted relative: R+17.6 + national D+1.0 = R+16.6
+SC: Final Margin R+15.9, EVs: 9
+	Predicted relative: R+16.9 + national D+1.0 = R+15.9
+KS: Final Margin R+14.8, EVs: 6
+	Predicted relative: R+15.8 + national D+1.0 = R+14.8
+AK: Final Margin R+11.8, EVs: 3
+	Predicted relative: R+12.8 + national D+1.0 = R+11.8
+TX: Final Margin R+11.6, EVs: 40
+	Predicted relative: R+12.6 + national D+1.0 = R+11.6
+IA: Final Margin R+11.0, EVs: 6
+	Predicted relative: R+12.0 + national D+1.0 = R+11.0
+FL: Final Margin R+10.2, EVs: 30
+	Predicted relative: R+11.2 + national D+1.0 = R+10.2
+OH: Final Margin R+8.8, EVs: 17
+	Predicted relative: R+9.8 + national D+1.0 = R+8.8
+AZ: Final Margin R+3.3, EVs: 11
+	Predicted relative: R+4.3 + national D+1.0 = R+3.3
+NC: Final Margin R+0.9, EVs: 16
+	Predicted relative: R+1.9 + national D+1.0 = R+0.9
+NV: Final Margin R+0.4, EVs: 6
+	Predicted relative: R+1.4 + national D+1.0 = R+0.4
+GA: Final Margin R+0.2, EVs: 16
+	Predicted relative: R+1.2 + national D+1.0 = R+0.2
+PA: Final Margin D+0.7, EVs: 19
+	Predicted relative: R+0.3 + national D+1.0 = D+0.7
+MI: Final Margin D+0.9, EVs: 15
+	Predicted relative: R+0.1 + national D+1.0 = D+0.9
+WI: Final Margin D+1.6, EVs: 10
+	Predicted relative: D+0.6 + national D+1.0 = D+1.6
+NH: Final Margin D+4.7, EVs: 4
+	Predicted relative: D+3.7 + national D+1.0 = D+4.7
+MN: Final Margin D+6.4, EVs: 10
+	Predicted relative: D+5.4 + national D+1.0 = D+6.4
+VA: Final Margin D+8.1, EVs: 13
+	Predicted relative: D+7.1 + national D+1.0 = D+8.1
+NM: Final Margin D+8.7, EVs: 5
+	Predicted relative: D+7.7 + national D+1.0 = D+8.7
+NJ: Final Margin D+8.8, EVs: 14
+	Predicted relative: D+7.8 + national D+1.0 = D+8.8
+ME: Final Margin D+9.1, EVs: 4
+	Predicted relative: D+8.1 + national D+1.0 = D+9.1
+CO: Final Margin D+13.1, EVs: 10
+	Predicted relative: D+12.1 + national D+1.0 = D+13.1
+IL: Final Margin D+14.1, EVs: 19
+	Predicted relative: D+13.1 + national D+1.0 = D+14.1
+NY: Final Margin D+16.1, EVs: 28
+	Predicted relative: D+15.1 + national D+1.0 = D+16.1
+RI: Final Margin D+16.5, EVs: 4
+	Predicted relative: D+15.5 + national D+1.0 = D+16.5
+CT: Final Margin D+16.9, EVs: 7
+	Predicted relative: D+15.9 + national D+1.0 = D+16.9
+DE: Final Margin D+17.0, EVs: 3
+	Predicted relative: D+16.0 + national D+1.0 = D+17.0
+OR: Final Margin D+17.1, EVs: 8
+	Predicted relative: D+16.1 + national D+1.0 = D+17.1
+WA: Final Margin D+21.4, EVs: 12
+	Predicted relative: D+20.4 + national D+1.0 = D+21.4
+CA: Final Margin D+24.1, EVs: 54
+	Predicted relative: D+23.1 + national D+1.0 = D+24.1
+HI: Final Margin D+27.1, EVs: 4
+	Predicted relative: D+26.1 + national D+1.0 = D+27.1
+MA: Final Margin D+28.4, EVs: 11
+	Predicted relative: D+27.4 + national D+1.0 = D+28.4
+MD: Final Margin D+31.8, EVs: 10
+	Predicted relative: D+30.8 + national D+1.0 = D+31.8
+VT: Final Margin D+35.0, EVs: 3
+	Predicted relative: D+34.0 + national D+1.0 = D+35.0
+DC: Final Margin D+90.3, EVs: 3
+	Predicted relative: D+89.3 + national D+1.0 = D+90.3

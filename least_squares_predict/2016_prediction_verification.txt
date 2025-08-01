@@ -1,0 +1,316 @@
+TRAINED COEFFICIENTS:
+	rel_margin[year + 4] ~
+		0.9430379670790879 * rel_margin[year - 0]
+		0.031788067473337275 * rel_margin[year - 4]
+Prediction Verification for 2016
+=================================
+Predicted Electoral College: D: 303, R: 236 (Winner: D)
+Actual Electoral College: D: 233, R: 306 (Winner: R)
+Prediction Correct: (EC INCORRECT)
+=================================
+AK: Predicted final margin R+16.2 (Actual R+16.8), EVs: 3 (CORRECT)
+		-0.185312~
+			0.943038 * -0.186504(2016)
+			0.031788 * -0.296711(2012)
+		Predicted relative: R+18.5 + national D+2.3 = R+16.2
+		Actual relative: R+19.1 + national D+2.3 = R+16.8
+AL: Predicted final margin R+23.6 (Actual R+28.7), EVs: 9 (CORRECT)
+		-0.258776~
+			0.943038 * -0.264522(2016)
+			0.031788 * -0.293233(2012)
+		Predicted relative: R+25.9 + national D+2.3 = R+23.6
+		Actual relative: R+31.1 + national D+2.3 = R+28.7
+AR: Predicted final margin R+25.3 (Actual R+28.6), EVs: 6 (CORRECT)
+		-0.276014~
+			0.943038 * -0.283286(2016)
+			0.031788 * -0.278850(2012)
+		Predicted relative: R+27.6 + national D+2.3 = R+25.3
+		Actual relative: R+30.9 + national D+2.3 = R+28.6
+AZ: Predicted final margin R+10.7 (Actual R+3.8), EVs: 11 (CORRECT)
+		-0.130060~
+			0.943038 * -0.132465(2016)
+			0.031788 * -0.161693(2012)
+		Predicted relative: R+13.0 + national D+2.3 = R+10.7
+		Actual relative: R+6.1 + national D+2.3 = R+3.8
+CA: Predicted final margin D+21.5 (Actual D+32.3), EVs: 55 (CORRECT)
+		0.191431~
+			0.943038 * 0.197258(2016)
+			0.031788 * 0.170154(2012)
+		Predicted relative: D+19.1 + national D+2.3 = D+21.5
+		Actual relative: D+29.9 + national D+2.3 = D+32.3
+CO: Predicted final margin D+3.8 (Actual D+5.4), EVs: 9 (CORRECT)
+		0.014417~
+			0.943038 * 0.014762(2016)
+			0.031788 * 0.015597(2012)
+		Predicted relative: D+1.4 + national D+2.3 = D+3.8
+		Actual relative: D+3.0 + national D+2.3 = D+5.4
+CT: Predicted final margin D+15.6 (Actual D+14.3), EVs: 7 (CORRECT)
+		0.132348~
+			0.943038 * 0.135254(2016)
+			0.031788 * 0.150951(2012)
+		Predicted relative: D+13.2 + national D+2.3 = D+15.6
+		Actual relative: D+12.0 + national D+2.3 = D+14.3
+DC: Predicted final margin D+81.4 (Actual D+91.4), EVs: 3 (CORRECT)
+		0.790523~
+			0.943038 * 0.811555(2016)
+			0.031788 * 0.792600(2012)
+		Predicted relative: D+79.1 + national D+2.3 = D+81.4
+		Actual relative: D+89.1 + national D+2.3 = D+91.4
+DE: Predicted final margin D+16.9 (Actual D+12.0), EVs: 3 (CORRECT)
+		0.145906~
+			0.943038 * 0.148741(2016)
+			0.031788 * 0.177347(2012)
+		Predicted relative: D+14.6 + national D+2.3 = D+16.9
+		Actual relative: D+9.7 + national D+2.3 = D+12.0
+FL: Predicted final margin R+0.8 (Actual R+1.2), EVs: 29 (CORRECT)
+		-0.031062~
+			0.943038 * -0.031353(2016)
+			0.031788 * -0.047022(2012)
+		Predicted relative: R+3.1 + national D+2.3 = R+0.8
+		Actual relative: R+3.6 + national D+2.3 = R+1.2
+GA: Predicted final margin R+9.3 (Actual R+5.3), EVs: 16 (CORRECT)
+		-0.116602~
+			0.943038 * -0.119331(2016)
+			0.031788 * -0.127982(2012)
+		Predicted relative: R+11.7 + national D+2.3 = R+9.3
+		Actual relative: R+7.6 + national D+2.3 = R+5.3
+HI: Predicted final margin D+40.7 (Actual D+34.9), EVs: 4 (CORRECT)
+		0.383664~
+			0.943038 * 0.393879(2016)
+			0.031788 * 0.384459(2012)
+		Predicted relative: D+38.4 + national D+2.3 = D+40.7
+		Actual relative: D+32.6 + national D+2.3 = D+34.9
+IA: Predicted final margin D+4.2 (Actual R+10.1), EVs: 6 (INCORRECT)
+		0.018593~
+			0.943038 * 0.018989(2016)
+			0.031788 * 0.021560(2012)
+		Predicted relative: D+1.9 + national D+2.3 = D+4.2
+		Actual relative: R+12.5 + national D+2.3 = R+10.1
+ID: Predicted final margin R+33.5 (Actual R+36.6), EVs: 4 (CORRECT)
+		-0.358306~
+			0.943038 * -0.368626(2016)
+			0.031788 * -0.335907(2012)
+		Predicted relative: R+35.8 + national D+2.3 = R+33.5
+		Actual relative: R+38.9 + national D+2.3 = R+36.6
+IL: Predicted final margin D+15.3 (Actual D+18.0), EVs: 20 (CORRECT)
+		0.129569~
+			0.943038 * 0.131353(2016)
+			0.031788 * 0.179270(2012)
+		Predicted relative: D+13.0 + national D+2.3 = D+15.3
+		Actual relative: D+15.7 + national D+2.3 = D+18.0
+IN: Predicted final margin R+11.5 (Actual R+20.2), EVs: 11 (CORRECT)
+		-0.138057~
+			0.943038 * -0.144205(2016)
+			0.031788 * -0.064976(2012)
+		Predicted relative: R+13.8 + national D+2.3 = R+11.5
+		Actual relative: R+22.6 + national D+2.3 = R+20.2
+KS: Predicted final margin R+23.1 (Actual R+22.2), EVs: 6 (CORRECT)
+		-0.254751~
+			0.943038 * -0.262464(2016)
+			0.031788 * -0.227661(2012)
+		Predicted relative: R+25.5 + national D+2.3 = R+23.1
+		Actual relative: R+24.5 + national D+2.3 = R+22.2
+KY: Predicted final margin R+24.0 (Actual R+31.3), EVs: 8 (CORRECT)
+		-0.263245~
+			0.943038 * -0.271053(2016)
+			0.031788 * -0.240084(2012)
+		Predicted relative: R+26.3 + national D+2.3 = R+24.0
+		Actual relative: R+33.7 + national D+2.3 = R+31.3
+LA: Predicted final margin R+18.8 (Actual R+20.3), EVs: 8 (CORRECT)
+		-0.211290~
+			0.943038 * -0.215134(2016)
+			0.031788 * -0.264559(2012)
+		Predicted relative: R+21.1 + national D+2.3 = R+18.8
+		Actual relative: R+22.7 + national D+2.3 = R+20.3
+MA: Predicted final margin D+21.4 (Actual D+29.3), EVs: 11 (CORRECT)
+		0.190372~
+			0.943038 * 0.195516(2016)
+			0.031788 * 0.188526(2012)
+		Predicted relative: D+19.0 + national D+2.3 = D+21.4
+		Actual relative: D+27.0 + national D+2.3 = D+29.3
+MD: Predicted final margin D+24.2 (Actual D+28.0), EVs: 10 (CORRECT)
+		0.219173~
+			0.943038 * 0.226237(2016)
+			0.031788 * 0.183186(2012)
+		Predicted relative: D+21.9 + national D+2.3 = D+24.2
+		Actual relative: D+25.7 + national D+2.3 = D+28.0
+ME: Predicted final margin D+13.7 (Actual D+3.2), EVs: 4 (CORRECT)
+		0.113552~
+			0.943038 * 0.117001(2016)
+			0.031788 * 0.101175(2012)
+		Predicted relative: D+11.4 + national D+2.3 = D+13.7
+		Actual relative: D+0.9 + national D+2.3 = D+3.2
+MI: Predicted final margin D+7.9 (Actual R+0.2), EVs: 16 (INCORRECT)
+		0.055558~
+			0.943038 * 0.055813(2016)
+			0.031788 * 0.092011(2012)
+		Predicted relative: D+5.6 + national D+2.3 = D+7.9
+		Actual relative: R+2.6 + national D+2.3 = R+0.2
+MN: Predicted final margin D+6.1 (Actual D+1.7), EVs: 10 (CORRECT)
+		0.037354~
+			0.943038 * 0.038627(2016)
+			0.031788 * 0.029172(2012)
+		Predicted relative: D+3.7 + national D+2.3 = D+6.1
+		Actual relative: R+0.7 + national D+2.3 = D+1.7
+MO: Predicted final margin R+10.7 (Actual R+19.6), EVs: 10 (CORRECT)
+		-0.130478~
+			0.943038 * -0.135771(2016)
+			0.031788 * -0.076767(2012)
+		Predicted relative: R+13.0 + national D+2.3 = R+10.7
+		Actual relative: R+22.0 + national D+2.3 = R+19.6
+MS: Predicted final margin R+13.1 (Actual R+18.2), EVs: 6 (CORRECT)
+		-0.153956~
+			0.943038 * -0.156236(2016)
+			0.031788 * -0.208254(2012)
+		Predicted relative: R+15.4 + national D+2.3 = R+13.1
+		Actual relative: R+20.5 + national D+2.3 = R+18.2
+MT: Predicted final margin R+15.0 (Actual R+22.2), EVs: 3 (CORRECT)
+		-0.173720~
+			0.943038 * -0.180883(2016)
+			0.031788 * -0.098803(2012)
+		Predicted relative: R+17.4 + national D+2.3 = R+15.0
+		Actual relative: R+24.5 + national D+2.3 = R+22.2
+NC: Predicted final margin R+3.6 (Actual R+3.8), EVs: 15 (CORRECT)
+		-0.059703~
+			0.943038 * -0.060879(2016)
+			0.031788 * -0.072096(2012)
+		Predicted relative: R+6.0 + national D+2.3 = R+3.6
+		Actual relative: R+6.1 + national D+2.3 = R+3.8
+ND: Predicted final margin R+21.1 (Actual R+39.6), EVs: 3 (CORRECT)
+		-0.233813~
+			0.943038 * -0.242422(2016)
+			0.031788 * -0.163588(2012)
+		Predicted relative: R+23.4 + national D+2.3 = R+21.1
+		Actual relative: R+41.9 + national D+2.3 = R+39.6
+NE: Predicted final margin R+23.2 (Actual R+27.1), EVs: 6 (CORRECT)
+		-0.255052~
+			0.943038 * -0.262786(2016)
+			0.031788 * -0.227597(2012)
+		Predicted relative: R+25.5 + national D+2.3 = R+23.2
+		Actual relative: R+29.4 + national D+2.3 = R+27.1
+NH: Predicted final margin D+3.9 (Actual D+0.4), EVs: 4 (CORRECT)
+		0.016237~
+			0.943038 * 0.016477(2016)
+			0.031788 * 0.021955(2012)
+		Predicted relative: D+1.6 + national D+2.3 = D+3.9
+		Actual relative: R+1.9 + national D+2.3 = D+0.4
+NJ: Predicted final margin D+15.7 (Actual D+14.6), EVs: 14 (CORRECT)
+		0.133535~
+			0.943038 * 0.138841(2016)
+			0.031788 * 0.081877(2012)
+		Predicted relative: D+13.4 + national D+2.3 = D+15.7
+		Actual relative: D+12.2 + national D+2.3 = D+14.6
+NM: Predicted final margin D+8.8 (Actual D+9.3), EVs: 5 (CORRECT)
+		0.064439~
+			0.943038 * 0.065706(2016)
+			0.031788 * 0.077883(2012)
+		Predicted relative: D+6.4 + national D+2.3 = D+8.8
+		Actual relative: D+7.0 + national D+2.3 = D+9.3
+NV: Predicted final margin D+5.1 (Actual D+2.6), EVs: 6 (CORRECT)
+		0.028024~
+			0.943038 * 0.027953(2016)
+			0.031788 * 0.052319(2012)
+		Predicted relative: D+2.8 + national D+2.3 = D+5.1
+		Actual relative: D+0.3 + national D+2.3 = D+2.6
+NY: Predicted final margin D+29.6 (Actual D+26.8), EVs: 29 (CORRECT)
+		0.272294~
+			0.943038 * 0.280656(2016)
+			0.031788 * 0.239862(2012)
+		Predicted relative: D+27.2 + national D+2.3 = D+29.6
+		Actual relative: D+24.5 + national D+2.3 = D+26.8
+OH: Predicted final margin D+1.3 (Actual R+8.5), EVs: 18 (INCORRECT)
+		-0.010265~
+			0.943038 * -0.009917(2016)
+			0.031788 * -0.028739(2012)
+		Predicted relative: R+1.0 + national D+2.3 = D+1.3
+		Actual relative: R+10.9 + national D+2.3 = R+8.5
+OK: Predicted final margin R+34.3 (Actual R+38.6), EVs: 7 (CORRECT)
+		-0.366591~
+			0.943038 * -0.375644(2016)
+			0.031788 * -0.388317(2012)
+		Predicted relative: R+36.7 + national D+2.3 = R+34.3
+		Actual relative: R+40.9 + national D+2.3 = R+38.6
+OR: Predicted final margin D+10.7 (Actual D+12.3), EVs: 7 (CORRECT)
+		0.083323~
+			0.943038 * 0.085225(2016)
+			0.031788 * 0.092859(2012)
+		Predicted relative: D+8.3 + national D+2.3 = D+10.7
+		Actual relative: D+10.0 + national D+2.3 = D+12.3
+PA: Predicted final margin D+3.8 (Actual R+0.8), EVs: 20 (INCORRECT)
+		0.014546~
+			0.943038 * 0.014441(2016)
+			0.031788 * 0.029179(2012)
+		Predicted relative: D+1.5 + national D+2.3 = D+3.8
+		Actual relative: R+3.1 + national D+2.3 = R+0.8
+RI: Predicted final margin D+25.6 (Actual D+16.6), EVs: 4 (CORRECT)
+		0.233088~
+			0.943038 * 0.240137(2016)
+			0.031788 * 0.208547(2012)
+		Predicted relative: D+23.3 + national D+2.3 = D+25.6
+		Actual relative: D+14.3 + national D+2.3 = D+16.6
+SC: Predicted final margin R+12.0 (Actual R+14.9), EVs: 9 (CORRECT)
+		-0.143312~
+			0.943038 * -0.146363(2016)
+			0.031788 * -0.166304(2012)
+		Predicted relative: R+14.3 + national D+2.3 = R+12.0
+		Actual relative: R+17.2 + national D+2.3 = R+14.9
+SD: Predicted final margin R+19.4 (Actual R+31.9), EVs: 3 (CORRECT)
+		-0.216904~
+			0.943038 * -0.224568(2016)
+			0.031788 * -0.161329(2012)
+		Predicted relative: R+21.7 + national D+2.3 = R+19.4
+		Actual relative: R+34.3 + national D+2.3 = R+31.9
+TN: Predicted final margin R+21.7 (Actual R+27.2), EVs: 11 (CORRECT)
+		-0.240386~
+			0.943038 * -0.247219(2016)
+			0.031788 * -0.228045(2012)
+		Predicted relative: R+24.0 + national D+2.3 = R+21.7
+		Actual relative: R+29.6 + national D+2.3 = R+27.2
+TX: Predicted final margin R+17.2 (Actual R+9.4), EVs: 38 (CORRECT)
+		-0.195114~
+			0.943038 * -0.200356(2016)
+			0.031788 * -0.194134(2012)
+		Predicted relative: R+19.5 + national D+2.3 = R+17.2
+		Actual relative: R+11.8 + national D+2.3 = R+9.4
+UT: Predicted final margin R+49.1 (Actual R+24.8), EVs: 6 (CORRECT)
+		-0.514009~
+			0.943038 * -0.532722(2016)
+			0.031788 * -0.365943(2012)
+		Predicted relative: R+51.4 + national D+2.3 = R+49.1
+		Actual relative: R+27.1 + national D+2.3 = R+24.8
+VA: Predicted final margin D+2.2 (Actual D+5.7), EVs: 13 (CORRECT)
+		-0.001176~
+			0.943038 * -0.000850(2016)
+			0.031788 * -0.011764(2012)
+		Predicted relative: R+0.1 + national D+2.3 = D+2.2
+		Actual relative: D+3.3 + national D+2.3 = D+5.7
+VT: Predicted final margin D+33.9 (Actual D+30.4), EVs: 3 (CORRECT)
+		0.315867~
+			0.943038 * 0.324747(2016)
+			0.031788 * 0.302568(2012)
+		Predicted relative: D+31.6 + national D+2.3 = D+33.9
+		Actual relative: D+28.0 + national D+2.3 = D+30.4
+WA: Predicted final margin D+13.2 (Actual D+17.6), EVs: 12 (CORRECT)
+		0.109134~
+			0.943038 * 0.112368(2016)
+			0.031788 * 0.099625(2012)
+		Predicted relative: D+10.9 + national D+2.3 = D+13.2
+		Actual relative: D+15.2 + national D+2.3 = D+17.6
+WI: Predicted final margin D+5.3 (Actual R+0.8), EVs: 10 (INCORRECT)
+		0.029503~
+			0.943038 * 0.029071(2016)
+			0.031788 * 0.065698(2012)
+		Predicted relative: D+3.0 + national D+2.3 = D+5.3
+		Actual relative: R+3.1 + national D+2.3 = R+0.8
+WV: Predicted final margin R+27.9 (Actual R+44.3), EVs: 5 (CORRECT)
+		-0.302456~
+			0.943038 * -0.313684(2016)
+			0.031788 * -0.208890(2012)
+		Predicted relative: R+30.2 + national D+2.3 = R+27.9
+		Actual relative: R+46.6 + national D+2.3 = R+44.3
+WY: Predicted final margin R+42.7 (Actual R+51.4), EVs: 3 (CORRECT)
+		-0.449941~
+			0.943038 * -0.463411(2016)
+			0.031788 * -0.406656(2012)
+		Predicted relative: R+45.0 + national D+2.3 = R+42.7
+		Actual relative: R+53.7 + national D+2.3 = R+51.4

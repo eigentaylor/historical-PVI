@@ -1,0 +1,316 @@
+TRAINED COEFFICIENTS:
+	rel_margin[year + 4] ~
+		0.9430379670790879 * rel_margin[year - 0]
+		0.031788067473337275 * rel_margin[year - 4]
+Prediction Verification for 1996
+=================================
+Predicted Electoral College: D: 410, R: 130 (Winner: D)
+Actual Electoral College: D: 380, R: 160 (Winner: D)
+Prediction Correct: (EC CORRECT)
+=================================
+AK: Predicted final margin R+10.2 (Actual R+20.9), EVs: 3 (CORRECT)
+		-0.197581~
+			0.943038 * -0.203899(1996)
+			0.031788 * -0.166617(1992)
+		Predicted relative: R+19.8 + national D+9.6 = R+10.2
+		Actual relative: R+30.5 + national D+9.6 = R+20.9
+AL: Predicted final margin R+4.8 (Actual R+7.5), EVs: 9 (CORRECT)
+		-0.144118~
+			0.943038 * -0.148836(1996)
+			0.031788 * -0.118262(1992)
+		Predicted relative: R+14.4 + national D+9.6 = R+4.8
+		Actual relative: R+17.1 + national D+9.6 = R+7.5
+AR: Predicted final margin D+21.4 (Actual D+18.7), EVs: 6 (CORRECT)
+		0.118037~
+			0.943038 * 0.127431(1996)
+			0.031788 * -0.067184(1992)
+		Predicted relative: D+11.8 + national D+9.6 = D+21.4
+		Actual relative: D+9.1 + national D+9.6 = D+18.7
+AZ: Predicted final margin R+0.1 (Actual D+2.4), EVs: 8 (INCORRECT)
+		-0.097238~
+			0.943038 * -0.098452(1996)
+			0.031788 * -0.138221(1992)
+		Predicted relative: R+9.7 + national D+9.6 = R+0.1
+		Actual relative: R+7.2 + national D+9.6 = D+2.4
+CA: Predicted final margin D+19.0 (Actual D+14.4), EVs: 54 (CORRECT)
+		0.093630~
+			0.943038 * 0.097921(1996)
+			0.031788 * 0.040503(1992)
+		Predicted relative: D+9.4 + national D+9.6 = D+19.0
+		Actual relative: D+4.8 + national D+9.6 = D+14.4
+CO: Predicted final margin D+8.1 (Actual R+1.5), EVs: 8 (INCORRECT)
+		-0.015517~
+			0.943038 * -0.016373(1996)
+			0.031788 * -0.002427(1992)
+		Predicted relative: R+1.6 + national D+9.6 = D+8.1
+		Actual relative: R+11.1 + national D+9.6 = R+1.5
+CT: Predicted final margin D+10.6 (Actual D+20.7), EVs: 8 (CORRECT)
+		0.010309~
+			0.943038 * 0.010088(1996)
+			0.031788 * 0.025026(1992)
+		Predicted relative: D+1.0 + national D+9.6 = D+10.6
+		Actual relative: D+11.1 + national D+9.6 = D+20.7
+DC: Predicted final margin D+81.3 (Actual D+80.2), EVs: 3 (CORRECT)
+		0.716589~
+			0.943038 * 0.733527(1996)
+			0.031788 * 0.781564(1992)
+		Predicted relative: D+71.7 + national D+9.6 = D+81.3
+		Actual relative: D+70.6 + national D+9.6 = D+80.2
+DE: Predicted final margin D+12.4 (Actual D+17.2), EVs: 3 (CORRECT)
+		0.028218~
+			0.943038 * 0.031546(1996)
+			0.031788 * -0.048175(1992)
+		Predicted relative: D+2.8 + national D+9.6 = D+12.4
+		Actual relative: D+7.6 + national D+9.6 = D+17.2
+FL: Predicted final margin D+0.1 (Actual D+6.3), EVs: 25 (CORRECT)
+		-0.095580~
+			0.943038 * -0.096351(1996)
+			0.031788 * -0.148392(1992)
+		Predicted relative: R+9.6 + national D+9.6 = D+0.1
+		Actual relative: R+3.3 + national D+9.6 = D+6.3
+GA: Predicted final margin D+3.0 (Actual R+1.3), EVs: 13 (INCORRECT)
+		-0.065887~
+			0.943038 * -0.065571(1996)
+			0.031788 * -0.127423(1992)
+		Predicted relative: R+6.6 + national D+9.6 = D+3.0
+		Actual relative: R+10.9 + national D+9.6 = R+1.3
+HI: Predicted final margin D+16.0 (Actual D+28.6), EVs: 4 (CORRECT)
+		0.063947~
+			0.943038 * 0.061986(1996)
+			0.031788 * 0.172775(1992)
+		Predicted relative: D+6.4 + national D+9.6 = D+16.0
+		Actual relative: D+18.9 + national D+9.6 = D+28.6
+IA: Predicted final margin D+10.4 (Actual D+11.5), EVs: 7 (CORRECT)
+		0.007819~
+			0.943038 * 0.002237(1996)
+			0.031788 * 0.179619(1992)
+		Predicted relative: D+0.8 + national D+9.6 = D+10.4
+		Actual relative: D+1.9 + national D+9.6 = D+11.5
+ID: Predicted final margin R+16.0 (Actual R+21.6), EVs: 4 (CORRECT)
+		-0.256523~
+			0.943038 * -0.265644(1996)
+			0.031788 * -0.189107(1992)
+		Predicted relative: R+25.7 + national D+9.6 = R+16.0
+		Actual relative: R+31.2 + national D+9.6 = R+21.6
+IL: Predicted final margin D+19.2 (Actual D+19.2), EVs: 22 (CORRECT)
+		0.095461~
+			0.943038 * 0.099350(1996)
+			0.031788 * 0.055664(1992)
+		Predicted relative: D+9.5 + national D+9.6 = D+19.2
+		Actual relative: D+9.6 + national D+9.6 = D+19.2
+IN: Predicted final margin R+4.9 (Actual R+6.3), EVs: 12 (CORRECT)
+		-0.144619~
+			0.943038 * -0.149112(1996)
+			0.031788 * -0.125871(1992)
+		Predicted relative: R+14.5 + national D+9.6 = R+4.9
+		Actual relative: R+15.9 + national D+9.6 = R+6.3
+KS: Predicted final margin R+4.1 (Actual R+20.1), EVs: 6 (CORRECT)
+		-0.136917~
+			0.943038 * -0.143235(1996)
+			0.031788 * -0.057901(1992)
+		Predicted relative: R+13.7 + national D+9.6 = R+4.1
+		Actual relative: R+29.8 + national D+9.6 = R+20.1
+KY: Predicted final margin D+6.2 (Actual D+1.1), EVs: 8 (CORRECT)
+		-0.034328~
+			0.943038 * -0.035038(1996)
+			0.031788 * -0.040426(1992)
+		Predicted relative: R+3.4 + national D+9.6 = D+6.2
+		Actual relative: R+8.5 + national D+9.6 = D+1.1
+LA: Predicted final margin D+7.7 (Actual D+13.1), EVs: 9 (CORRECT)
+		-0.018886~
+			0.943038 * -0.019111(1996)
+			0.031788 * -0.027177(1992)
+		Predicted relative: R+1.9 + national D+9.6 = D+7.7
+		Actual relative: D+3.5 + national D+9.6 = D+13.1
+MA: Predicted final margin D+26.1 (Actual D+37.3), EVs: 12 (CORRECT)
+		0.164748~
+			0.943038 * 0.169431(1996)
+			0.031788 * 0.156301(1992)
+		Predicted relative: D+16.5 + national D+9.6 = D+26.1
+		Actual relative: D+27.7 + national D+9.6 = D+37.3
+MD: Predicted final margin D+18.6 (Actual D+17.3), EVs: 10 (CORRECT)
+		0.089759~
+			0.943038 * 0.093584(1996)
+			0.031788 * 0.047361(1992)
+		Predicted relative: D+9.0 + national D+9.6 = D+18.6
+		Actual relative: D+7.7 + national D+9.6 = D+17.3
+ME: Predicted final margin D+14.1 (Actual D+25.3), EVs: 5 (CORRECT)
+		0.044697~
+			0.943038 * 0.048704(1996)
+			0.031788 * -0.038771(1992)
+		Predicted relative: D+4.5 + national D+9.6 = D+14.1
+		Actual relative: D+15.7 + national D+9.6 = D+25.3
+MI: Predicted final margin D+11.5 (Actual D+14.6), EVs: 18 (CORRECT)
+		0.018664~
+			0.943038 * 0.019889(1996)
+			0.031788 * -0.002912(1992)
+		Predicted relative: D+1.9 + national D+9.6 = D+11.5
+		Actual relative: D+5.0 + national D+9.6 = D+14.6
+MN: Predicted final margin D+17.8 (Actual D+18.8), EVs: 10 (CORRECT)
+		0.082035~
+			0.943038 * 0.082013(1996)
+			0.031788 * 0.147666(1992)
+		Predicted relative: D+8.2 + national D+9.6 = D+17.8
+		Actual relative: D+9.2 + national D+9.6 = D+18.8
+MO: Predicted final margin D+15.2 (Actual D+7.1), EVs: 11 (CORRECT)
+		0.055604~
+			0.943038 * 0.057725(1996)
+			0.031788 * 0.036711(1992)
+		Predicted relative: D+5.6 + national D+9.6 = D+15.2
+		Actual relative: R+2.5 + national D+9.6 = D+7.1
+MS: Predicted final margin R+6.9 (Actual R+5.5), EVs: 7 (CORRECT)
+		-0.165496~
+			0.943038 * -0.170984(1996)
+			0.031788 * -0.133773(1992)
+		Predicted relative: R+16.5 + national D+9.6 = R+6.9
+		Actual relative: R+15.1 + national D+9.6 = R+5.5
+MT: Predicted final margin D+6.1 (Actual R+3.4), EVs: 3 (INCORRECT)
+		-0.035235~
+			0.943038 * -0.037933(1996)
+			0.031788 * 0.016885(1992)
+		Predicted relative: R+3.5 + national D+9.6 = D+6.1
+		Actual relative: R+13.0 + national D+9.6 = R+3.4
+NC: Predicted final margin D+1.6 (Actual R+5.1), EVs: 14 (INCORRECT)
+		-0.079686~
+			0.943038 * -0.081583(1996)
+			0.031788 * -0.086502(1992)
+		Predicted relative: R+8.0 + national D+9.6 = D+1.6
+		Actual relative: R+14.7 + national D+9.6 = R+5.1
+ND: Predicted final margin R+12.2 (Actual R+7.8), EVs: 3 (CORRECT)
+		-0.218569~
+			0.943038 * -0.229908(1996)
+			0.031788 * -0.055258(1992)
+		Predicted relative: R+21.9 + national D+9.6 = R+12.2
+		Actual relative: R+17.4 + national D+9.6 = R+7.8
+NE: Predicted final margin R+19.0 (Actual R+21.1), EVs: 6 (CORRECT)
+		-0.285910~
+			0.943038 * -0.298649(1996)
+			0.031788 * -0.134433(1992)
+		Predicted relative: R+28.6 + national D+9.6 = R+19.0
+		Actual relative: R+30.7 + national D+9.6 = R+21.1
+NH: Predicted final margin D+3.7 (Actual D+11.2), EVs: 4 (CORRECT)
+		-0.059242~
+			0.943038 * -0.056483(1996)
+			0.031788 * -0.188024(1992)
+		Predicted relative: R+5.9 + national D+9.6 = D+3.7
+		Actual relative: D+1.6 + national D+9.6 = D+11.2
+NJ: Predicted final margin D+5.3 (Actual D+19.9), EVs: 15 (CORRECT)
+		-0.043452~
+			0.943038 * -0.044008(1996)
+			0.031788 * -0.061374(1992)
+		Predicted relative: R+4.3 + national D+9.6 = D+5.3
+		Actual relative: D+10.3 + national D+9.6 = D+19.9
+NM: Predicted final margin D+12.6 (Actual D+8.0), EVs: 5 (CORRECT)
+		0.029537~
+			0.943038 * 0.030429(1996)
+			0.031788 * 0.026451(1992)
+		Predicted relative: D+3.0 + national D+9.6 = D+12.6
+		Actual relative: R+1.6 + national D+9.6 = D+8.0
+NV: Predicted final margin D+5.8 (Actual D+1.2), EVs: 4 (CORRECT)
+		-0.038314~
+			0.943038 * -0.035918(1996)
+			0.031788 * -0.139723(1992)
+		Predicted relative: R+3.8 + national D+9.6 = D+5.8
+		Actual relative: R+8.4 + national D+9.6 = D+1.2
+NY: Predicted final margin D+26.1 (Actual D+35.5), EVs: 33 (CORRECT)
+		0.164742~
+			0.943038 * 0.169803(1996)
+			0.031788 * 0.145090(1992)
+		Predicted relative: D+16.5 + national D+9.6 = D+26.1
+		Actual relative: D+25.9 + national D+9.6 = D+35.5
+OH: Predicted final margin D+4.9 (Actual D+7.2), EVs: 21 (CORRECT)
+		-0.047300~
+			0.943038 * -0.049051(1996)
+			0.031788 * -0.032832(1992)
+		Predicted relative: R+4.7 + national D+9.6 = D+4.9
+		Actual relative: R+2.4 + national D+9.6 = D+7.2
+OK: Predicted final margin R+8.1 (Actual R+8.8), EVs: 8 (CORRECT)
+		-0.177224~
+			0.943038 * -0.184856(1996)
+			0.031788 * -0.091147(1992)
+		Predicted relative: R+17.7 + national D+9.6 = R+8.1
+		Actual relative: R+18.4 + national D+9.6 = R+8.8
+OR: Predicted final margin D+15.7 (Actual D+9.4), EVs: 7 (CORRECT)
+		0.060783~
+			0.943038 * 0.060264(1996)
+			0.031788 * 0.124323(1992)
+		Predicted relative: D+6.1 + national D+9.6 = D+15.7
+		Actual relative: R+0.2 + national D+9.6 = D+9.4
+PA: Predicted final margin D+13.4 (Actual D+10.3), EVs: 23 (CORRECT)
+		0.038053~
+			0.943038 * 0.038557(1996)
+			0.031788 * 0.053258(1992)
+		Predicted relative: D+3.8 + national D+9.6 = D+13.4
+		Actual relative: D+0.7 + national D+9.6 = D+10.3
+RI: Predicted final margin D+25.7 (Actual D+38.0), EVs: 4 (CORRECT)
+		0.161266~
+			0.943038 * 0.164461(1996)
+			0.031788 * 0.194207(1992)
+		Predicted relative: D+16.1 + national D+9.6 = D+25.7
+		Actual relative: D+28.4 + national D+9.6 = D+38.0
+SC: Predicted final margin R+2.2 (Actual R+6.2), EVs: 8 (CORRECT)
+		-0.117979~
+			0.943038 * -0.119551(1996)
+			0.031788 * -0.164794(1992)
+		Predicted relative: R+11.8 + national D+9.6 = R+2.2
+		Actual relative: R+15.8 + national D+9.6 = R+6.2
+SD: Predicted final margin R+1.4 (Actual R+3.9), EVs: 3 (CORRECT)
+		-0.110527~
+			0.943038 * -0.117635(1996)
+			0.031788 * 0.012802(1992)
+		Predicted relative: R+11.1 + national D+9.6 = R+1.4
+		Actual relative: R+13.5 + national D+9.6 = R+3.9
+TN: Predicted final margin D+7.4 (Actual D+2.6), EVs: 11 (CORRECT)
+		-0.022077~
+			0.943038 * -0.020453(1996)
+			0.031788 * -0.087724(1992)
+		Predicted relative: R+2.2 + national D+9.6 = D+7.4
+		Actual relative: R+7.0 + national D+9.6 = D+2.6
+TX: Predicted final margin R+1.6 (Actual R+5.3), EVs: 32 (CORRECT)
+		-0.112176~
+			0.943038 * -0.117257(1996)
+			0.031788 * -0.050278(1992)
+		Predicted relative: R+11.2 + national D+9.6 = R+1.6
+		Actual relative: R+14.9 + national D+9.6 = R+5.3
+UT: Predicted final margin R+24.0 (Actual R+24.0), EVs: 5 (CORRECT)
+		-0.336310~
+			0.943038 * -0.347485(1996)
+			0.031788 * -0.271108(1992)
+		Predicted relative: R+33.6 + national D+9.6 = R+24.0
+		Actual relative: R+33.6 + national D+9.6 = R+24.0
+VA: Predicted final margin R+2.5 (Actual R+2.1), EVs: 13 (CORRECT)
+		-0.120628~
+			0.943038 * -0.123514(1996)
+			0.031788 * -0.130530(1992)
+		Predicted relative: R+12.1 + national D+9.6 = R+2.5
+		Actual relative: R+11.7 + national D+9.6 = R+2.1
+VT: Predicted final margin D+22.2 (Actual D+26.4), EVs: 3 (CORRECT)
+		0.126417~
+			0.943038 * 0.132670(1996)
+			0.031788 * 0.041015(1992)
+		Predicted relative: D+12.6 + national D+9.6 = D+22.2
+		Actual relative: D+16.8 + national D+9.6 = D+26.4
+WA: Predicted final margin D+17.4 (Actual D+14.4), EVs: 11 (CORRECT)
+		0.077846~
+			0.943038 * 0.079420(1996)
+			0.031788 * 0.092803(1992)
+		Predicted relative: D+7.8 + national D+9.6 = D+17.4
+		Actual relative: D+4.8 + national D+9.6 = D+14.4
+WI: Predicted final margin D+8.4 (Actual D+11.8), EVs: 11 (CORRECT)
+		-0.011987~
+			0.943038 * -0.016524(1996)
+			0.031788 * 0.113118(1992)
+		Predicted relative: R+1.2 + national D+9.6 = D+8.4
+		Actual relative: D+2.2 + national D+9.6 = D+11.8
+WV: Predicted final margin D+17.8 (Actual D+16.7), EVs: 5 (CORRECT)
+		0.082185~
+			0.943038 * 0.082963(1996)
+			0.031788 * 0.124187(1992)
+		Predicted relative: D+8.2 + national D+9.6 = D+17.8
+		Actual relative: D+7.1 + national D+9.6 = D+16.7
+WY: Predicted final margin R+4.9 (Actual R+15.0), EVs: 3 (CORRECT)
+		-0.144636~
+			0.943038 * -0.148254(1996)
+			0.031788 * -0.151848(1992)
+		Predicted relative: R+14.5 + national D+9.6 = R+4.9
+		Actual relative: R+24.6 + national D+9.6 = R+15.0
