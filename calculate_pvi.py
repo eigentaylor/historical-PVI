@@ -174,4 +174,4 @@ if __name__ == "__main__":
     import sys
     start_year = 1984
     end_year = 2024
-    calculate_pvi(start_year, end_year, pres_weight=0.96, last_pres_weight=0.03, house_weight=0.01)
+    calculate_pvi(start_year, end_year, pres_weight=1, last_pres_weight=0, house_weight=0.00)
