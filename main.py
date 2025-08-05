@@ -2,7 +2,7 @@ import subprocess
 import sys
 
 # Set start and end years here
-START_YEAR = 1976
+START_YEAR = 1972
 END_YEAR = 2024
 REDO_EACH_STEP = False
 USE_FFT2 = True  # Set to True to use FFT2 for national margin and relative margins
@@ -24,8 +24,8 @@ run_fourier_future(
     )
 
 # Run PVI calculation
-print(f"Calculating PVI from {START_YEAR} to {END_YEAR}...")
-calculate_pvi(START_YEAR, END_YEAR)
+#print(f"Calculating PVI from {START_YEAR} to {END_YEAR}...")
+#calculate_pvi(START_YEAR, END_YEAR)
 
 # Run hierarchical_clustering.py as a script
 print("Running hierarchical_clustering.py ...")
@@ -49,4 +49,12 @@ result = subprocess.run([sys.executable, "plot_state_trends.py"], capture_output
 print(result.stdout)
 if result.returncode != 0:
     print("Error running plot_state_trends.py:")
+    print(result.stderr)
+
+# Run create_state_tables.py as a script
+print("Running create_state_tables.py ...")
+result = subprocess.run([sys.executable, "create_state_tables.py"], capture_output=True, text=True)
+print(result.stdout)
+if result.returncode != 0:
+    print("Error running create_state_tables.py:")
     print(result.stderr)
