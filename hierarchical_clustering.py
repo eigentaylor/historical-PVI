@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.cluster.hierarchy import dendrogram, linkage
+from scipy.cluster.hierarchy import dendrogram, linkage, to_tree
 
 # clear output directory
 import os
@@ -49,7 +49,7 @@ state_labels = sorted(df['abbr'].unique())
 
 Z_states = linkage(state_vectors, method='ward')
 
-plt.figure(figsize=(20, 12), dpi=300)  # Increased figure size and resolution
+plt.figure(figsize=(20, 12), dpi=600)  # Increased figure size and resolution
 dendrogram(Z_states, labels=state_labels, leaf_rotation=90)
 plt.title('Hierarchical Clustering of States', color='white')
 plt.xlabel('State', color='white')
@@ -81,7 +81,7 @@ def cluster_by_year_ranges(df, interval=None):
         Z_states = linkage(state_vectors, method='ward')
 
         # Save dendrogram
-        plt.figure(figsize=(20, 12), dpi=300)
+        plt.figure(figsize=(20, 12), dpi=500)
         dendrogram(Z_states, labels=state_labels, leaf_rotation=90)
         plt.title(f'Hierarchical Clustering of States ({start_year}-{end_year})', color='white')
         plt.xlabel('State', color='white')
@@ -91,6 +91,20 @@ def cluster_by_year_ranges(df, interval=None):
         plt.savefig(filename, facecolor='black')
         plt.close()
         print(f"Dendrogram saved as '{filename}'.")
+
+        # Save tree structure to a text file
+        tree = to_tree(Z_states)
+        tree_filename = f'dendrogram/{start_year}_{end_year}_state_tree.txt'
+        with open(tree_filename, 'w') as f:
+            def write_tree(node, depth=0):
+                if node.is_leaf():
+                    f.write(f"{'  ' * depth}{state_labels[node.id]}\n")
+                else:
+                    f.write(f"{'  ' * depth}Cluster (dist: {node.dist:.3f})\n")
+                    write_tree(node.get_left(), depth + 1)
+                    write_tree(node.get_right(), depth + 1)
+            write_tree(tree)
+        print(f"Tree structure saved as '{tree_filename}'.")
 
 # do for all year
 cluster_by_year_ranges(df, interval=None)
