@@ -68,9 +68,9 @@ def EC_text(data_year, rel_predictions_year, national_margin_year, actual_pres_m
 def prediction_calculation(coefficients, rel_margins, start_year):
     """Write the calculation for the relative margin calculation for the state"""
     predicted_margin = sum(coefficients[i] * rel_margins[0][i] for i in range(len(coefficients)))
-    text = f"\t\t{predicted_margin:3f}~\n"
+    text = f"\t\t{predicted_margin:3f} ({utils.lean_str(predicted_margin)})\n"
     for i, coeff in enumerate(coefficients):
-        text += f"\t\t\t{coeff:3f} * {rel_margins[0][i]:3f}({start_year - 4 * i})\n"
+        text += f"\t\t\t{coeff:3f} * {rel_margins[0][i]:3f} ({utils.lean_str(rel_margins[0][i])}) ({start_year - 4 * (i + 1)})\n"
     return text
 def verify_predictions_for_year(data, coefficients, year, output_dir, num_past_elections=3):
     """Verify predictions for a specific year and save results to a file with a variable number of past elections."""
@@ -116,7 +116,7 @@ def verify_predictions_for_year(data, coefficients, year, output_dir, num_past_e
 def analyze_2028_prediction(data, coefficients, output_dir, num_past_elections=3):
     """Perform 2028 prediction and tipping point analysis and save results to a file."""
     data_2024 = data[data['year'] == 2024].sort_values('abbr')
-    past_data = [data[data['year'] == 2024 - 4 * i].sort_values('abbr') for i in range(1, num_past_elections)]
+    past_data = [data[data['year'] == 2024 - 4 * i].sort_values('abbr') for i in range(num_past_elections)]
 
     if any(d.empty for d in past_data):
         print("Skipping 2028 prediction due to insufficient data.")
@@ -125,7 +125,7 @@ def analyze_2028_prediction(data, coefficients, output_dir, num_past_elections=3
     rel_margins_past = [d['relative_margin'].values for d in past_data]
     rel_margins_2024 = data_2024['relative_margin'].values
 
-    M_2028 = np.column_stack([rel_margins_2024] + rel_margins_past[::-1])  # Include 2024 and reverse past margins
+    M_2028 = np.column_stack(rel_margins_past)  # Include 2024 and reverse past margins
     debug_M = {abbr: {i: M_2028[i]} for i, abbr in enumerate(data_2024['abbr'])}
     rel_predictions_2028 = predict_future(M_2028, coefficients)
 
@@ -190,7 +190,8 @@ def main():
     data = load_data(file_path)
 
     # Number of past elections to use
-    num_past_elections = 2  # Change this value to use a different number of past elections
+    num_past_elections = 5  # Change this value to use a different number of past elections
+    start_year = 1976 + 4 * (num_past_elections - 1)  # Adjust start year based on the number of past elections
 
     # Prepare the matrices
     M, b = prepare_matrices(data, num_past_elections=num_past_elections)
@@ -203,9 +204,14 @@ def main():
     # Create output directory
     output_dir = "least_squares_predict"
     os.makedirs(output_dir, exist_ok=True)
+    # clear output directory
+    for file in os.listdir(output_dir):
+        file_path = os.path.join(output_dir, file)
+        if os.path.isfile(file_path):
+            os.remove(file_path)
 
-    # Perform prediction verification for all years starting from 1984
-    for year in range(1984, 2025, 4):
+    # Perform prediction verification for all years starting from start_year
+    for year in range(start_year, 2025, 4):
         verify_predictions_for_year(data, coefficients, year, output_dir, num_past_elections=num_past_elections)
 
     # Perform 2028 prediction and tipping point analysis

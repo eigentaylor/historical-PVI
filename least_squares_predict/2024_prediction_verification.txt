@@ -1,316 +1,472 @@
 TRAINED COEFFICIENTS:
 	rel_margin[year + 4] ~
-		0.9430379670790879 * rel_margin[year - 0]
-		0.031788067473337275 * rel_margin[year - 4]
+		0.9766748957099926 * rel_margin[year - 0]
+		0.011236299490880685 * rel_margin[year - 4]
+		-0.020405034953154315 * rel_margin[year - 8]
+		0.11064021086677253 * rel_margin[year - 12]
+		-0.06963851578340015 * rel_margin[year - 16]
 Prediction Verification for 2024
 =================================
 Predicted Electoral College: D: 226, R: 312 (Winner: R)
 Actual Electoral College: D: 226, R: 312 (Winner: R)
 Prediction Correct: (EC CORRECT)
 =================================
-AK: Predicted final margin R+16.3 (Actual R+13.7), EVs: 3 (CORRECT)
-		-0.148089~
-			0.943038 * -0.150597(2024)
-			0.031788 * -0.190964(2020)
-		Predicted relative: R+14.8 + national R+1.5 = R+16.3
+AK: Predicted final margin R+17.7 (Actual R+13.7), EVs: 3 (CORRECT)
+		-0.161548 (R+16.2)
+			0.976675 * -0.150597 (R+15.1) (2020)
+			0.011236 * -0.190964 (R+19.1) (2016)
+			-0.020405 * -0.186504 (R+18.7) (2012)
+			0.110640 * -0.296711 (R+29.7) (2008)
+			-0.069639 * -0.239865 (R+24.0) (2004)
+		Predicted relative: R+16.2 + national R+1.5 = R+17.7
 		Actual relative: R+12.2 + national R+1.5 = R+13.7
-AL: Predicted final margin R+31.1 (Actual R+30.9), EVs: 9 (CORRECT)
-		-0.296172~
-			0.943038 * -0.303587(2024)
-			0.031788 * -0.310734(2020)
-		Predicted relative: R+29.6 + national R+1.5 = R+31.1
+AL: Predicted final margin R+32.6 (Actual R+30.9), EVs: 9 (CORRECT)
+		-0.310797 (R+31.1)
+			0.976675 * -0.303587 (R+30.4) (2020)
+			0.011236 * -0.310734 (R+31.1) (2016)
+			-0.020405 * -0.264522 (R+26.5) (2012)
+			0.110640 * -0.293233 (R+29.3) (2008)
+			-0.069639 * -0.233295 (R+23.3) (2004)
+		Predicted relative: R+31.1 + national R+1.5 = R+32.6
 		Actual relative: R+29.4 + national R+1.5 = R+30.9
-AR: Predicted final margin R+33.6 (Actual R+31.3), EVs: 6 (CORRECT)
-		-0.320654~
-			0.943038 * -0.329608(2024)
-			0.031788 * -0.308954(2020)
-		Predicted relative: R+32.1 + national R+1.5 = R+33.6
+AR: Predicted final margin R+36.0 (Actual R+31.3), EVs: 6 (CORRECT)
+		-0.345306 (R+34.5)
+			0.976675 * -0.329608 (R+33.0) (2020)
+			0.011236 * -0.308954 (R+30.9) (2016)
+			-0.020405 * -0.283286 (R+28.3) (2012)
+			0.110640 * -0.278850 (R+27.9) (2008)
+			-0.069639 * -0.074055 (R+7.4) (2004)
+		Predicted relative: R+34.5 + national R+1.5 = R+36.0
 		Actual relative: R+29.8 + national R+1.5 = R+31.3
-AZ: Predicted final margin R+5.7 (Actual R+5.6), EVs: 11 (CORRECT)
-		-0.041759~
-			0.943038 * -0.042223(2024)
-			0.031788 * -0.061052(2020)
-		Predicted relative: R+4.2 + national R+1.5 = R+5.7
+AZ: Predicted final margin R+6.6 (Actual R+5.6), EVs: 11 (CORRECT)
+		-0.051482 (R+5.1)
+			0.976675 * -0.042223 (R+4.2) (2020)
+			0.011236 * -0.061052 (R+6.1) (2016)
+			-0.020405 * -0.132465 (R+13.2) (2012)
+			0.110640 * -0.161693 (R+16.2) (2008)
+			-0.069639 * -0.080840 (R+8.1) (2004)
+		Predicted relative: R+5.1 + national R+1.5 = R+6.6
 		Actual relative: R+4.1 + national R+1.5 = R+5.6
-CA: Predicted final margin D+23.3 (Actual D+20.8), EVs: 54 (CORRECT)
-		0.247932~
-			0.943038 * 0.252818(2024)
-			0.031788 * 0.299313(2020)
-		Predicted relative: D+24.8 + national R+1.5 = D+23.3
+CA: Predicted final margin D+24.1 (Actual D+20.8), EVs: 54 (CORRECT)
+		0.256347 (D+25.6)
+			0.976675 * 0.252818 (D+25.3) (2020)
+			0.011236 * 0.299313 (D+29.9) (2016)
+			-0.020405 * 0.197258 (D+19.7) (2012)
+			0.110640 * 0.170154 (D+17.0) (2008)
+			-0.069639 * 0.125487 (D+12.5) (2004)
+		Predicted relative: D+25.6 + national R+1.5 = D+24.1
 		Actual relative: D+22.3 + national R+1.5 = D+20.8
-CO: Predicted final margin D+7.4 (Actual D+11.3), EVs: 10 (CORRECT)
-		0.089053~
-			0.943038 * 0.093407(2024)
-			0.031788 * 0.030415(2020)
-		Predicted relative: D+8.9 + national R+1.5 = D+7.4
+CO: Predicted final margin D+8.0 (Actual D+11.3), EVs: 10 (CORRECT)
+		0.094572 (D+9.5)
+			0.976675 * 0.093407 (D+9.3) (2020)
+			0.011236 * 0.030415 (D+3.0) (2016)
+			-0.020405 * 0.014762 (D+1.5) (2012)
+			0.110640 * 0.015597 (D+1.6) (2008)
+			-0.069639 * -0.022664 (R+2.3) (2004)
+		Predicted relative: D+9.5 + national R+1.5 = D+8.0
 		Actual relative: D+12.8 + national R+1.5 = D+11.3
-CT: Predicted final margin D+13.8 (Actual D+14.8), EVs: 7 (CORRECT)
-		0.153312~
-			0.943038 * 0.158541(2024)
-			0.031788 * 0.119580(2020)
-		Predicted relative: D+15.3 + national R+1.5 = D+13.8
+CT: Predicted final margin D+14.6 (Actual D+14.8), EVs: 7 (CORRECT)
+		0.161064 (D+16.1)
+			0.976675 * 0.158541 (D+15.9) (2020)
+			0.011236 * 0.119580 (D+12.0) (2016)
+			-0.020405 * 0.135254 (D+13.5) (2012)
+			0.110640 * 0.150951 (D+15.1) (2008)
+			-0.069639 * 0.130159 (D+13.0) (2004)
+		Predicted relative: D+16.1 + national R+1.5 = D+14.6
 		Actual relative: D+16.3 + national R+1.5 = D+14.8
-DC: Predicted final margin D+80.9 (Actual D+86.6), EVs: 3 (CORRECT)
-		0.824217~
-			0.943038 * 0.843979(2024)
-			0.031788 * 0.890652(2020)
-		Predicted relative: D+82.4 + national R+1.5 = D+80.9
+DC: Predicted final margin D+83.2 (Actual D+86.6), EVs: 3 (CORRECT)
+		0.847282 (D+84.7)
+			0.976675 * 0.843979 (D+84.4) (2020)
+			0.011236 * 0.890652 (D+89.1) (2016)
+			-0.020405 * 0.811555 (D+81.2) (2012)
+			0.110640 * 0.792600 (D+79.3) (2008)
+			-0.069639 * 0.835066 (D+83.5) (2004)
+		Predicted relative: D+84.7 + national R+1.5 = D+83.2
 		Actual relative: D+88.1 + national R+1.5 = D+86.6
-DE: Predicted final margin D+12.7 (Actual D+15.0), EVs: 3 (CORRECT)
-		0.141866~
-			0.943038 * 0.147175(2024)
-			0.031788 * 0.096721(2020)
-		Predicted relative: D+14.2 + national R+1.5 = D+12.7
+DE: Predicted final margin D+13.9 (Actual D+15.0), EVs: 3 (CORRECT)
+		0.154362 (D+15.4)
+			0.976675 * 0.147175 (D+14.7) (2020)
+			0.011236 * 0.096721 (D+9.7) (2016)
+			-0.020405 * 0.148741 (D+14.9) (2012)
+			0.110640 * 0.177347 (D+17.7) (2008)
+			-0.069639 * 0.101290 (D+10.1) (2004)
+		Predicted relative: D+15.4 + national R+1.5 = D+13.9
 		Actual relative: D+16.5 + national R+1.5 = D+15.0
-FL: Predicted final margin R+9.1 (Actual R+13.2), EVs: 30 (CORRECT)
-		-0.075873~
-			0.943038 * -0.079255(2024)
-			0.031788 * -0.035628(2020)
-		Predicted relative: R+7.6 + national R+1.5 = R+9.1
+FL: Predicted final margin R+9.6 (Actual R+13.2), EVs: 30 (CORRECT)
+		-0.080572 (R+8.1)
+			0.976675 * -0.079255 (R+7.9) (2020)
+			0.011236 * -0.035628 (R+3.6) (2016)
+			-0.020405 * -0.031353 (R+3.1) (2012)
+			0.110640 * -0.047022 (R+4.7) (2008)
+			-0.069639 * -0.025813 (R+2.6) (2004)
+		Predicted relative: R+8.1 + national R+1.5 = R+9.6
 		Actual relative: R+11.7 + national R+1.5 = R+13.2
-GA: Predicted final margin R+5.8 (Actual R+2.2), EVs: 16 (CORRECT)
-		-0.042956~
-			0.943038 * -0.042973(2024)
-			0.031788 * -0.076475(2020)
-		Predicted relative: R+4.3 + national R+1.5 = R+5.8
+GA: Predicted final margin R+6.0 (Actual R+2.2), EVs: 16 (CORRECT)
+		-0.044637 (R+4.5)
+			0.976675 * -0.042973 (R+4.3) (2020)
+			0.011236 * -0.076475 (R+7.6) (2016)
+			-0.020405 * -0.119331 (R+11.9) (2012)
+			0.110640 * -0.127982 (R+12.8) (2008)
+			-0.069639 * -0.142424 (R+14.2) (2004)
+		Predicted relative: R+4.5 + national R+1.5 = R+6.0
 		Actual relative: R+0.7 + national R+1.5 = R+2.2
-HI: Predicted final margin D+23.6 (Actual D+23.6), EVs: 4 (CORRECT)
-		0.251101~
-			0.943038 * 0.255294(2024)
-			0.031788 * 0.325575(2020)
-		Predicted relative: D+25.1 + national R+1.5 = D+23.6
+HI: Predicted final margin D+26.5 (Actual D+23.6), EVs: 4 (CORRECT)
+		0.279645 (D+28.0)
+			0.976675 * 0.255294 (D+25.5) (2020)
+			0.011236 * 0.325575 (D+32.6) (2016)
+			-0.020405 * 0.393879 (D+39.4) (2012)
+			0.110640 * 0.384459 (D+38.4) (2008)
+			-0.069639 * 0.112749 (D+11.3) (2004)
+		Predicted relative: D+28.0 + national R+1.5 = D+26.5
 		Actual relative: D+25.1 + national R+1.5 = D+23.6
-IA: Predicted final margin R+14.1 (Actual R+13.4), EVs: 6 (CORRECT)
-		-0.125634~
-			0.943038 * -0.129025(2024)
-			0.031788 * -0.124522(2020)
-		Predicted relative: R+12.6 + national R+1.5 = R+14.1
+IA: Predicted final margin R+14.2 (Actual R+13.4), EVs: 6 (CORRECT)
+		-0.126665 (R+12.7)
+			0.976675 * -0.129025 (R+12.9) (2020)
+			0.011236 * -0.124522 (R+12.5) (2016)
+			-0.020405 * 0.018989 (D+1.9) (2012)
+			0.110640 * 0.021560 (D+2.2) (2008)
+			-0.069639 * 0.017927 (D+1.8) (2004)
+		Predicted relative: R+12.7 + national R+1.5 = R+14.2
 		Actual relative: R+11.9 + national R+1.5 = R+13.4
-ID: Predicted final margin R+37.0 (Actual R+37.5), EVs: 4 (CORRECT)
-		-0.354611~
-			0.943038 * -0.362903(2024)
-			0.031788 * -0.389455(2020)
-		Predicted relative: R+35.5 + national R+1.5 = R+37.0
+ID: Predicted final margin R+37.8 (Actual R+37.5), EVs: 4 (CORRECT)
+		-0.363262 (R+36.3)
+			0.976675 * -0.362903 (R+36.3) (2020)
+			0.011236 * -0.389455 (R+38.9) (2016)
+			-0.020405 * -0.368626 (R+36.9) (2012)
+			0.110640 * -0.335907 (R+33.6) (2008)
+			-0.069639 * -0.361794 (R+36.2) (2004)
+		Predicted relative: R+36.3 + national R+1.5 = R+37.8
 		Actual relative: R+36.0 + national R+1.5 = R+37.5
-IL: Predicted final margin D+11.1 (Actual D+11.1), EVs: 19 (CORRECT)
-		0.125536~
-			0.943038 * 0.127821(2024)
-			0.031788 * 0.157150(2020)
-		Predicted relative: D+12.6 + national R+1.5 = D+11.1
+IL: Predicted final margin D+12.0 (Actual D+11.1), EVs: 19 (CORRECT)
+		0.134788 (D+13.5)
+			0.976675 * 0.127821 (D+12.8) (2020)
+			0.011236 * 0.157150 (D+15.7) (2016)
+			-0.020405 * 0.131353 (D+13.1) (2012)
+			0.110640 * 0.179270 (D+17.9) (2008)
+			-0.069639 * 0.128833 (D+12.9) (2004)
+		Predicted relative: D+13.5 + national R+1.5 = D+12.0
 		Actual relative: D+12.6 + national R+1.5 = D+11.1
-IN: Predicted final margin R+22.0 (Actual R+19.3), EVs: 11 (CORRECT)
-		-0.204512~
-			0.943038 * -0.209261(2024)
-			0.031788 * -0.225597(2020)
-		Predicted relative: R+20.5 + national R+1.5 = R+22.0
-		Actual relative: R+17.8 + national R+1.5 = R+19.3
-KS: Predicted final margin R+20.7 (Actual R+16.4), EVs: 6 (CORRECT)
-		-0.191911~
-			0.943038 * -0.195228(2024)
-			0.031788 * -0.245481(2020)
-		Predicted relative: R+19.2 + national R+1.5 = R+20.7
-		Actual relative: R+14.9 + national R+1.5 = R+16.4
-KY: Predicted final margin R+31.7 (Actual R+31.0), EVs: 8 (CORRECT)
-		-0.302442~
-			0.943038 * -0.309362(2024)
-			0.031788 * -0.336664(2020)
-		Predicted relative: R+30.2 + national R+1.5 = R+31.7
-		Actual relative: R+29.5 + national R+1.5 = R+31.0
-LA: Predicted final margin R+24.3 (Actual R+22.4), EVs: 8 (CORRECT)
-		-0.228488~
-			0.943038 * -0.234649(2024)
-			0.031788 * -0.226685(2020)
-		Predicted relative: R+22.8 + national R+1.5 = R+24.3
-		Actual relative: R+20.9 + national R+1.5 = R+22.4
-MA: Predicted final margin D+27.4 (Actual D+25.9), EVs: 11 (CORRECT)
-		0.288612~
-			0.943038 * 0.296951(2024)
-			0.031788 * 0.269774(2020)
-		Predicted relative: D+28.9 + national R+1.5 = D+27.4
-		Actual relative: D+27.4 + national R+1.5 = D+25.9
-MD: Predicted final margin D+27.2 (Actual D+29.5), EVs: 10 (CORRECT)
-		0.286577~
-			0.943038 * 0.295221(2024)
-			0.031788 * 0.257074(2020)
-		Predicted relative: D+28.7 + national R+1.5 = D+27.2
-		Actual relative: D+31.0 + national R+1.5 = D+29.5
-ME: Predicted final margin D+3.1 (Actual D+7.1), EVs: 4 (CORRECT)
-		0.045587~
-			0.943038 * 0.048048(2024)
-			0.031788 * 0.008685(2020)
-		Predicted relative: D+4.6 + national R+1.5 = D+3.1
-		Actual relative: D+8.6 + national R+1.5 = D+7.1
-MI: Predicted final margin R+3.2 (Actual R+1.4), EVs: 15 (CORRECT)
-		-0.016929~
-			0.943038 * -0.017089(2024)
-			0.031788 * -0.025605(2020)
-		Predicted relative: R+1.7 + national R+1.5 = R+3.2
-		Actual relative: D+0.1 + national R+1.5 = R+1.4
-MN: Predicted final margin D+1.1 (Actual D+4.3), EVs: 10 (CORRECT)
-		0.025658~
-			0.943038 * 0.027431(2024)
-			0.031788 * -0.006617(2020)
-		Predicted relative: D+2.6 + national R+1.5 = D+1.1
-		Actual relative: D+5.8 + national R+1.5 = D+4.3
-MO: Predicted final margin R+21.3 (Actual R+18.7), EVs: 10 (CORRECT)
-		-0.197547~
-			0.943038 * -0.202076(2024)
-			0.031788 * -0.219622(2020)
+IN: Predicted final margin R+21.3 (Actual R+19.3), EVs: 11 (CORRECT)
+		-0.198361 (R+19.8)
+			0.976675 * -0.209261 (R+20.9) (2020)
+			0.011236 * -0.225597 (R+22.6) (2016)
+			-0.020405 * -0.144205 (R+14.4) (2012)
+			0.110640 * -0.064976 (R+6.5) (2008)
+			-0.069639 * -0.183809 (R+18.4) (2004)
 		Predicted relative: R+19.8 + national R+1.5 = R+21.3
+		Actual relative: R+17.8 + national R+1.5 = R+19.3
+KS: Predicted final margin R+21.2 (Actual R+16.4), EVs: 6 (CORRECT)
+		-0.197062 (R+19.7)
+			0.976675 * -0.195228 (R+19.5) (2020)
+			0.011236 * -0.245481 (R+24.5) (2016)
+			-0.020405 * -0.262464 (R+26.2) (2012)
+			0.110640 * -0.227661 (R+22.8) (2008)
+			-0.069639 * -0.232682 (R+23.3) (2004)
+		Predicted relative: R+19.7 + national R+1.5 = R+21.2
+		Actual relative: R+14.9 + national R+1.5 = R+16.4
+KY: Predicted final margin R+33.0 (Actual R+31.0), EVs: 8 (CORRECT)
+		-0.314740 (R+31.5)
+			0.976675 * -0.309362 (R+30.9) (2020)
+			0.011236 * -0.336664 (R+33.7) (2016)
+			-0.020405 * -0.271053 (R+27.1) (2012)
+			0.110640 * -0.240084 (R+24.0) (2008)
+			-0.069639 * -0.175492 (R+17.5) (2004)
+		Predicted relative: R+31.5 + national R+1.5 = R+33.0
+		Actual relative: R+29.5 + national R+1.5 = R+31.0
+LA: Predicted final margin R+26.3 (Actual R+22.4), EVs: 8 (CORRECT)
+		-0.248110 (R+24.8)
+			0.976675 * -0.234649 (R+23.5) (2020)
+			0.011236 * -0.226685 (R+22.7) (2016)
+			-0.020405 * -0.215134 (R+21.5) (2012)
+			0.110640 * -0.264559 (R+26.5) (2008)
+			-0.069639 * -0.121959 (R+12.2) (2004)
+		Predicted relative: R+24.8 + national R+1.5 = R+26.3
+		Actual relative: R+20.9 + national R+1.5 = R+22.4
+MA: Predicted final margin D+27.5 (Actual D+25.9), EVs: 11 (CORRECT)
+		0.290460 (D+29.0)
+			0.976675 * 0.296951 (D+29.7) (2020)
+			0.011236 * 0.269774 (D+27.0) (2016)
+			-0.020405 * 0.195516 (D+19.6) (2012)
+			0.110640 * 0.188526 (D+18.9) (2008)
+			-0.069639 * 0.279517 (D+28.0) (2004)
+		Predicted relative: D+29.0 + national R+1.5 = D+27.5
+		Actual relative: D+27.4 + national R+1.5 = D+25.9
+MD: Predicted final margin D+28.1 (Actual D+29.5), EVs: 10 (CORRECT)
+		0.296013 (D+29.6)
+			0.976675 * 0.295221 (D+29.5) (2020)
+			0.011236 * 0.257074 (D+25.7) (2016)
+			-0.020405 * 0.226237 (D+22.6) (2012)
+			0.110640 * 0.183186 (D+18.3) (2008)
+			-0.069639 * 0.155972 (D+15.6) (2004)
+		Predicted relative: D+29.6 + national R+1.5 = D+28.1
+		Actual relative: D+31.0 + national R+1.5 = D+29.5
+ME: Predicted final margin D+3.3 (Actual D+7.1), EVs: 4 (CORRECT)
+		0.047731 (D+4.8)
+			0.976675 * 0.048048 (D+4.8) (2020)
+			0.011236 * 0.008685 (D+0.9) (2016)
+			-0.020405 * 0.117001 (D+11.7) (2012)
+			0.110640 * 0.101175 (D+10.1) (2008)
+			-0.069639 * 0.116321 (D+11.6) (2004)
+		Predicted relative: D+4.8 + national R+1.5 = D+3.3
+		Actual relative: D+8.6 + national R+1.5 = D+7.1
+MI: Predicted final margin R+2.7 (Actual R+1.4), EVs: 15 (CORRECT)
+		-0.012057 (R+1.2)
+			0.976675 * -0.017089 (R+1.7) (2020)
+			0.011236 * -0.025605 (R+2.6) (2016)
+			-0.020405 * 0.055813 (D+5.6) (2012)
+			0.110640 * 0.092011 (D+9.2) (2008)
+			-0.069639 * 0.059177 (D+5.9) (2004)
+		Predicted relative: R+1.2 + national R+1.5 = R+2.7
+		Actual relative: D+0.1 + national R+1.5 = R+1.4
+MN: Predicted final margin D+1.0 (Actual D+4.3), EVs: 10 (CORRECT)
+		0.024986 (D+2.5)
+			0.976675 * 0.027431 (D+2.7) (2020)
+			0.011236 * -0.006617 (R+0.7) (2016)
+			-0.020405 * 0.038627 (D+3.9) (2012)
+			0.110640 * 0.029172 (D+2.9) (2008)
+			-0.069639 * 0.059879 (D+6.0) (2004)
+		Predicted relative: D+2.5 + national R+1.5 = D+1.0
+		Actual relative: D+5.8 + national R+1.5 = D+4.3
+MO: Predicted final margin R+21.7 (Actual R+18.7), EVs: 10 (CORRECT)
+		-0.202229 (R+20.2)
+			0.976675 * -0.202076 (R+20.2) (2020)
+			0.011236 * -0.219622 (R+22.0) (2016)
+			-0.020405 * -0.135771 (R+13.6) (2012)
+			0.110640 * -0.076767 (R+7.7) (2008)
+			-0.069639 * -0.047734 (R+4.8) (2004)
+		Predicted relative: R+20.2 + national R+1.5 = R+21.7
 		Actual relative: R+17.2 + national R+1.5 = R+18.7
-MS: Predicted final margin R+22.2 (Actual R+23.1), EVs: 6 (CORRECT)
-		-0.207441~
-			0.943038 * -0.213059(2024)
-			0.031788 * -0.205048(2020)
-		Predicted relative: R+20.7 + national R+1.5 = R+22.2
+MS: Predicted final margin R+23.4 (Actual R+23.1), EVs: 6 (CORRECT)
+		-0.218726 (R+21.9)
+			0.976675 * -0.213059 (R+21.3) (2020)
+			0.011236 * -0.205048 (R+20.5) (2016)
+			-0.020405 * -0.156236 (R+15.6) (2012)
+			0.110640 * -0.208254 (R+20.8) (2008)
+			-0.069639 * -0.165440 (R+16.5) (2004)
+		Predicted relative: R+21.9 + national R+1.5 = R+23.4
 		Actual relative: R+21.6 + national R+1.5 = R+23.1
-MT: Predicted final margin R+22.4 (Actual R+20.6), EVs: 4 (CORRECT)
-		-0.208955~
-			0.943038 * -0.213303(2024)
-			0.031788 * -0.245445(2020)
-		Predicted relative: R+20.9 + national R+1.5 = R+22.4
+MT: Predicted final margin R+22.0 (Actual R+20.6), EVs: 4 (CORRECT)
+		-0.205420 (R+20.5)
+			0.976675 * -0.213303 (R+21.3) (2020)
+			0.011236 * -0.245445 (R+24.5) (2016)
+			-0.020405 * -0.180883 (R+18.1) (2012)
+			0.110640 * -0.098803 (R+9.9) (2008)
+			-0.069639 * -0.185341 (R+18.5) (2004)
+		Predicted relative: R+20.5 + national R+1.5 = R+22.0
 		Actual relative: R+19.1 + national R+1.5 = R+20.6
 NC: Predicted final margin R+7.3 (Actual R+3.3), EVs: 16 (CORRECT)
-		-0.057630~
-			0.943038 * -0.059043(2024)
-			0.031788 * -0.061326(2020)
+		-0.058113 (R+5.8)
+			0.976675 * -0.059043 (R+5.9) (2020)
+			0.011236 * -0.061326 (R+6.1) (2016)
+			-0.020405 * -0.060879 (R+6.1) (2012)
+			0.110640 * -0.072096 (R+7.2) (2008)
+			-0.069639 * -0.100179 (R+10.0) (2004)
 		Predicted relative: R+5.8 + national R+1.5 = R+7.3
 		Actual relative: R+1.8 + national R+1.5 = R+3.3
 ND: Predicted final margin R+39.6 (Actual R+37.4), EVs: 3 (CORRECT)
-		-0.380842~
-			0.943038 * -0.389708(2024)
-			0.031788 * -0.419436(2020)
+		-0.380828 (R+38.1)
+			0.976675 * -0.389708 (R+39.0) (2020)
+			0.011236 * -0.419436 (R+41.9) (2016)
+			-0.020405 * -0.242422 (R+24.2) (2012)
+			0.110640 * -0.163588 (R+16.4) (2008)
+			-0.069639 * -0.253527 (R+25.4) (2004)
 		Predicted relative: R+38.1 + national R+1.5 = R+39.6
 		Actual relative: R+35.9 + national R+1.5 = R+37.4
 NE: Predicted final margin R+25.2 (Actual R+20.8), EVs: 5 (CORRECT)
-		-0.236663~
-			0.943038 * -0.241041(2024)
-			0.031788 * -0.294205(2020)
+		-0.236796 (R+23.7)
+			0.976675 * -0.241041 (R+24.1) (2020)
+			0.011236 * -0.294205 (R+29.4) (2016)
+			-0.020405 * -0.262786 (R+26.3) (2012)
+			0.110640 * -0.227597 (R+22.8) (2008)
+			-0.069639 * -0.312286 (R+31.2) (2004)
 		Predicted relative: R+23.7 + national R+1.5 = R+25.2
 		Actual relative: R+19.3 + national R+1.5 = R+20.8
-NH: Predicted final margin D+1.2 (Actual D+2.8), EVs: 4 (CORRECT)
-		0.027307~
-			0.943038 * 0.029607(2024)
-			0.031788 * -0.019311(2020)
-		Predicted relative: D+2.7 + national R+1.5 = D+1.2
+NH: Predicted final margin D+1.3 (Actual D+2.8), EVs: 4 (CORRECT)
+		0.028114 (D+2.8)
+			0.976675 * 0.029607 (D+3.0) (2020)
+			0.011236 * -0.019311 (R+1.9) (2016)
+			-0.020405 * 0.016477 (D+1.6) (2012)
+			0.110640 * 0.021955 (D+2.2) (2008)
+			-0.069639 * 0.038466 (D+3.8) (2004)
+		Predicted relative: D+2.8 + national R+1.5 = D+1.3
 		Actual relative: D+4.3 + national R+1.5 = D+2.8
-NJ: Predicted final margin D+9.8 (Actual D+6.0), EVs: 14 (CORRECT)
-		0.113346~
-			0.943038 * 0.116066(2024)
-			0.031788 * 0.122433(2020)
-		Predicted relative: D+11.3 + national R+1.5 = D+9.8
+NJ: Predicted final margin D+10.0 (Actual D+6.0), EVs: 14 (CORRECT)
+		0.114549 (D+11.5)
+			0.976675 * 0.116066 (D+11.6) (2020)
+			0.011236 * 0.122433 (D+12.2) (2016)
+			-0.020405 * 0.138841 (D+13.9) (2012)
+			0.110640 * 0.081877 (D+8.2) (2008)
+			-0.069639 * 0.092071 (D+9.2) (2004)
+		Predicted relative: D+11.5 + national R+1.5 = D+10.0
 		Actual relative: D+7.5 + national R+1.5 = D+6.0
-NM: Predicted final margin D+4.9 (Actual D+6.1), EVs: 5 (CORRECT)
-		0.063525~
-			0.943038 * 0.065010(2024)
-			0.031788 * 0.069765(2020)
-		Predicted relative: D+6.4 + national R+1.5 = D+4.9
+NM: Predicted final margin D+5.5 (Actual D+6.1), EVs: 5 (CORRECT)
+		0.070394 (D+7.0)
+			0.976675 * 0.065010 (D+6.5) (2020)
+			0.011236 * 0.069765 (D+7.0) (2016)
+			-0.020405 * 0.065706 (D+6.6) (2012)
+			0.110640 * 0.077883 (D+7.8) (2008)
+			-0.069639 * 0.016654 (D+1.7) (2004)
+		Predicted relative: D+7.0 + national R+1.5 = D+5.5
 		Actual relative: D+7.6 + national R+1.5 = D+6.1
-NV: Predicted final margin R+3.5 (Actual R+3.2), EVs: 6 (CORRECT)
-		-0.019624~
-			0.943038 * -0.020897(2024)
-			0.031788 * 0.002623(2020)
-		Predicted relative: R+2.0 + national R+1.5 = R+3.5
+NV: Predicted final margin R+3.0 (Actual R+3.2), EVs: 6 (CORRECT)
+		-0.015044 (R+1.5)
+			0.976675 * -0.020897 (R+2.1) (2020)
+			0.011236 * 0.002623 (D+0.3) (2016)
+			-0.020405 * 0.027953 (D+2.8) (2012)
+			0.110640 * 0.052319 (D+5.2) (2008)
+			-0.069639 * -0.001692 (R+0.2) (2004)
+		Predicted relative: R+1.5 + national R+1.5 = R+3.0
 		Actual relative: R+1.7 + national R+1.5 = R+3.2
-NY: Predicted final margin D+17.1 (Actual D+12.7), EVs: 28 (CORRECT)
-		0.186000~
-			0.943038 * 0.188977(2024)
-			0.031788 * 0.244979(2020)
-		Predicted relative: D+18.6 + national R+1.5 = D+17.1
+NY: Predicted final margin D+17.8 (Actual D+12.7), EVs: 28 (CORRECT)
+		0.192725 (D+19.3)
+			0.976675 * 0.188977 (D+18.9) (2020)
+			0.011236 * 0.244979 (D+24.5) (2016)
+			-0.020405 * 0.280656 (D+28.1) (2012)
+			0.110640 * 0.239862 (D+24.0) (2008)
+			-0.069639 * 0.221256 (D+22.1) (2004)
+		Predicted relative: D+19.3 + national R+1.5 = D+17.8
 		Actual relative: D+14.2 + national R+1.5 = D+12.7
-OH: Predicted final margin R+13.8 (Actual R+11.3), EVs: 17 (CORRECT)
-		-0.123118~
-			0.943038 * -0.126894(2024)
-			0.031788 * -0.108605(2020)
-		Predicted relative: R+12.3 + national R+1.5 = R+13.8
+OH: Predicted final margin R+14.3 (Actual R+11.3), EVs: 17 (CORRECT)
+		-0.128374 (R+12.8)
+			0.976675 * -0.126894 (R+12.7) (2020)
+			0.011236 * -0.108605 (R+10.9) (2016)
+			-0.020405 * -0.009917 (R+1.0) (2012)
+			0.110640 * -0.028739 (R+2.9) (2008)
+			-0.069639 * 0.003485 (D+0.3) (2004)
+		Predicted relative: R+12.8 + national R+1.5 = R+14.3
 		Actual relative: R+9.8 + national R+1.5 = R+11.3
-OK: Predicted final margin R+39.0 (Actual R+34.9), EVs: 7 (CORRECT)
-		-0.375290~
-			0.943038 * -0.384161(2024)
-			0.031788 * -0.409346(2020)
-		Predicted relative: R+37.5 + national R+1.5 = R+39.0
+OK: Predicted final margin R+41.0 (Actual R+34.9), EVs: 7 (CORRECT)
+		-0.395129 (R+39.5)
+			0.976675 * -0.384161 (R+38.4) (2020)
+			0.011236 * -0.409346 (R+40.9) (2016)
+			-0.020405 * -0.375644 (R+37.6) (2012)
+			0.110640 * -0.388317 (R+38.8) (2008)
+			-0.069639 * -0.286748 (R+28.7) (2004)
+		Predicted relative: R+39.5 + national R+1.5 = R+41.0
 		Actual relative: R+33.4 + national R+1.5 = R+34.9
-OR: Predicted final margin D+10.2 (Actual D+14.9), EVs: 8 (CORRECT)
-		0.117078~
-			0.943038 * 0.120783(2024)
-			0.031788 * 0.099865(2020)
-		Predicted relative: D+11.7 + national R+1.5 = D+10.2
+OR: Predicted final margin D+10.8 (Actual D+14.9), EVs: 8 (CORRECT)
+		0.122969 (D+12.3)
+			0.976675 * 0.120783 (D+12.1) (2020)
+			0.011236 * 0.099865 (D+10.0) (2016)
+			-0.020405 * 0.085225 (D+8.5) (2012)
+			0.110640 * 0.092859 (D+9.3) (2008)
+			-0.069639 * 0.066833 (D+6.7) (2004)
+		Predicted relative: D+12.3 + national R+1.5 = D+10.8
 		Actual relative: D+16.4 + national R+1.5 = D+14.9
-PA: Predicted final margin R+4.8 (Actual R+1.7), EVs: 19 (CORRECT)
-		-0.032641~
-			0.943038 * -0.033576(2024)
-			0.031788 * -0.030762(2020)
-		Predicted relative: R+3.3 + national R+1.5 = R+4.8
+PA: Predicted final margin R+4.9 (Actual R+1.7), EVs: 19 (CORRECT)
+		-0.033674 (R+3.4)
+			0.976675 * -0.033576 (R+3.4) (2020)
+			0.011236 * -0.030762 (R+3.1) (2016)
+			-0.020405 * 0.014441 (D+1.4) (2012)
+			0.110640 * 0.029179 (D+2.9) (2008)
+			-0.069639 * 0.049826 (D+5.0) (2004)
+		Predicted relative: R+3.4 + national R+1.5 = R+4.9
 		Actual relative: R+0.2 + national R+1.5 = R+1.7
-RI: Predicted final margin D+14.7 (Actual D+14.2), EVs: 4 (CORRECT)
-		0.161681~
-			0.943038 * 0.166627(2024)
-			0.031788 * 0.142963(2020)
-		Predicted relative: D+16.2 + national R+1.5 = D+14.7
+RI: Predicted final margin D+15.1 (Actual D+14.2), EVs: 4 (CORRECT)
+		0.166072 (D+16.6)
+			0.976675 * 0.166627 (D+16.7) (2020)
+			0.011236 * 0.142963 (D+14.3) (2016)
+			-0.020405 * 0.240137 (D+24.0) (2012)
+			0.110640 * 0.208547 (D+20.9) (2008)
+			-0.069639 * 0.236211 (D+23.6) (2004)
+		Predicted relative: D+16.6 + national R+1.5 = D+15.1
 		Actual relative: D+15.7 + national R+1.5 = D+14.2
-SC: Predicted final margin R+17.5 (Actual R+18.1), EVs: 9 (CORRECT)
-		-0.160038~
-			0.943038 * -0.163892(2024)
-			0.031788 * -0.172456(2020)
-		Predicted relative: R+16.0 + national R+1.5 = R+17.5
+SC: Predicted final margin R+18.2 (Actual R+18.1), EVs: 9 (CORRECT)
+		-0.167109 (R+16.7)
+			0.976675 * -0.163892 (R+16.4) (2020)
+			0.011236 * -0.172456 (R+17.2) (2016)
+			-0.020405 * -0.146363 (R+14.6) (2012)
+			0.110640 * -0.166304 (R+16.6) (2008)
+			-0.069639 * -0.148069 (R+14.8) (2004)
+		Predicted relative: R+16.7 + national R+1.5 = R+18.2
 		Actual relative: R+16.6 + national R+1.5 = R+18.1
-SD: Predicted final margin R+32.2 (Actual R+29.9), EVs: 3 (CORRECT)
-		-0.307060~
-			0.943038 * -0.314055(2024)
-			0.031788 * -0.342688(2020)
-		Predicted relative: R+30.7 + national R+1.5 = R+32.2
+SD: Predicted final margin R+32.5 (Actual R+29.9), EVs: 3 (CORRECT)
+		-0.310365 (R+31.0)
+			0.976675 * -0.314055 (R+31.4) (2020)
+			0.011236 * -0.342688 (R+34.3) (2016)
+			-0.020405 * -0.224568 (R+22.5) (2012)
+			0.110640 * -0.161329 (R+16.1) (2008)
+			-0.069639 * -0.193606 (R+19.4) (2004)
+		Predicted relative: R+31.0 + national R+1.5 = R+32.5
 		Actual relative: R+28.4 + national R+1.5 = R+29.9
-TN: Predicted final margin R+29.0 (Actual R+30.1), EVs: 11 (CORRECT)
-		-0.275258~
-			0.943038 * -0.281915(2024)
-			0.031788 * -0.295738(2020)
-		Predicted relative: R+27.5 + national R+1.5 = R+29.0
+TN: Predicted final margin R+30.6 (Actual R+30.1), EVs: 11 (CORRECT)
+		-0.290558 (R+29.1)
+			0.976675 * -0.281915 (R+28.2) (2020)
+			0.011236 * -0.295738 (R+29.6) (2016)
+			-0.020405 * -0.247219 (R+24.7) (2012)
+			0.110640 * -0.228045 (R+22.8) (2008)
+			-0.069639 * -0.119049 (R+11.9) (2004)
+		Predicted relative: R+29.1 + national R+1.5 = R+30.6
 		Actual relative: R+28.6 + national R+1.5 = R+30.1
-TX: Predicted final margin R+11.5 (Actual R+13.9), EVs: 40 (CORRECT)
-		-0.099901~
-			0.943038 * -0.101974(2024)
-			0.031788 * -0.117516(2020)
-		Predicted relative: R+10.0 + national R+1.5 = R+11.5
+TX: Predicted final margin R+11.9 (Actual R+13.9), EVs: 40 (CORRECT)
+		-0.103993 (R+10.4)
+			0.976675 * -0.101974 (R+10.2) (2020)
+			0.011236 * -0.117516 (R+11.8) (2016)
+			-0.020405 * -0.200356 (R+20.0) (2012)
+			0.110640 * -0.194134 (R+19.4) (2008)
+			-0.069639 * -0.205544 (R+20.6) (2004)
+		Predicted relative: R+10.4 + national R+1.5 = R+11.9
 		Actual relative: R+12.4 + national R+1.5 = R+13.9
-UT: Predicted final margin R+26.8 (Actual R+22.2), EVs: 6 (CORRECT)
-		-0.253077~
-			0.943038 * -0.259232(2024)
-			0.031788 * -0.270909(2020)
-		Predicted relative: R+25.3 + national R+1.5 = R+26.8
+UT: Predicted final margin R+27.0 (Actual R+22.2), EVs: 6 (CORRECT)
+		-0.255048 (R+25.5)
+			0.976675 * -0.259232 (R+25.9) (2020)
+			0.011236 * -0.270909 (R+27.1) (2016)
+			-0.020405 * -0.532722 (R+53.3) (2012)
+			0.110640 * -0.365943 (R+36.6) (2008)
+			-0.069639 * -0.442268 (R+44.2) (2004)
+		Predicted relative: R+25.5 + national R+1.5 = R+27.0
 		Actual relative: R+20.7 + national R+1.5 = R+22.2
-VA: Predicted final margin D+4.1 (Actual D+5.9), EVs: 13 (CORRECT)
-		0.055503~
-			0.943038 * 0.057734(2024)
-			0.031788 * 0.033276(2020)
-		Predicted relative: D+5.6 + national R+1.5 = D+4.1
+VA: Predicted final margin D+4.5 (Actual D+5.9), EVs: 13 (CORRECT)
+		0.059517 (D+6.0)
+			0.976675 * 0.057734 (D+5.8) (2020)
+			0.011236 * 0.033276 (D+3.3) (2016)
+			-0.020405 * -0.000850 (R+0.1) (2012)
+			0.110640 * -0.011764 (R+1.2) (2008)
+			-0.069639 * -0.058014 (R+5.8) (2004)
+		Predicted relative: D+6.0 + national R+1.5 = D+4.5
 		Actual relative: D+7.4 + national R+1.5 = D+5.9
-VT: Predicted final margin D+29.6 (Actual D+32.8), EVs: 3 (CORRECT)
-		0.311276~
-			0.943038 * 0.320624(2024)
-			0.031788 * 0.280477(2020)
-		Predicted relative: D+31.1 + national R+1.5 = D+29.6
+VT: Predicted final margin D+31.2 (Actual D+32.8), EVs: 3 (CORRECT)
+		0.327082 (D+32.7)
+			0.976675 * 0.320624 (D+32.1) (2020)
+			0.011236 * 0.280477 (D+28.0) (2016)
+			-0.020405 * 0.324747 (D+32.5) (2012)
+			0.110640 * 0.302568 (D+30.3) (2008)
+			-0.069639 * 0.230680 (D+23.1) (2004)
+		Predicted relative: D+32.7 + national R+1.5 = D+31.2
 		Actual relative: D+34.3 + national R+1.5 = D+32.8
-WA: Predicted final margin D+13.4 (Actual D+18.9), EVs: 12 (CORRECT)
-		0.149274~
-			0.943038 * 0.153150(2024)
-			0.031788 * 0.152487(2020)
-		Predicted relative: D+14.9 + national R+1.5 = D+13.4
+WA: Predicted final margin D+13.8 (Actual D+18.9), EVs: 12 (CORRECT)
+		0.153225 (D+15.3)
+			0.976675 * 0.153150 (D+15.3) (2020)
+			0.011236 * 0.152487 (D+15.2) (2016)
+			-0.020405 * 0.112368 (D+11.2) (2012)
+			0.110640 * 0.099625 (D+10.0) (2008)
+			-0.069639 * 0.097591 (D+9.8) (2004)
+		Predicted relative: D+15.3 + national R+1.5 = D+13.8
 		Actual relative: D+20.4 + national R+1.5 = D+18.9
-WI: Predicted final margin R+5.3 (Actual R+0.9), EVs: 10 (CORRECT)
-		-0.037757~
-			0.943038 * -0.038978(2024)
-			0.031788 * -0.031411(2020)
-		Predicted relative: R+3.8 + national R+1.5 = R+5.3
+WI: Predicted final margin R+4.9 (Actual R+0.9), EVs: 10 (CORRECT)
+		-0.033731 (R+3.4)
+			0.976675 * -0.038978 (R+3.9) (2020)
+			0.011236 * -0.031411 (R+3.1) (2016)
+			-0.020405 * 0.029071 (D+2.9) (2012)
+			0.110640 * 0.065698 (D+6.6) (2008)
+			-0.069639 * 0.028496 (D+2.8) (2004)
+		Predicted relative: R+3.4 + national R+1.5 = R+4.9
 		Actual relative: D+0.6 + national R+1.5 = R+0.9
-WV: Predicted final margin R+44.6 (Actual R+42.7), EVs: 4 (CORRECT)
-		-0.431020~
-			0.943038 * -0.441330(2024)
-			0.031788 * -0.466472(2020)
-		Predicted relative: R+43.1 + national R+1.5 = R+44.6
+WV: Predicted final margin R+46.1 (Actual R+42.7), EVs: 4 (CORRECT)
+		-0.445681 (R+44.6)
+			0.976675 * -0.441330 (R+44.1) (2020)
+			0.011236 * -0.466472 (R+46.6) (2016)
+			-0.020405 * -0.313684 (R+31.4) (2012)
+			0.110640 * -0.208890 (R+20.9) (2008)
+			-0.069639 * -0.104934 (R+10.5) (2004)
+		Predicted relative: R+44.6 + national R+1.5 = R+46.1
 		Actual relative: R+41.2 + national R+1.5 = R+42.7
-WY: Predicted final margin R+49.9 (Actual R+47.0), EVs: 3 (CORRECT)
-		-0.483856~
-			0.943038 * -0.494968(2024)
-			0.031788 * -0.537358(2020)
-		Predicted relative: R+48.4 + national R+1.5 = R+49.9
+WY: Predicted final margin R+51.3 (Actual R+47.0), EVs: 3 (CORRECT)
+		-0.498424 (R+49.8)
+			0.976675 * -0.494968 (R+49.5) (2020)
+			0.011236 * -0.537358 (R+53.7) (2016)
+			-0.020405 * -0.463411 (R+46.3) (2012)
+			0.110640 * -0.406656 (R+40.7) (2008)
+			-0.069639 * -0.381594 (R+38.2) (2004)
+		Predicted relative: R+49.8 + national R+1.5 = R+51.3
 		Actual relative: R+45.5 + national R+1.5 = R+47.0

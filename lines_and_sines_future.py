@@ -27,7 +27,8 @@ def main():
     # Create a backup of presidential_margins_future.csv if it exists
     if os.path.exists('presidential_margins_future.csv'):
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        backup_file = f'presidential_margins_future_backup_{timestamp}.csv'
+        backup_file = f'backups/presidential_margins_future_backup_{timestamp}.csv'
+        os.makedirs(os.path.dirname(backup_file), exist_ok=True)
         shutil.copy('presidential_margins_future.csv', backup_file)
         print(f"Created backup at {backup_file}")
     
