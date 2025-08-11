@@ -1,0 +1,101 @@
+Cluster (dist: 0.930)
+  Cluster (dist: 0.366)
+    Cluster (dist: 0.120)
+      Cluster (dist: 0.062)
+        SD
+        UT
+      Cluster (dist: 0.075)
+        ND
+        NV
+    Cluster (dist: 0.226)
+      Cluster (dist: 0.131)
+        Cluster (dist: 0.064)
+          MA
+          NH
+        Cluster (dist: 0.097)
+          IA
+          Cluster (dist: 0.060)
+            MT
+            Cluster (dist: 0.051)
+              NM
+              Cluster (dist: 0.021)
+                AZ
+                CA
+      Cluster (dist: 0.140)
+        OK
+        Cluster (dist: 0.085)
+          Cluster (dist: 0.029)
+            ID
+            NE
+          Cluster (dist: 0.066)
+            CO
+            Cluster (dist: 0.027)
+              KS
+              WY
+  Cluster (dist: 0.621)
+    Cluster (dist: 0.311)
+      Cluster (dist: 0.245)
+        GA
+        Cluster (dist: 0.154)
+          Cluster (dist: 0.065)
+            TN
+            VA
+          Cluster (dist: 0.145)
+            Cluster (dist: 0.065)
+              SC
+              Cluster (dist: 0.050)
+                AL
+                NC
+            Cluster (dist: 0.098)
+              MS
+              Cluster (dist: 0.026)
+                DE
+                KY
+      Cluster (dist: 0.260)
+        Cluster (dist: 0.080)
+          TX
+          Cluster (dist: 0.052)
+            LA
+            Cluster (dist: 0.026)
+              MO
+              WV
+        Cluster (dist: 0.118)
+          AR
+          FL
+    Cluster (dist: 0.391)
+      Cluster (dist: 0.111)
+        Cluster (dist: 0.065)
+          ME
+          MI
+        Cluster (dist: 0.109)
+          VT
+          Cluster (dist: 0.086)
+            CT
+            Cluster (dist: 0.063)
+              HI
+              RI
+      Cluster (dist: 0.248)
+        DC
+        Cluster (dist: 0.207)
+          Cluster (dist: 0.116)
+            Cluster (dist: 0.045)
+              NY
+              Cluster (dist: 0.021)
+                IL
+                WI
+            Cluster (dist: 0.046)
+              AK
+              Cluster (dist: 0.024)
+                OR
+                WA
+          Cluster (dist: 0.129)
+            MD
+            Cluster (dist: 0.078)
+              PA
+              Cluster (dist: 0.053)
+                Cluster (dist: 0.017)
+                  NJ
+                  OH
+                Cluster (dist: 0.043)
+                  IN
+                  MN
