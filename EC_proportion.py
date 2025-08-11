@@ -8,11 +8,15 @@ import utils  # Import utils for lean_str
 
 
 # Configuration
-USE_FUTURE = False  # Set True to append future projections to history
+USE_FUTURE = True  # Set True to append future projections to history
 OUTPUT_DIR = "EC_proportion"
+if USE_FUTURE:
+    OUTPUT_DIR = os.path.join(OUTPUT_DIR, 'future')
+    os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 # Add a configuration option for scaling
 SCALE_TO_TOTAL_EVS = True  # Set True to scale y-axis to (0, 538)
+FUTURE_YEAR_MARK = 2026  # Vertical marker year when future data present
 
 # Category thresholds (relative_margin)
 # Order matters (from strong R to strong D)
@@ -82,8 +86,11 @@ def load_data(use_future: bool) -> pd.DataFrame:
     if use_future:
         df_hist = pd.read_csv("presidential_margins.csv")
         df_future = pd.read_csv("presidential_margins_future.csv")
-        # Use history up to and including 2024, then append future
-        df = pd.concat([df_hist[df_hist["year"] <= 2024], df_future], ignore_index=True)
+        # Use history up to and including 2024, then append future (>2024 only)
+        df = pd.concat([
+            df_hist[df_hist["year"] <= 2024],
+            df_future[df_future["year"] > 2024]
+        ], ignore_index=True)
     else:
         df = pd.read_csv("presidential_margins.csv")
     # Ensure expected columns
@@ -170,6 +177,12 @@ def plot_stacked_area(proportions: pd.DataFrame, output_dir: str) -> None:
     # dash red line at the specified value for visual reference
     ax.axhline(dashed_line_value, color='red', linestyle='--', linewidth=1, alpha=0.7)
     ax.text(int(years.min()), dashed_line_value, dashed_line_label, color='red', alpha=0.7, verticalalignment='bottom')
+
+    # If data includes years past 2024, draw a big yellow dashed vertical line at 2026
+    if years.max() > 2024:
+        ax.axvline(FUTURE_YEAR_MARK, color='#FFD700', linestyle='--', linewidth=2.5, alpha=0.95)
+        ax.text(FUTURE_YEAR_MARK + 0.2, y_limit * 0.98, str(FUTURE_YEAR_MARK), color='#FFD700', rotation=90,
+                va='top', ha='left', fontsize=10)
 
     # Update legend to include ranges
     legend_labels = [f"{cat} ({CATEGORY_RANGES[cat]})" for cat in CATEGORY_ORDER]

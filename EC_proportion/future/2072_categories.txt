@@ -1,0 +1,89 @@
+Year: 2072
+
+Category: lockedR (R+30.0+)
+Total EVs: 8 (1.49%)
+States:
+  WY: 3 EVs, R+48.0
+  NE: 5 EVs, R+30.5
+
+Category: safeR (R+20.0 to R+30.0)
+Total EVs: 50 (9.29%)
+States:
+  OK: 7 EVs, R+28.7
+  WV: 4 EVs, R+26.6
+  UT: 6 EVs, R+25.4
+  AL: 9 EVs, R+23.5
+  AK: 3 EVs, R+22.7
+  AR: 6 EVs, R+22.6
+  ID: 4 EVs, R+21.9
+  TN: 11 EVs, R+21.8
+
+Category: leanR (R+10.0 to R+20.0)
+Total EVs: 155 (28.81%)
+States:
+  IN: 11 EVs, R+18.4
+  TX: 40 EVs, R+17.3
+  FL: 30 EVs, R+17.0
+  KS: 6 EVs, R+16.8
+  MS: 6 EVs, R+16.1
+  KY: 8 EVs, R+15.8
+  SC: 9 EVs, R+13.9
+  LA: 8 EVs, R+13.5
+  AZ: 11 EVs, R+13.5
+  MT: 4 EVs, R+12.5
+  SD: 3 EVs, R+12.3
+  MO: 10 EVs, R+11.4
+  ND: 3 EVs, R+10.5
+  NV: 6 EVs, R+10.2
+
+Category: tiltR (R+4.0 to R+10.0)
+Total EVs: 49 (9.11%)
+States:
+  GA: 16 EVs, R+7.2
+  OH: 17 EVs, R+7.1
+  NC: 16 EVs, R+4.3
+
+Category: swing (R+4.0 to D+4.0)
+Total EVs: 82 (15.24%)
+States:
+  MI: 15 EVs, R+3.9
+  IA: 6 EVs, R+3.1
+  VA: 13 EVs, R+2.0
+  CO: 10 EVs, D+0.5
+  PA: 19 EVs, D+0.6
+  NH: 4 EVs, D+1.8
+  WI: 10 EVs, D+2.4
+  NM: 5 EVs, D+2.6
+
+Category: tiltD (D+4.0 to D+10.0)
+Total EVs: 90 (16.73%)
+States:
+  WA: 12 EVs, D+6.7
+  CA: 54 EVs, D+6.9
+  MN: 10 EVs, D+7.4
+  NJ: 14 EVs, D+9.6
+
+Category: leanD (D+10.0 to D+20.0)
+Total EVs: 69 (12.83%)
+States:
+  CT: 7 EVs, D+10.3
+  IL: 19 EVs, D+10.7
+  NY: 28 EVs, D+15.7
+  DE: 3 EVs, D+17.6
+  OR: 8 EVs, D+17.6
+  ME: 4 EVs, D+19.7
+
+Category: safeD (D+20.0 to D+30.0)
+Total EVs: 28 (5.20%)
+States:
+  MD: 10 EVs, D+21.8
+  VT: 3 EVs, D+26.7
+  MA: 11 EVs, D+28.0
+  RI: 4 EVs, D+29.1
+
+Category: lockedD (D+30.0+)
+Total EVs: 7 (1.30%)
+States:
+  HI: 4 EVs, D+37.6
+  DC: 3 EVs, D+83.4
+

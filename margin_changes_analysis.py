@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -28,9 +29,29 @@ OUT_DIR = ROOT / 'margin_changes'
 OUT_DIR.mkdir(exist_ok=True)
 
 CSV_PATH = ROOT / 'presidential_margins.csv'
+FUTURE_CSV_PATH = ROOT / 'presidential_margins_future.csv'
 
-def load_data(csv_path: Path) -> pd.DataFrame:
-    df = pd.read_csv(csv_path)
+# Toggle to include future projections
+USE_FUTURE = True
+FUTURE_YEAR_MARK = 2026
+if USE_FUTURE:
+    OUT_DIR = OUT_DIR / 'future'
+    os.makedirs(OUT_DIR, exist_ok=True)
+
+
+def load_data(csv_path: Path, use_future: bool = False) -> pd.DataFrame:
+    if use_future:
+        df_hist = pd.read_csv(csv_path)
+        # Filter hist to <= 2024
+        df_hist = df_hist[df_hist['year'].astype(int) <= 2024]
+        # Append future if available
+        if FUTURE_CSV_PATH.exists():
+            df_future = pd.read_csv(FUTURE_CSV_PATH)
+            df = pd.concat([df_hist, df_future], ignore_index=True)
+        else:
+            df = df_hist
+    else:
+        df = pd.read_csv(csv_path)
     # Keep only required columns and ensure correct types
     df = df[['year', 'abbr', 'relative_margin']].copy()
     df['year'] = df['year'].astype(int)
@@ -56,7 +77,7 @@ def save_all_states_histogram(changes: pd.Series, out_path: Path) -> None:
     min_c, max_c = float(changes.min()), float(changes.max())
     lim = max(abs(min_c), abs(max_c))
     lim = max(lim, 0.05)  # ensure some width
-    bins = np.linspace(-lim, lim, 50)
+    bins = np.linspace(-lim, lim, 50).tolist()
 
     ax.hist(changes, bins=bins, color='#58a6ff', edgecolor='#161b22', alpha=0.9)
     ax.axvline(0, color='#f78166', linestyle='-', linewidth=1.5, alpha=0.9)
@@ -66,20 +87,22 @@ def save_all_states_histogram(changes: pd.Series, out_path: Path) -> None:
     ax.set_ylabel('Count')
     
     # set x ticks to be intervals of 0.05 and to util.lean_str
-    x_vals = ax.get_xticks()
     x_ticks = np.arange(-0.3, 0.35, 0.05)
     ax.set_xticks(x_ticks)
-    ax.set_xticklabels([utils.lean_str(x) for x in x_ticks])
+    ax.set_xticklabels([utils.lean_str(float(x)) for x in x_ticks])
     # display x ticks slanted
     plt.setp(ax.get_xticklabels(), rotation=45, ha='right')
 
     # Summary stats annotation
-    mean = changes.mean()
-    median = changes.median()
-    var = changes.var(ddof=1)
-    std = changes.std(ddof=1)
+    s = changes.astype(float)
+    # Use numpy for stats to avoid typing issues
+    arr = s.to_numpy(dtype=float)
+    mean = float(np.mean(arr))
+    median = float(np.median(arr))
+    var = float(np.var(arr, ddof=1)) if arr.size > 1 else float('nan')
+    std = float(np.std(arr, ddof=1)) if arr.size > 1 else float('nan')
     text = (
-        f"n = {changes.shape[0]}\n"
+        f"n = {arr.size}\n"
         f"mean = {mean:.4f}\n"
         f"median = {median:.4f}\n"
         f"variance = {var:.6f}\n"
@@ -109,9 +132,20 @@ def save_state_barplot(state_df: pd.DataFrame, out_path: Path) -> None:
     ax.set_title(f'{abbr}: 4-year Changes in Relative Margin')
     ax.set_xlabel('Election year')
     ax.set_ylabel('Change in relative_margin')
+
+    # Ensure all years are shown and pad x-limits for clarity
+    ax.set_xticks(years)
+    ax.set_xlim(int(years.min()) - 1, int(years.max()) + 1)
+
+    # Show yellow dashed line at 2026 if future data is present
+    if years.max() > 2024:
+        ax.axvline(FUTURE_YEAR_MARK, color='#FFD700', linestyle='--', linewidth=2.5, alpha=0.95)
+        ymax = ax.get_ylim()[1]
+        ax.text(FUTURE_YEAR_MARK + 0.2, ymax * 0.95, str(FUTURE_YEAR_MARK), color='#FFD700', rotation=90,
+                va='top', ha='left', fontsize=9)
+
     y_vals = ax.get_yticks()
-    ax.set_yticklabels([utils.lean_str(y) for y in y_vals])
-    ax.set_xticks(years)  # Ensure all years are shown
+    ax.set_yticklabels([utils.lean_str(float(y)) for y in y_vals])
 
     fig.tight_layout()
     fig.savefig(out_path, dpi=180)
@@ -119,17 +153,19 @@ def save_state_barplot(state_df: pd.DataFrame, out_path: Path) -> None:
 
 
 def compute_stats(changes: pd.Series) -> dict:
+    s = changes.astype(float)
+    arr = s.to_numpy(dtype=float)
     return {
-        'count': int(changes.shape[0]),
-        'mean': float(changes.mean()),
-        'median': float(changes.median()),
-        'variance': float(changes.var(ddof=1)) if changes.shape[0] > 1 else np.nan,
-        'std_dev': float(changes.std(ddof=1)) if changes.shape[0] > 1 else np.nan,
+        'count': int(arr.size),
+        'mean': float(np.mean(arr)),
+        'median': float(np.median(arr)),
+        'variance': float(np.var(arr, ddof=1)) if arr.size > 1 else float('nan'),
+        'std_dev': float(np.std(arr, ddof=1)) if arr.size > 1 else float('nan'),
     }
 
 
 def main():
-    df = load_data(CSV_PATH)
+    df = load_data(CSV_PATH, USE_FUTURE)
     changes_df = compute_margin_changes(df)
 
     # All-states histogram

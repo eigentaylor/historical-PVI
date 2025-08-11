@@ -21,9 +21,13 @@ def save_predictions_to_csv(predictions, historical_data_path, output_suffix):
     """
     # Load historical data
     historical_data = pd.read_csv(historical_data_path)
+    
+    EVs_2024 = historical_data[historical_data['year'] == 2024].set_index('abbr')['electoral_votes'].to_dict()
 
     # Convert predictions to DataFrame
     pred_df = pd.DataFrame(predictions)
+    # only include years > 2024
+    pred_df = pred_df[pred_df['year'] > 2024].copy()
 
     # Add string representations for margins
     pred_df['pres_margin_str'] = pred_df['relative_margin'].apply(
@@ -45,6 +49,9 @@ def save_predictions_to_csv(predictions, historical_data_path, output_suffix):
     for col in columns_to_keep:
         if col not in pred_df.columns:
             pred_df[col] = np.nan
+            
+    # if 'electoral_votes' not in pred_df.columns:
+    pred_df['electoral_votes'] = pred_df['abbr'].map(EVs_2024).fillna(0).astype(int)
 
     result_df = pd.concat([historical_data[columns_to_keep], pred_df[columns_to_keep]], ignore_index=True)
 
@@ -53,8 +60,14 @@ def save_predictions_to_csv(predictions, historical_data_path, output_suffix):
 
     # Generate output file name
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    output_file = f'presidential_margins_future_{output_suffix}_{timestamp}.csv'
+    output_file = f'presidential_margins_future{output_suffix}.csv'
 
     # Save to CSV
     result_df.to_csv(output_file, index=False)
     print(f"Successfully wrote predictions to {output_file}")
+
+if __name__ == '__main__':
+    # import simulated_relative_margins_2024_2100.csv as an example
+    predictions = pd.read_csv('simulated_relative_margins_2024_2100.csv').to_dict(orient='records')
+    historical_data_path = 'presidential_margins.csv'
+    save_predictions_to_csv(predictions, historical_data_path, '')

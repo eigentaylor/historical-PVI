@@ -5,8 +5,15 @@ from collections import defaultdict
 from typing import Dict, List, Tuple
 import utils
 
-CSV_PATH = 'presidential_margins.csv'
+# Toggle for including future projections (>2024) in addition to historical
+USE_FUTURE = True
+HIST_CSV_PATH = 'presidential_margins.csv'
+FUTURE_CSV_PATH = 'presidential_margins_future.csv'
+CSV_PATH = HIST_CSV_PATH
 OUTPUT_DIR = 'tipping_points'
+if USE_FUTURE:
+    OUTPUT_DIR = os.path.join(OUTPUT_DIR, 'future')
+    os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 # Outcome thresholds (total EVs for a party)
 TARGET_EVS = {
@@ -40,9 +47,11 @@ def read_presidential_margins(csv_path: str) -> Dict[int, List[Dict]]:
         for row in reader:
             try:
                 year = int(row['year'])
+                if year >= 2024:
+                    pass
                 abbr = row['abbr']
-                evs = int(row['electoral_votes'])
-                pres_margin = float(row['pres_margin'])  # D positive, R negative
+                evs = int(float(row['electoral_votes']))
+                pres_margin = float(row.get('pres_margin', '0') or 0.0)
                 rel_margin = float(row['relative_margin'])  # D positive, R negative
                 nat_margin = float(row.get('national_margin', '0') or 0.0)
             except (KeyError, ValueError):
@@ -55,6 +64,17 @@ def read_presidential_margins(csv_path: str) -> Dict[int, List[Dict]]:
                 'relative_margin': rel_margin,
                 'national_margin': nat_margin,
             })
+    return by_year
+
+
+def read_data(use_future: bool) -> Dict[int, List[Dict]]:
+    """Read historical data and optionally append future data (years > 2024)."""
+    by_year = read_presidential_margins(HIST_CSV_PATH) if not use_future else read_presidential_margins(FUTURE_CSV_PATH)
+    # if use_future and os.path.exists(FUTURE_CSV_PATH):
+    #     future = read_presidential_margins(FUTURE_CSV_PATH)
+    #     for year, states in future.items():
+    #         if year > 2024:
+    #             by_year[year].extend(states)
     return by_year
 
 
@@ -350,7 +370,7 @@ def build_report(year: int, tipping_points: Dict[str, Dict], ordered_rel: List[T
     am = actual_info['margin']
     actual_line = f"  Actual: {margin_to_str(am)} via {actual_info['state']} (D: {actual_info['D_evs']} EVs, R: {actual_info['R_evs']} EVs)"
 
-    if am >= 0 and d_items:
+    if am >= 0 and d_items and year <= 2024:
         # Insert by margin order among D thresholds
         d_items.append((am, actual_line))
         d_items.sort(key=lambda x: x[0])
@@ -365,12 +385,13 @@ def build_report(year: int, tipping_points: Dict[str, Dict], ordered_rel: List[T
                 tp = tipping_points.get(key)
                 if tp:
                     r_items.append((tp['margin'], f"  {key}: {margin_to_str(tp['margin'])} via {tp['state']} (D: {tp['D_evs_after']} EVs, R: {tp['R_evs_after']} EVs)"))
-            r_items.append((am, actual_line))
+            if year <= 2024:
+                r_items.append((am, actual_line))
             r_items.sort(key=lambda x: x[0])
             # Rebuild r_lines in sorted order to ensure proper placement
             r_lines = [item[1] for item in r_items]
             inserted = True
-        if not inserted:
+        if not inserted and year <= 2024:
             # Fallback: put Actual at the end of R block
             r_lines.append(actual_line)
 
@@ -409,7 +430,7 @@ def build_report(year: int, tipping_points: Dict[str, Dict], ordered_rel: List[T
     lines.append("")
     lines.append("States sorted by relative margins (R to D):")
     for abbr, evs, rm in ordered_rel:
-        state_emoji = utils.emoji_from_lean(rm)
+        state_emoji = utils.emoji_from_lean(rm, use_swing=True)
         lines.append(f"  {state_emoji} {abbr}: {rel_margin_to_str(rm)} ({evs} EV)")
 
     lines.append("")
@@ -443,12 +464,11 @@ def process_year(year: int, states: List[Dict]) -> str:
 
 
 def main():
-    by_year = read_presidential_margins(CSV_PATH)
+    by_year = read_data(USE_FUTURE)
     if not by_year:
         print(f"No data found in {CSV_PATH}")
         return
-    YEARS = sorted(by_year.keys())
-    years = sorted(set(YEARS) & set(by_year.keys())) if YEARS else sorted(by_year.keys())
+    years = sorted(by_year.keys())
     for y in years:
         out_path = process_year(y, by_year[y])
         print(f"Wrote {out_path}")

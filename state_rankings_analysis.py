@@ -23,6 +23,12 @@ def load_data(csv_path: Path) -> pd.DataFrame:
     return df
 
 
+# Add simple toggle and constants for future data and year marker
+USE_FUTURE = True
+FUTURE_CSV_PATH = Path(__file__).resolve().parent / "presidential_margins_future.csv"
+FUTURE_YEAR_MARK = 2026
+
+
 def compute_yearly_ranks(df: pd.DataFrame) -> pd.DataFrame:
     # For each year, rank states by relative_margin (descending: most D-leaning rank 1)
     df = df.sort_values(["year", "relative_margin"], ascending=[True, False]).copy()
@@ -71,6 +77,12 @@ def plot_state_rank_over_time(ranks_df: pd.DataFrame, out_dir: Path) -> None:
             xticks = list(range(min(all_years), max(all_years) + 1, step))
             ax.set_xticks(xticks)
 
+        # Add yellow dashed 2026 line if future years present
+        if max(all_years) > 2024:
+            ax.axvline(FUTURE_YEAR_MARK, color="#FFD700", linestyle="--", linewidth=2.5, alpha=0.95)
+            ax.text(FUTURE_YEAR_MARK + 0.2, ax.get_ylim()[0] - 0.5, str(FUTURE_YEAR_MARK), color="#FFD700",
+                    rotation=90, va="top", ha="left", fontsize=10)
+
         ax.spines["top"].set_visible(False)
         ax.spines["right"].set_visible(False)
 
@@ -85,6 +97,13 @@ def main():
     out_dir = repo_root / "state_rankings"
 
     df = load_data(csv_path)
+
+    # Optionally append future data (>2024 only)
+    if USE_FUTURE and FUTURE_CSV_PATH.exists():
+        df_future = load_data(FUTURE_CSV_PATH)
+        df_future = df_future[df_future["year"] > 2024]
+        df = pd.concat([df, df_future], ignore_index=True)
+
     ranks_df = compute_yearly_ranks(df)
     plot_state_rank_over_time(ranks_df, out_dir)
     print(f"Saved per-state rank plots to: {out_dir}")
