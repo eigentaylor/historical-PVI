@@ -1,6 +1,97 @@
 import csv
 import utils
 
+# Abbreviation to full state name mapping for Electoral_College.csv
+ABBR_TO_NAME = {
+    'AL': 'Alabama', 'AK': 'Alaska', 'AZ': 'Arizona', 'AR': 'Arkansas', 'CA': 'California',
+    'CO': 'Colorado', 'CT': 'Connecticut', 'DE': 'Delaware', 'DC': 'D.C.', 'FL': 'Florida',
+    'GA': 'Georgia', 'HI': 'Hawaii', 'ID': 'Idaho', 'IL': 'Illinois', 'IN': 'Indiana',
+    'IA': 'Iowa', 'KS': 'Kansas', 'KY': 'Kentucky', 'LA': 'Louisiana', 'ME': 'Maine',
+    'MD': 'Maryland', 'MA': 'Massachusetts', 'MI': 'Michigan', 'MN': 'Minnesota', 'MS': 'Mississippi',
+    'MO': 'Missouri', 'MT': 'Montana', 'NE': 'Nebraska', 'NV': 'Nevada', 'NH': 'New Hampshire',
+    'NJ': 'New Jersey', 'NM': 'New Mexico', 'NY': 'New York', 'NC': 'North Carolina', 'ND': 'North Dakota',
+    'OH': 'Ohio', 'OK': 'Oklahoma', 'OR': 'Oregon', 'PA': 'Pennsylvania', 'RI': 'Rhode Island',
+    'SC': 'South Carolina', 'SD': 'South Dakota', 'TN': 'Tennessee', 'TX': 'Texas', 'UT': 'Utah',
+    'VT': 'Vermont', 'VA': 'Virginia', 'WA': 'Washington', 'WV': 'West Virginia', 'WI': 'Wisconsin', 'WY': 'Wyoming'
+}
+
+
+def load_electoral_college_map(path: str = 'Electoral_College.csv'):
+    """Load Electoral College votes by (year, full_state_name) from CSV.
+    Prints warnings for malformed rows.
+    Returns dict[(int year, str state_name)] = int evs
+    """
+    ec_map = {}
+    try:
+        with open(path, newline='', encoding='utf-8') as f:
+            reader = csv.reader(f)
+            for row in reader:
+                if not row or len(row) < 3:
+                    continue
+                try:
+                    year = int(row[0])
+                except ValueError:
+                    # likely a header or malformed row
+                    continue
+                state_name = row[1].strip()
+                evs_str = row[2].strip() if len(row) > 2 else ''
+                if evs_str == '':
+                    # some years intentionally blank; skip
+                    continue
+                try:
+                    evs = int(evs_str)
+                except ValueError:
+                    print(f"Warning: invalid EV '{evs_str}' for {state_name} {year} in {path}")
+                    continue
+                ec_map[(year, state_name)] = evs
+    except FileNotFoundError:
+        print(f"Warning: {path} not found. EVs will default to 0.")
+    return ec_map
+
+
+def get_ev_from_map(year: int, state_po: str, ec_map) -> int:
+    name = ABBR_TO_NAME.get(state_po, None)
+    if name is None:
+        print(f"Warning: unknown state abbreviation '{state_po}' for year {year}")
+        return 0
+    ev = ec_map.get((int(year), name))
+    if ev is None:
+        print(f"Warning: missing EV for {name} ({state_po}) in {year} in Electoral_College.csv")
+        return 0
+    return ev
+
+
+def load_existing_2024_evs(path: str = 'presidential_margins.csv'):
+    """Load 2024 EVs from an existing presidential_margins.csv to preserve them.
+    Returns dict[str abbr] = int evs. Silently ignores missing file.
+    """
+    evs_2024 = {}
+    try:
+        with open(path, newline='', encoding='utf-8') as f:
+            reader = csv.DictReader(f)
+            if not reader or not reader.fieldnames:
+                return evs_2024
+            year_field = 'year' if 'year' in reader.fieldnames else None
+            abbr_field = 'abbr' if 'abbr' in reader.fieldnames else ('state_po' if 'state_po' in reader.fieldnames else None)
+            ev_field = 'electoral_votes' if 'electoral_votes' in reader.fieldnames else None
+            if not (year_field and abbr_field and ev_field):
+                return evs_2024
+            for row in reader:
+                if str(row.get(year_field, '')).strip() == '2024':
+                    abbr = (row.get(abbr_field) or '').strip()
+                    ev_str = (row.get(ev_field) or '').strip()
+                    if abbr and ev_str:
+                        try:
+                            # handle possible float-like strings
+                            evs_2024[abbr] = int(float(ev_str))
+                        except ValueError:
+                            print(f"Warning: invalid 2024 EV '{ev_str}' for {abbr} in {path}")
+    except FileNotFoundError:
+        # OK if the file doesn't exist yet
+        pass
+    return evs_2024
+
+
 def run_import_csv(start_year=1976):
     input_file = "data/1976-2020-president.csv"
     output_file = "presidential_margins.csv"
@@ -50,15 +141,10 @@ def run_import_csv(start_year=1976):
                 results.setdefault(key, {}).setdefault("R", 0)
                 results[key]["R"] += votes
 
-    # Load electoral votes from 1900_2024_election_results.csv
-    ev_map = {}
-    with open("data/1900_2024_election_results.csv", newline='', encoding='utf-8') as f:
-        reader = csv.DictReader(f)
-        for row in reader:
-            ev_map[(int(row['year']), row['state_po'])] = int(row['electoral_votes']) if row['electoral_votes'] else 0
-            if row['state_po'] in ["ME", "NE"]:
-                # add an extra EV
-                ev_map[(int(row['year']), row['state_po'])] += 1
+    # Load electoral votes mapping from Electoral_College.csv
+    ec_map = load_electoral_college_map('Electoral_College.csv')
+    # Preserve existing 2024 EVs from current presidential_margins.csv
+    existing_2024_evs = load_existing_2024_evs(output_file)
 
     # Prepare output rows
     output_rows = []
@@ -70,7 +156,7 @@ def run_import_csv(start_year=1976):
         total = D + R
         margin = (D - R) / total if total > 0 else ""
         margin_str = utils.lean_str(margin)
-        ev = ev_map.get((int(year), state_po), 0)
+        ev = get_ev_from_map(int(year), state_po, ec_map)
         output_rows.append([int(year), state_po, D, R, margin, margin_str, ev])
 
     # Read 2024 margins from the trends file
@@ -85,9 +171,12 @@ def run_import_csv(start_year=1976):
             margin = (D - R) / (D + R) if (D + R) > 0 else ""
             state_2024_margin[state_po] = margin
             margin_str = utils.lean_str(margin)
-            ev = ev_map.get((2024, state_po), 0)
+            # Use EVs from existing presidential_margins.csv for 2024, not Electoral_College.csv
+            ev_2024 = existing_2024_evs.get(state_po)
+            if ev_2024 is None:
+                print(f"Warning: missing 2024 EV for {state_po} in {output_file}; leaving blank in new output")
             # Update the output rows with 2024 margin
-            output_rows.append([2024, state_po, D, R, margin, margin_str, ev])
+            output_rows.append([2024, state_po, D, R, margin, margin_str, (ev_2024 if ev_2024 is not None else '')])
             
     # check what 2016 AZ D_votes were
     az_2016_d_votes = next((row[2] for row in output_rows if row[0] == 2016 and row[1] == "AZ"), None)
@@ -119,3 +208,4 @@ def run_import_csv(start_year=1976):
         writer.writerows(output_rows)
 
     print(f"Done! Output written to {output_file}")
+
