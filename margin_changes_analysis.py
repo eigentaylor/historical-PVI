@@ -3,6 +3,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from pathlib import Path
 
+import utils
+
 # Settings
 plt.style.use('dark_background')
 plt.rcParams.update({
@@ -54,7 +56,7 @@ def save_all_states_histogram(changes: pd.Series, out_path: Path) -> None:
     min_c, max_c = float(changes.min()), float(changes.max())
     lim = max(abs(min_c), abs(max_c))
     lim = max(lim, 0.05)  # ensure some width
-    bins = np.linspace(-lim, lim, 41)
+    bins = np.linspace(-lim, lim, 50)
 
     ax.hist(changes, bins=bins, color='#58a6ff', edgecolor='#161b22', alpha=0.9)
     ax.axvline(0, color='#f78166', linestyle='-', linewidth=1.5, alpha=0.9)
@@ -62,6 +64,14 @@ def save_all_states_histogram(changes: pd.Series, out_path: Path) -> None:
     ax.set_title('Distribution of 4-year Changes in Relative Margin (All States)')
     ax.set_xlabel('Change in relative_margin (this year - 4 years prior)')
     ax.set_ylabel('Count')
+    
+    # set x ticks to be intervals of 0.05 and to util.lean_str
+    x_vals = ax.get_xticks()
+    x_ticks = np.arange(-0.3, 0.35, 0.05)
+    ax.set_xticks(x_ticks)
+    ax.set_xticklabels([utils.lean_str(x) for x in x_ticks])
+    # display x ticks slanted
+    plt.setp(ax.get_xticklabels(), rotation=45, ha='right')
 
     # Summary stats annotation
     mean = changes.mean()
@@ -99,11 +109,9 @@ def save_state_barplot(state_df: pd.DataFrame, out_path: Path) -> None:
     ax.set_title(f'{abbr}: 4-year Changes in Relative Margin')
     ax.set_xlabel('Election year')
     ax.set_ylabel('Change in relative_margin')
-
-    # nicer x ticks (every 8 years to reduce clutter if many years)
-    if years.size > 10:
-        ticks = years[::2]
-        ax.set_xticks(ticks)
+    y_vals = ax.get_yticks()
+    ax.set_yticklabels([utils.lean_str(y) for y in y_vals])
+    ax.set_xticks(years)  # Ensure all years are shown
 
     fig.tight_layout()
     fig.savefig(out_path, dpi=180)
