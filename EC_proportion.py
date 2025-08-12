@@ -8,11 +8,16 @@ import utils  # Import utils for lean_str
 
 
 # Configuration
-USE_FUTURE = True  # Set True to append future projections to history
-OUTPUT_DIR = "EC_proportion"
-if USE_FUTURE:
-    OUTPUT_DIR = os.path.join(OUTPUT_DIR, 'future')
-    os.makedirs(OUTPUT_DIR, exist_ok=True)
+USE_FUTURE = False  # Set True to append future projections to history
+OUTPUT_DIR_BASE = "EC_proportion"
+# clear files in the output directory
+if not os.path.exists(OUTPUT_DIR_BASE):
+    os.makedirs(OUTPUT_DIR_BASE)
+# Clear any existing files in the output directory
+for filename in os.listdir(OUTPUT_DIR_BASE):
+    file_path = os.path.join(OUTPUT_DIR_BASE, filename)
+    if os.path.isfile(file_path):
+        os.remove(file_path)
 
 # Add a configuration option for scaling
 SCALE_TO_TOTAL_EVS = True  # Set True to scale y-axis to (0, 538)
@@ -39,10 +44,10 @@ CATEGORY_COLORS = {
     "lockedD": "#00008B",      # darkblue
 }
 
-LOCKED = 0.3
-SAFE = 0.2
-LEAN = 0.1
-TILT = 0.04
+LOCKED = 0.2
+SAFE = 0.1
+LEAN = 0.08
+TILT = 0.05
 
 # Ranges for each category
 CATEGORY_THRESHOLDS = {
@@ -81,6 +86,22 @@ def get_category_ranges(thresholds: dict, order: List[str]) -> dict:
 CATEGORY_RANGES = get_category_ranges(CATEGORY_THRESHOLDS, CATEGORY_ORDER)
 
 
+def filter_year_range(df: pd.DataFrame, year_range=None) -> pd.DataFrame:
+    """Filter df to inclusive [start, end] if year_range is provided; otherwise return df."""
+    if not year_range:
+        return df
+    start, end = year_range
+    return df[(df["year"] >= start) & (df["year"] <= end)].copy()
+
+
+def make_range_suffix(year_range=None) -> str:
+    """Return a filename suffix like _2000_2024 for a given range, else empty string."""
+    if not year_range:
+        return ""
+    start, end = year_range
+    return f"_{int(start)}_{int(end)}"
+
+
 def load_data(use_future: bool) -> pd.DataFrame:
     """Load margins data. Optionally append future projections to history."""
     if use_future:
@@ -111,7 +132,7 @@ def categorize_relative_margin(x: float) -> str:
 
 
 def build_proportion_table(df: pd.DataFrame) -> pd.DataFrame:
-    """Return a dataframe indexed by year with columns per category of EV proportions."""
+    """Return a dataframe indexed by year with columns per category of EV proportions and their deltas."""
     tmp = df.copy()
     # Convert relative_margin to float if needed
     tmp["relative_margin"] = pd.to_numeric(tmp["relative_margin"], errors="coerce")
@@ -135,10 +156,17 @@ def build_proportion_table(df: pd.DataFrame) -> pd.DataFrame:
     # Convert to proportions of that year's total EVs
     totals = pivot.sum(axis=1)
     proportions = pivot.div(totals, axis=0)
-    return proportions
+
+    # Calculate deltas (year-over-year differences)
+    deltas = proportions.diff().fillna(0)  # Fill NaN for the first year with 0
+    deltas.columns = [f"{col}_delta" for col in deltas.columns]
+
+    # Combine proportions and deltas into a single DataFrame
+    combined = pd.concat([proportions, deltas], axis=1)
+    return combined
 
 
-def plot_stacked_area(proportions: pd.DataFrame, output_dir: str) -> None:
+def plot_stacked_area(proportions: pd.DataFrame, output_dir: str, filename_suffix: str = "") -> None:
     os.makedirs(output_dir, exist_ok=True)
 
     # Cast to numpy arrays for plotting
@@ -156,6 +184,16 @@ def plot_stacked_area(proportions: pd.DataFrame, output_dir: str) -> None:
         y_limit = 538
         dashed_line_value = 270
         dashed_line_label = "270 EVs"
+        yticks = np.concatenate([np.arange(0, 270+1, 15), np.arange(283, 538+1, 15), [270, 0, 538]])
+        ax.set_yticks(yticks)
+        # Custom tick labels: if > 270, show as "538-x"
+        ytick_labels = []
+        for val in yticks:
+            if val > 270:
+                ytick_labels.append(f"{538-val}")
+            else:
+                ytick_labels.append(str(val))
+        ax.set_yticklabels(ytick_labels)
     else:
         y_label = "Proportion of EVs"
         y_limit = 1
@@ -165,7 +203,10 @@ def plot_stacked_area(proportions: pd.DataFrame, output_dir: str) -> None:
     # Unpack the series so stackplot receives y1, y2, ...
     ax.stackplot(years, *series, labels=CATEGORY_ORDER, colors=colors, alpha=0.9)
 
-    ax.set_title("Electoral College EV Proportions by Partisan Category of Relative Margins Over Time")
+    title = "Electoral College EV Proportions by Partisan Category of Relative Margins Over Time"
+    if years.size:
+        title += f" ({int(years.min())}-{int(years.max())})"
+    ax.set_title(title)
     ax.set_xlabel("Election year")
     ax.set_ylabel(y_label)
     ax.set_ylim(0, y_limit)
@@ -191,13 +232,12 @@ def plot_stacked_area(proportions: pd.DataFrame, output_dir: str) -> None:
         text.set_color("white")
 
     fig.tight_layout()
-    out_png = os.path.join(output_dir, "EC_proportions.png")
+    out_png = os.path.join(output_dir, f"EC_proportions{filename_suffix}.png")
     fig.savefig(out_png, dpi=200)
     plt.close(fig)
 
 
-
-def write_category_details(df: pd.DataFrame, output_dir: str) -> None:
+def write_category_details(df: pd.DataFrame, output_dir: str, filename_suffix: str = "") -> None:
     """Write text files for each year listing states in each category."""
     os.makedirs(output_dir, exist_ok=True)
 
@@ -209,7 +249,7 @@ def write_category_details(df: pd.DataFrame, output_dir: str) -> None:
     years = df["year"].unique()
     for year in years:
         year_df = df[df["year"] == year]
-        year_file = os.path.join(output_dir, f"{year}_categories.txt")
+        year_file = os.path.join(output_dir, f"{year}_categories{filename_suffix}.txt")
 
         with open(year_file, "w") as f:
             f.write(f"Year: {year}\n\n")
@@ -235,19 +275,52 @@ def write_category_details(df: pd.DataFrame, output_dir: str) -> None:
                 f.write("\n")
 
 
-def main():
-    df = load_data(USE_FUTURE)
-    proportions = build_proportion_table(df)
+def run_for_range(df: pd.DataFrame, output_dir: str, year_range=None) -> None:
+    """Build CSV, per-year category files, and plot for the given year_range into output_dir."""
+    df_r = filter_year_range(df, year_range)
+    if df_r.empty:
+        return
 
     # Ensure output dir exists before writing CSV
-    os.makedirs(OUTPUT_DIR, exist_ok=True)
-    # Optional: write proportions to CSV for inspection
-    proportions.to_csv(os.path.join(OUTPUT_DIR, "EC_proportions.csv"))
+    os.makedirs(output_dir, exist_ok=True)
 
+    suffix = make_range_suffix(year_range)
+
+    proportions = build_proportion_table(df_r)
     # Write category details for each year
-    write_category_details(df, OUTPUT_DIR)
+    if year_range is None:
+        # Write proportions (with deltas) to CSV for inspection
+        proportions.to_csv(os.path.join(output_dir, f"EC_proportions{suffix}.csv"))
+        write_category_details(df_r, output_dir, filename_suffix=suffix)
+    else:
+        # find the existing EC_proportions.csv and filter it to the year range
+        existing_file = os.path.join(output_dir, f"EC_proportions.csv")
+        if os.path.exists(existing_file):
+            proportions = pd.read_csv(existing_file)
+            proportions = proportions[proportions["year"].between(year_range[0], year_range[1])]
+            proportions.to_csv(os.path.join(output_dir, f"EC_proportions{suffix}.csv"), index=False)
 
-    plot_stacked_area(proportions, OUTPUT_DIR)
+    # Plot
+    plot_stacked_area(proportions, output_dir, filename_suffix=suffix)
+
+
+def run(use_future: bool = USE_FUTURE, ranges=None) -> None:
+    """Run outputs for provided ranges. ranges is a list like [None, (2000,2024)]."""
+    df = load_data(use_future)
+    # Choose output dir based on future/history to avoid mixing datasets
+    output_dir = os.path.join(OUTPUT_DIR_BASE, 'future') if use_future else OUTPUT_DIR_BASE
+
+    if ranges is None:
+        ranges = [None, (2000, 2024)]
+
+    for r in ranges:
+        run_for_range(df, output_dir, year_range=r)
+
+
+def main():
+    # Default behavior replicates prior outputs and also 2000–2024
+    #run(True)
+    run(False, ranges=[None, (2000, 2024)])
 
 
 if __name__ == "__main__":

@@ -183,20 +183,45 @@ def run_import_csv(start_year=1976):
             
     years = sorted(list(set(row[0] for row in output_rows)))
 
-    # calculate distance from national average
+    # calculate distance from national average and relative margin delta
     for year in years:
         total_D = sum(row[2] for row in output_rows if row[0] == year)
         total_R = sum(row[3] for row in output_rows if row[0] == year)
         national_margin = (total_D - total_R) / (total_D + total_R) if (total_D + total_R) > 0 else 0.0
-        
+
         for row in output_rows:
             if row[0] == year:
                 state_margin = (row[2] - row[3]) / (row[2] + row[3]) if (row[2] + row[3]) > 0 else 0.0
-                row.append(state_margin - national_margin)  # Margin delta
-                row.append(utils.lean_str(state_margin - national_margin))  # Margin delta string
+                relative_margin = state_margin - national_margin
+                row.append(relative_margin)  # Margin delta
+                row.append(utils.lean_str(relative_margin))  # Margin delta string
                 row.append(national_margin)
                 row.append(utils.lean_str(national_margin))
-                # electoral votes already present
+    # sort output rows by abbr, year
+    output_rows.sort(key=lambda x: (x[1], x[0]))
+    # calculate relative margin delta
+    for row in output_rows:
+        year = row[0]
+        state_po = row[1]
+        if year > min(years):
+            prev_year = year - 4
+            prev_row = next((r for r in output_rows if r[0] == prev_year and r[1] == state_po), None)
+            if prev_row:
+                # relative margin delta = current relative_margin - previous relative_margin
+                relative_margin_delta = row[7] - prev_row[7]  # relative_margin - previous relative_margin
+                # Insert relative_margin_delta and its string between entries 8 and 9
+                row.insert(9, relative_margin_delta)
+                row.insert(10, utils.lean_str(relative_margin_delta))
+                # national margin delta
+                national_margin_delta = row[11] - prev_row[11]  # national_margin - previous national_margin
+                row.append(national_margin_delta)
+                row.append(utils.lean_str(national_margin_delta))
+            else:
+                row.insert(9, '')  # No previous year data
+                row.insert(10, '')
+        else:
+            row.insert(9, '')  # No previous year data
+            row.insert(10, '')
 
     # Sort by state abbreviation
     output_rows.sort(key=lambda x: (x[1], x[0]))
@@ -204,8 +229,10 @@ def run_import_csv(start_year=1976):
     # Write to output CSV
     with open(output_file, "w", newline='', encoding='utf-8') as f:
         writer = csv.writer(f)
-        writer.writerow(["year", "abbr", "D_votes", "R_votes", "pres_margin", "pres_margin_str", "electoral_votes", "relative_margin", "relative_margin_str", "national_margin", "national_margin_str"])
+        writer.writerow(["year", "abbr", "D_votes", "R_votes", "pres_margin", "pres_margin_str", "electoral_votes", "relative_margin", "relative_margin_str", "relative_margin_delta", "relative_margin_delta_str", "national_margin", "national_margin_str", "national_margin_delta", "national_margin_delta_str"])
         writer.writerows(output_rows)
 
     print(f"Done! Output written to {output_file}")
 
+if __name__ == "__main__":
+    run_import_csv()
