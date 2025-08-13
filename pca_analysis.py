@@ -35,6 +35,7 @@ from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 import matplotlib.pyplot as plt
 import seaborn as sns
+import utils
 
 # Use dark mode for all plots
 plt.style.use("dark_background")
@@ -322,26 +323,28 @@ def plot_biplot(scores: np.ndarray, loadings: np.ndarray, feature_names: List[st
     plt.close(fig)
 
 
-def print_interpretation(feature_names: List[str], loadings: np.ndarray, explained: np.ndarray, top_n: int = 8):
+def save_interpretation_log(feature_names: List[str], loadings: np.ndarray, explained: np.ndarray, out_dir: str, top_n: int = 8):
     labels = _format_feature_labels(feature_names)
-    print("\nPCA interpretation (top features per component):")
-    for i in range(min(5, loadings.shape[1])):
-        comp = loadings[:, i]
-        order = np.argsort(comp)
-        neg = [(labels[idx], comp[idx]) for idx in order[:top_n]]
-        pos = [(labels[idx], comp[idx]) for idx in order[-top_n:][::-1]]
-        ev = explained[i] * 100
-        print(f"\nPC{i+1}: {ev:.1f}% variance")
-        print("  Strongly positive (move together):")
-        for name, v in pos:
-            print(f"    + {name:>15s}: {v:+.3f}")
-        print("  Strongly negative (opposite direction):")
-        for name, v in neg:
-            print(f"    - {name:>15s}: {v:+.3f}")
-    print("\nNotes:")
-    print("- Features with large positive loadings rise/fall together along that PC; large negatives move inversely.")
-    print("- For margins datasets: positive = more Democratic relative to nation; negative = more Republican relative to nation.")
-    print("- For EC datasets: positive loadings increase the share in those buckets; negatives decrease it.")
+    log_path = os.path.join(out_dir, "interpretation_log.txt")
+    with open(log_path, "w") as f:
+        f.write("PCA interpretation (top features per component):\n")
+        for i in range(min(5, loadings.shape[1])):
+            comp = loadings[:, i]
+            order = np.argsort(comp)
+            neg = [(labels[idx], comp[idx]) for idx in order[:top_n]]
+            pos = [(labels[idx], comp[idx]) for idx in order[-top_n:][::-1]]
+            ev = explained[i] * 100
+            f.write(f"\nPC{i+1}: {ev:.1f}% variance\n")
+            f.write("  Strongly positive (move together):\n")
+            for name, v in pos:
+                f.write(f"    + {name:>15s}: {utils.lean_str(v)} ({v:+.3f})\n")
+            f.write("  Strongly negative (opposite direction):\n")
+            for name, v in neg:
+                f.write(f"    - {name:>15s}: {utils.lean_str(v)} ({v:+.3f})\n")
+        f.write("\nNotes:\n")
+        f.write("- Features with large positive loadings rise/fall together along that PC; large negatives move inversely.\n")
+        f.write("- For margins datasets: positive = more Democratic relative to nation; negative = more Republican relative to nation.\n")
+        f.write("- For EC datasets: positive loadings increase the share in those buckets; negatives decrease it.\n")
 
 
 def _total_variance(X_scaled: np.ndarray) -> float:
@@ -464,7 +467,8 @@ def main(year_start: int | None = None, year_end: int | None = None,
     pc1 = f"{explained_used[0]*100:.1f}%" if len(explained_used) >= 1 else "n/a"
     pc2 = f"{explained_used[1]*100:.1f}%" if len(explained_used) >= 2 else "n/a"
     print(f"Explained variance by first {len(explained_used)} PCs: {total:.1f}% (PC1: {pc1}, PC2: {pc2})")
-    print_interpretation(data.feature_names, loadings_used, explained_used, top_n=8)
+    save_interpretation_log(data.feature_names, loadings_used, explained_used, out_dir, top_n=8)
+    print(f"\nSaved interpretation log to: {os.path.join(out_dir, 'interpretation_log.txt')}")
     print(f"\nSaved outputs to: {os.path.abspath(out_dir)}")
 
 

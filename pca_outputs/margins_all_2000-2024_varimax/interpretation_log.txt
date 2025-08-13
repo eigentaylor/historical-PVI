@@ -1,0 +1,106 @@
+PCA interpretation (top features per component):
+
+PC1: 43.2% variance
+  Strongly positive (move together):
+    +              CO: D+23.9 (+0.239)
+    +              NC: D+19.6 (+0.196)
+    +              VT: D+19.4 (+0.194)
+    +              MD: D+19.2 (+0.192)
+    +              VA: D+18.4 (+0.184)
+    +              CA: D+17.9 (+0.179)
+    +              NM: D+17.6 (+0.176)
+    +              WA: D+17.3 (+0.173)
+  Strongly negative (opposite direction):
+    -              AR: R+29.4 (-0.294)
+    -              TN: R+22.2 (-0.222)
+    -              MO: R+21.4 (-0.214)
+    -              KY: R+19.8 (-0.198)
+    -              PA: R+19.2 (-0.192)
+    -              WV: R+19.1 (-0.191)
+    -              SD: R+18.5 (-0.185)
+    -              WY: R+18.0 (-0.180)
+
+PC2: 17.9% variance
+  Strongly positive (move together):
+    +              HI: D+33.5 (+0.335)
+    +              WI: D+29.0 (+0.290)
+    +              IN: D+26.1 (+0.261)
+    +              NV: D+25.0 (+0.250)
+    +              ND: D+18.1 (+0.181)
+    +              NM: D+17.9 (+0.179)
+    +              NC: D+17.5 (+0.175)
+    +              OH: D+17.5 (+0.175)
+  Strongly negative (opposite direction):
+    -              MA: R+37.9 (-0.379)
+    -              AZ: R+25.6 (-0.256)
+    -              TX: R+16.5 (-0.165)
+    -              UT: R+11.4 (-0.114)
+    -              NH: R+11.4 (-0.114)
+    -              LA: R+9.3 (-0.093)
+    -              TN: R+8.1 (-0.081)
+    -              AR: R+7.7 (-0.077)
+
+PC3: 13.8% variance
+  Strongly positive (move together):
+    +              NH: D+36.1 (+0.361)
+    +              ID: D+35.5 (+0.355)
+    +              MT: D+26.6 (+0.266)
+    +              WY: D+22.7 (+0.227)
+    +              MN: D+21.9 (+0.219)
+    +              ME: D+14.8 (+0.148)
+    +              CO: D+14.1 (+0.141)
+    +              SD: D+14.1 (+0.141)
+  Strongly negative (opposite direction):
+    -              NJ: R+36.1 (-0.361)
+    -              NY: R+26.2 (-0.262)
+    -              HI: R+22.5 (-0.225)
+    -              AL: R+14.5 (-0.145)
+    -              RI: R+14.2 (-0.142)
+    -              MS: R+14.1 (-0.141)
+    -              FL: R+13.7 (-0.137)
+    -              CA: R+8.3 (-0.083)
+
+PC4: 7.6% variance
+  Strongly positive (move together):
+    +              CT: D+50.1 (+0.501)
+    +              DE: D+39.2 (+0.392)
+    +              NE: D+29.5 (+0.295)
+    +              KS: D+28.8 (+0.288)
+    +              GA: D+18.9 (+0.189)
+    +              OK: D+16.6 (+0.166)
+    +              RI: D+16.6 (+0.166)
+    +              IN: D+15.5 (+0.155)
+  Strongly negative (opposite direction):
+    -              IL: R+20.9 (-0.209)
+    -              FL: R+18.4 (-0.184)
+    -              NV: R+17.7 (-0.177)
+    -              DC: R+16.8 (-0.168)
+    -              SC: R+11.8 (-0.118)
+    -              CA: R+10.9 (-0.109)
+    -              MS: R+10.2 (-0.102)
+    -              NY: R+10.1 (-0.101)
+
+PC5: 8.0% variance
+  Strongly positive (move together):
+    +              IL: D+37.8 (+0.378)
+    +              UT: D+27.4 (+0.274)
+    +              DC: D+12.8 (+0.128)
+    +              KS: D+11.8 (+0.118)
+    +              IN: D+11.7 (+0.117)
+    +              AR: D+10.1 (+0.101)
+    +              TX: D+8.1 (+0.081)
+    +              NE: D+7.5 (+0.075)
+  Strongly negative (opposite direction):
+    -              SC: R+50.9 (-0.509)
+    -              MS: R+36.0 (-0.360)
+    -              ME: R+24.7 (-0.247)
+    -              MN: R+24.3 (-0.243)
+    -              NH: R+22.0 (-0.220)
+    -              NJ: R+20.4 (-0.204)
+    -              VT: R+14.0 (-0.140)
+    -              OH: R+13.8 (-0.138)
+
+Notes:
+- Features with large positive loadings rise/fall together along that PC; large negatives move inversely.
+- For margins datasets: positive = more Democratic relative to nation; negative = more Republican relative to nation.
+- For EC datasets: positive loadings increase the share in those buckets; negatives decrease it.

@@ -1,0 +1,106 @@
+PCA interpretation (top features per component):
+
+PC1: 11.5% variance
+  Strongly positive (move together):
+    +          Tilt R: D+95.5 (+0.955)
+    +          Safe R: R+0.5 (-0.005)
+    +          Safe D: R+1.7 (-0.017)
+    +           Swing: R+2.6 (-0.026)
+    +          Lean D: R+4.3 (-0.043)
+    +        Locked D: R+7.7 (-0.077)
+    +          Tilt D: R+7.8 (-0.078)
+    +          Lean R: R+18.8 (-0.188)
+  Strongly negative (opposite direction):
+    -        Locked R: R+19.5 (-0.195)
+    -          Lean R: R+18.8 (-0.188)
+    -          Tilt D: R+7.8 (-0.078)
+    -        Locked D: R+7.7 (-0.077)
+    -          Lean D: R+4.3 (-0.043)
+    -           Swing: R+2.6 (-0.026)
+    -          Safe D: R+1.7 (-0.017)
+    -          Safe R: R+0.5 (-0.005)
+
+PC2: 18.4% variance
+  Strongly positive (move together):
+    +        Locked D: D+47.8 (+0.478)
+    +          Tilt D: D+6.4 (+0.064)
+    +           Swing: D+4.5 (+0.045)
+    +          Lean D: D+2.3 (+0.023)
+    +          Tilt R: D+0.2 (+0.002)
+    +          Safe R: R+2.9 (-0.029)
+    +          Lean R: R+6.6 (-0.066)
+    +        Locked R: R+7.4 (-0.074)
+  Strongly negative (opposite direction):
+    -          Safe D: R+86.8 (-0.868)
+    -        Locked R: R+7.4 (-0.074)
+    -          Lean R: R+6.6 (-0.066)
+    -          Safe R: R+2.9 (-0.029)
+    -          Tilt R: D+0.2 (+0.002)
+    -          Lean D: D+2.3 (+0.023)
+    -           Swing: D+4.5 (+0.045)
+    -          Tilt D: D+6.4 (+0.064)
+
+PC3: 13.2% variance
+  Strongly positive (move together):
+    +          Lean D: D+95.2 (+0.952)
+    +          Safe R: D+0.6 (+0.006)
+    +           Swing: R+4.0 (-0.040)
+    +          Tilt R: R+4.3 (-0.043)
+    +          Safe D: R+5.7 (-0.057)
+    +          Tilt D: R+9.4 (-0.094)
+    +          Lean R: R+15.1 (-0.151)
+    +        Locked R: R+15.4 (-0.154)
+  Strongly negative (opposite direction):
+    -        Locked D: R+17.8 (-0.178)
+    -        Locked R: R+15.4 (-0.154)
+    -          Lean R: R+15.1 (-0.151)
+    -          Tilt D: R+9.4 (-0.094)
+    -          Safe D: R+5.7 (-0.057)
+    -          Tilt R: R+4.3 (-0.043)
+    -           Swing: R+4.0 (-0.040)
+    -          Safe R: D+0.6 (+0.006)
+
+PC4: 20.0% variance
+  Strongly positive (move together):
+    +        Locked R: D+69.8 (+0.698)
+    +        Locked D: D+1.5 (+0.015)
+    +          Tilt D: D+0.7 (+0.007)
+    +          Safe D: D+0.4 (+0.004)
+    +          Lean D: D+0.4 (+0.004)
+    +          Tilt R: D+0.4 (+0.004)
+    +           Swing: D+0.3 (+0.003)
+    +          Safe R: R+0.0 (-0.000)
+  Strongly negative (opposite direction):
+    -          Lean R: R+71.6 (-0.716)
+    -          Safe R: R+0.0 (-0.000)
+    -           Swing: D+0.3 (+0.003)
+    -          Tilt R: D+0.4 (+0.004)
+    -          Lean D: D+0.4 (+0.004)
+    -          Safe D: D+0.4 (+0.004)
+    -          Tilt D: D+0.7 (+0.007)
+    -        Locked D: D+1.5 (+0.015)
+
+PC5: 12.4% variance
+  Strongly positive (move together):
+    +        Locked D: D+25.4 (+0.254)
+    +          Safe D: D+9.1 (+0.091)
+    +          Tilt D: D+8.3 (+0.083)
+    +          Lean R: D+5.2 (+0.052)
+    +        Locked R: D+5.0 (+0.050)
+    +          Lean D: D+3.9 (+0.039)
+    +          Tilt R: D+2.5 (+0.025)
+    +          Safe R: R+1.9 (-0.019)
+  Strongly negative (opposite direction):
+    -           Swing: R+95.5 (-0.955)
+    -          Safe R: R+1.9 (-0.019)
+    -          Tilt R: D+2.5 (+0.025)
+    -          Lean D: D+3.9 (+0.039)
+    -        Locked R: D+5.0 (+0.050)
+    -          Lean R: D+5.2 (+0.052)
+    -          Tilt D: D+8.3 (+0.083)
+    -          Safe D: D+9.1 (+0.091)
+
+Notes:
+- Features with large positive loadings rise/fall together along that PC; large negatives move inversely.
+- For margins datasets: positive = more Democratic relative to nation; negative = more Republican relative to nation.
+- For EC datasets: positive loadings increase the share in those buckets; negatives decrease it.
