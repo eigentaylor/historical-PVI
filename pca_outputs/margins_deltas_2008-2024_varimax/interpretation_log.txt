@@ -1,0 +1,106 @@
+PCA interpretation (top features per component):
+
+PC1: 33.7% variance
+  Strongly positive (move together):
+    +              VT: D+22.7 (+0.227)
+    +              MI: D+22.3 (+0.223)
+    +              HI: D+21.5 (+0.215)
+    +              NV: D+20.7 (+0.207)
+    +              WI: D+20.7 (+0.207)
+    +              ND: D+20.2 (+0.202)
+    +              IA: D+20.2 (+0.202)
+    +              NC: D+20.0 (+0.200)
+  Strongly negative (opposite direction):
+    -              AZ: R+27.6 (-0.276)
+    -              MA: R+25.1 (-0.251)
+    -              TX: R+18.0 (-0.180)
+    -              DC: R+16.4 (-0.164)
+    -              GA: R+16.2 (-0.162)
+    -              LA: R+13.8 (-0.138)
+    -              AK: R+12.7 (-0.127)
+    -              UT: R+12.3 (-0.123)
+
+PC2: 30.4% variance
+  Strongly positive (move together):
+    +              AK: D+28.0 (+0.280)
+    +              AL: D+25.5 (+0.255)
+    +              SC: D+24.1 (+0.241)
+    +              MS: D+23.7 (+0.237)
+    +              RI: D+21.6 (+0.216)
+    +              OH: D+21.4 (+0.214)
+    +              MN: D+20.7 (+0.207)
+    +              OK: D+20.2 (+0.202)
+  Strongly negative (opposite direction):
+    -              VA: R+23.3 (-0.233)
+    -              IL: R+22.8 (-0.228)
+    -              UT: R+20.1 (-0.201)
+    -              TX: R+19.0 (-0.190)
+    -              CA: R+16.7 (-0.167)
+    -              NM: R+14.9 (-0.149)
+    -        National: R+13.9 (-0.139)
+    -              GA: R+10.5 (-0.105)
+
+PC3: 23.5% variance
+  Strongly positive (move together):
+    +              KS: D+30.4 (+0.304)
+    +              CO: D+27.1 (+0.271)
+    +              GA: D+23.0 (+0.230)
+    +              CT: D+22.1 (+0.221)
+    +              WY: D+21.0 (+0.210)
+    +              NH: D+20.7 (+0.207)
+    +              WV: D+20.6 (+0.206)
+    +              ID: D+20.2 (+0.202)
+  Strongly negative (opposite direction):
+    -              NY: R+29.5 (-0.295)
+    -              FL: R+27.6 (-0.276)
+    -              NJ: R+19.8 (-0.198)
+    -              CA: R+15.8 (-0.158)
+    -              HI: R+13.6 (-0.136)
+    -              MS: R+13.6 (-0.136)
+    -              OH: R+6.8 (-0.068)
+    -              MD: R+6.8 (-0.068)
+
+PC4: 10.0% variance
+  Strongly positive (move together):
+    +              WA: D+38.2 (+0.382)
+    +              NC: D+32.9 (+0.329)
+    +              DC: D+28.9 (+0.289)
+    +              OR: D+24.0 (+0.240)
+    +              PA: D+20.9 (+0.209)
+    +              WI: D+17.5 (+0.175)
+    +              OH: D+11.6 (+0.116)
+    +              IL: D+11.1 (+0.111)
+  Strongly negative (opposite direction):
+    -              MD: R+38.2 (-0.382)
+    -        National: R+22.9 (-0.229)
+    -              CT: R+21.4 (-0.214)
+    -              NJ: R+19.7 (-0.197)
+    -              CO: R+15.5 (-0.155)
+    -              NH: R+14.6 (-0.146)
+    -              RI: R+13.1 (-0.131)
+    -              ID: R+11.9 (-0.119)
+
+PC5: 2.5% variance
+  Strongly positive (move together):
+    +              AR: D+86.8 (+0.868)
+    +              GA: D+10.6 (+0.106)
+    +              WY: D+10.2 (+0.102)
+    +              TN: D+9.6 (+0.096)
+    +              WA: D+7.5 (+0.075)
+    +              MI: D+7.4 (+0.074)
+    +              MD: D+7.1 (+0.071)
+    +              FL: D+6.0 (+0.060)
+  Strongly negative (opposite direction):
+    -              AK: R+28.6 (-0.286)
+    -              AZ: R+16.1 (-0.161)
+    -              NV: R+10.6 (-0.106)
+    -        National: R+9.2 (-0.092)
+    -              UT: R+9.1 (-0.091)
+    -              HI: R+8.8 (-0.088)
+    -              DC: R+7.4 (-0.074)
+    -              NJ: R+7.3 (-0.073)
+
+Notes:
+- Features with large positive loadings rise/fall together along that PC; large negatives move inversely.
+- For margins datasets: positive = more Democratic relative to nation; negative = more Republican relative to nation.
+- For EC datasets: positive loadings increase the share in those buckets; negatives decrease it.

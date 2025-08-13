@@ -1,0 +1,106 @@
+PCA interpretation (top features per component):
+
+PC1: 23.8% variance
+  Strongly positive (move together):
+    +     safeR_delta: D+71.8 (+0.718)
+    +     leanR_delta: D+67.6 (+0.676)
+    +   lockedR_delta: D+1.9 (+0.019)
+    +     leanD_delta: R+0.4 (-0.004)
+    +   lockedD_delta: R+0.5 (-0.005)
+    +     tiltD_delta: R+2.8 (-0.028)
+    +     safeD_delta: R+4.5 (-0.045)
+    +     swing_delta: R+6.1 (-0.061)
+  Strongly negative (opposite direction):
+    -     tiltR_delta: R+14.4 (-0.144)
+    -     swing_delta: R+6.1 (-0.061)
+    -     safeD_delta: R+4.5 (-0.045)
+    -     tiltD_delta: R+2.8 (-0.028)
+    -   lockedD_delta: R+0.5 (-0.005)
+    -     leanD_delta: R+0.4 (-0.004)
+    -   lockedR_delta: D+1.9 (+0.019)
+    -     leanR_delta: D+67.6 (+0.676)
+
+PC2: 26.3% variance
+  Strongly positive (move together):
+    +     safeD_delta: D+63.2 (+0.632)
+    +   lockedR_delta: D+24.0 (+0.240)
+    +     tiltD_delta: D+17.8 (+0.178)
+    +     leanD_delta: D+4.6 (+0.046)
+    +     leanR_delta: D+1.5 (+0.015)
+    +     safeR_delta: R+3.5 (-0.035)
+    +     swing_delta: R+9.9 (-0.099)
+    +     tiltR_delta: R+24.2 (-0.242)
+  Strongly negative (opposite direction):
+    -   lockedD_delta: R+66.2 (-0.662)
+    -     tiltR_delta: R+24.2 (-0.242)
+    -     swing_delta: R+9.9 (-0.099)
+    -     safeR_delta: R+3.5 (-0.035)
+    -     leanR_delta: D+1.5 (+0.015)
+    -     leanD_delta: D+4.6 (+0.046)
+    -     tiltD_delta: D+17.8 (+0.178)
+    -   lockedR_delta: D+24.0 (+0.240)
+
+PC3: 15.7% variance
+  Strongly positive (move together):
+    +     swing_delta: D+83.4 (+0.834)
+    +   lockedR_delta: D+11.6 (+0.116)
+    +     leanR_delta: D+7.7 (+0.077)
+    +   lockedD_delta: D+4.4 (+0.044)
+    +     leanD_delta: D+1.5 (+0.015)
+    +     tiltD_delta: D+0.8 (+0.008)
+    +     safeD_delta: R+7.6 (-0.076)
+    +     safeR_delta: R+11.2 (-0.112)
+  Strongly negative (opposite direction):
+    -     tiltR_delta: R+51.5 (-0.515)
+    -     safeR_delta: R+11.2 (-0.112)
+    -     safeD_delta: R+7.6 (-0.076)
+    -     tiltD_delta: D+0.8 (+0.008)
+    -     leanD_delta: D+1.5 (+0.015)
+    -   lockedD_delta: D+4.4 (+0.044)
+    -     leanR_delta: D+7.7 (+0.077)
+    -   lockedR_delta: D+11.6 (+0.116)
+
+PC4: 14.6% variance
+  Strongly positive (move together):
+    +     leanD_delta: D+89.6 (+0.896)
+    +     leanR_delta: D+10.9 (+0.109)
+    +     tiltR_delta: D+3.2 (+0.032)
+    +     swing_delta: D+2.3 (+0.023)
+    +     safeD_delta: R+6.4 (-0.064)
+    +     safeR_delta: R+9.8 (-0.098)
+    +   lockedD_delta: R+17.3 (-0.173)
+    +   lockedR_delta: R+26.2 (-0.262)
+  Strongly negative (opposite direction):
+    -     tiltD_delta: R+26.7 (-0.267)
+    -   lockedR_delta: R+26.2 (-0.262)
+    -   lockedD_delta: R+17.3 (-0.173)
+    -     safeR_delta: R+9.8 (-0.098)
+    -     safeD_delta: R+6.4 (-0.064)
+    -     swing_delta: D+2.3 (+0.023)
+    -     tiltR_delta: D+3.2 (+0.032)
+    -     leanR_delta: D+10.9 (+0.109)
+
+PC5: 19.6% variance
+  Strongly positive (move together):
+    +   lockedR_delta: D+67.8 (+0.678)
+    +     tiltR_delta: D+29.8 (+0.298)
+    +     swing_delta: D+10.5 (+0.105)
+    +     safeD_delta: D+5.3 (+0.053)
+    +     safeR_delta: D+3.0 (+0.030)
+    +     leanR_delta: R+0.1 (-0.001)
+    +     leanD_delta: R+0.6 (-0.006)
+    +   lockedD_delta: R+0.8 (-0.008)
+  Strongly negative (opposite direction):
+    -     tiltD_delta: R+66.1 (-0.661)
+    -   lockedD_delta: R+0.8 (-0.008)
+    -     leanD_delta: R+0.6 (-0.006)
+    -     leanR_delta: R+0.1 (-0.001)
+    -     safeR_delta: D+3.0 (+0.030)
+    -     safeD_delta: D+5.3 (+0.053)
+    -     swing_delta: D+10.5 (+0.105)
+    -     tiltR_delta: D+29.8 (+0.298)
+
+Notes:
+- Features with large positive loadings rise/fall together along that PC; large negatives move inversely.
+- For margins datasets: positive = more Democratic relative to nation; negative = more Republican relative to nation.
+- For EC datasets: positive loadings increase the share in those buckets; negatives decrease it.
