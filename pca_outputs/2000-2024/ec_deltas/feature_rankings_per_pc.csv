@@ -1,0 +1,10 @@
+rank,PC1_abbr,PC1_val,PC2_abbr,PC2_val,PC3_abbr,PC3_val,PC4_abbr,PC4_val,PC5_abbr,PC5_val,PC6_abbr,PC6_val,PC7_abbr,PC7_val
+1,lockedR_delta,-0.468,leanR_delta,-0.425,safeD_delta,-0.400,lockedR_delta,-0.466,lockedD_delta,-0.538,tiltR_delta,-0.616,tiltD_delta,-0.246
+2,safeD_delta,-0.423,swing_delta,-0.346,tiltD_delta,-0.363,swing_delta,-0.386,lockedR_delta,-0.295,safeR_delta,-0.228,lockedD_delta,-0.045
+3,leanR_delta,-0.224,tiltD_delta,-0.268,leanD_delta,-0.159,tiltD_delta,-0.154,tiltD_delta,-0.221,tiltD_delta,-0.195,swing_delta,+0.024
+4,tiltR_delta,-0.075,safeR_delta,-0.212,lockedR_delta,-0.033,safeR_delta,-0.070,safeR_delta,-0.091,safeD_delta,-0.076,safeD_delta,+0.176
+5,swing_delta,+0.008,safeD_delta,-0.119,safeR_delta,-0.029,lockedD_delta,+0.068,leanR_delta,+0.014,swing_delta,+0.022,tiltR_delta,+0.176
+6,lockedD_delta,+0.117,lockedD_delta,+0.081,tiltR_delta,+0.158,safeD_delta,+0.096,safeD_delta,+0.105,leanR_delta,+0.028,leanD_delta,+0.182
+7,leanD_delta,+0.365,lockedR_delta,+0.089,leanR_delta,+0.168,tiltR_delta,+0.118,tiltR_delta,+0.180,lockedD_delta,+0.136,leanR_delta,+0.220
+8,tiltD_delta,+0.388,leanD_delta,+0.401,swing_delta,+0.473,leanD_delta,+0.228,leanD_delta,+0.307,lockedR_delta,+0.290,lockedR_delta,+0.452
+9,safeR_delta,+0.498,tiltR_delta,+0.627,lockedD_delta,+0.636,leanR_delta,+0.725,swing_delta,+0.655,leanD_delta,+0.648,safeR_delta,+0.768

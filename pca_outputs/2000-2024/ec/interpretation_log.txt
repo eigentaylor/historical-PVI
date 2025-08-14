@@ -1,0 +1,116 @@
+PCA interpretation (top features per component):
+National column (NAT) included: No
+
+PC1: 35.9% variance
+  Strongly positive (move together):
+    +          Tilt R: D+48.5 (+0.485)
+    +        Locked R: D+44.4 (+0.444)
+    +        Locked D: D+12.4 (+0.124)
+    +          Lean D: D+9.0 (+0.090)
+    +           Swing: R+2.7 (-0.027)
+    +          Safe D: R+10.1 (-0.101)
+    +          Lean R: R+41.1 (-0.411)
+    +          Safe R: R+41.6 (-0.416)
+  Strongly negative (opposite direction):
+    -          Tilt D: R+43.7 (-0.437)
+    -          Safe R: R+41.6 (-0.416)
+    -          Lean R: R+41.1 (-0.411)
+    -          Safe D: R+10.1 (-0.101)
+    -           Swing: R+2.7 (-0.027)
+    -          Lean D: D+9.0 (+0.090)
+    -        Locked D: D+12.4 (+0.124)
+    -        Locked R: D+44.4 (+0.444)
+
+PC2: 31.2% variance
+  Strongly positive (move together):
+    +        Locked D: D+50.2 (+0.502)
+    +          Safe R: D+39.3 (+0.393)
+    +          Tilt D: D+21.9 (+0.219)
+    +        Locked R: D+11.3 (+0.113)
+    +          Tilt R: R+0.0 (-0.000)
+    +          Lean D: R+9.1 (-0.091)
+    +          Lean R: R+22.5 (-0.225)
+    +           Swing: R+48.1 (-0.481)
+  Strongly negative (opposite direction):
+    -          Safe D: R+49.2 (-0.492)
+    -           Swing: R+48.1 (-0.481)
+    -          Lean R: R+22.5 (-0.225)
+    -          Lean D: R+9.1 (-0.091)
+    -          Tilt R: R+0.0 (-0.000)
+    -        Locked R: D+11.3 (+0.113)
+    -          Tilt D: D+21.9 (+0.219)
+    -          Safe R: D+39.3 (+0.393)
+
+PC3: 19.8% variance
+  Strongly positive (move together):
+    +          Lean D: D+63.6 (+0.636)
+    +          Tilt D: D+33.0 (+0.330)
+    +          Safe D: D+24.5 (+0.245)
+    +          Tilt R: D+8.6 (+0.086)
+    +          Safe R: D+4.9 (+0.049)
+    +        Locked R: R+4.7 (-0.047)
+    +          Lean R: R+35.3 (-0.353)
+    +        Locked D: R+35.9 (-0.359)
+  Strongly negative (opposite direction):
+    -           Swing: R+40.1 (-0.401)
+    -        Locked D: R+35.9 (-0.359)
+    -          Lean R: R+35.3 (-0.353)
+    -        Locked R: R+4.7 (-0.047)
+    -          Safe R: D+4.9 (+0.049)
+    -          Tilt R: D+8.6 (+0.086)
+    -          Safe D: D+24.5 (+0.245)
+    -          Tilt D: D+33.0 (+0.330)
+
+PC4: 10.4% variance
+  Strongly positive (move together):
+    +        Locked R: D+57.7 (+0.577)
+    +          Safe D: D+39.2 (+0.392)
+    +          Tilt D: D+21.9 (+0.219)
+    +          Safe R: R+3.0 (-0.030)
+    +           Swing: R+9.6 (-0.096)
+    +        Locked D: R+11.6 (-0.116)
+    +          Lean R: R+28.0 (-0.280)
+    +          Tilt R: R+40.6 (-0.406)
+  Strongly negative (opposite direction):
+    -          Lean D: R+44.6 (-0.446)
+    -          Tilt R: R+40.6 (-0.406)
+    -          Lean R: R+28.0 (-0.280)
+    -        Locked D: R+11.6 (-0.116)
+    -           Swing: R+9.6 (-0.096)
+    -          Safe R: R+3.0 (-0.030)
+    -          Tilt D: D+21.9 (+0.219)
+    -          Safe D: D+39.2 (+0.392)
+
+PC5: 2.3% variance
+  Strongly positive (move together):
+    +          Tilt R: D+56.4 (+0.564)
+    +          Safe D: D+40.8 (+0.408)
+    +          Lean R: D+22.6 (+0.226)
+    +          Safe R: D+4.4 (+0.044)
+    +          Tilt D: D+0.7 (+0.007)
+    +        Locked D: R+2.6 (-0.026)
+    +        Locked R: R+19.7 (-0.197)
+    +          Lean D: R+44.4 (-0.444)
+  Strongly negative (opposite direction):
+    -           Swing: R+47.5 (-0.475)
+    -          Lean D: R+44.4 (-0.444)
+    -        Locked R: R+19.7 (-0.197)
+    -        Locked D: R+2.6 (-0.026)
+    -          Tilt D: D+0.7 (+0.007)
+    -          Safe R: D+4.4 (+0.044)
+    -          Lean R: D+22.6 (+0.226)
+    -          Safe D: D+40.8 (+0.408)
+
+Notes:
+- Features with large positive loadings rise/fall together along that PC; large negatives move inversely.
+- For margins datasets: positive = more Democratic relative to nation; negative = more Republican relative to nation.
+- For EC datasets: positive loadings increase the share in those buckets; negatives decrease it.
+
+PC scores by year:
+  2000: PC1: -1.165, PC2: -2.799, PC3: -1.973, PC4: -0.551, PC5: +0.212, PC6: -0.045, PC7: +0.000
+  2004: PC1: -1.392, PC2: -0.219, PC3: +1.074, PC4: -0.292, PC5: -0.189, PC6: +0.401, PC7: +0.000
+  2008: PC1: +0.723, PC2: -1.011, PC3: +2.249, PC4: -1.009, PC5: -0.130, PC6: -0.230, PC7: +0.000
+  2012: PC1: +0.768, PC2: -1.036, PC3: +0.213, PC4: +2.142, PC5: -0.310, PC6: -0.045, PC7: +0.000
+  2016: PC1: +2.553, PC2: +1.547, PC3: -1.480, PC4: -0.705, PC5: -0.521, PC6: +0.037, PC7: +0.000
+  2020: PC1: +1.560, PC2: +1.027, PC3: +0.202, PC4: +0.239, PC5: +0.978, PC6: +0.055, PC7: +0.000
+  2024: PC1: -3.047, PC2: +2.491, PC3: -0.285, PC4: +0.176, PC5: -0.039, PC6: -0.173, PC7: +0.000

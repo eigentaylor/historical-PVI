@@ -1,0 +1,10 @@
+rank,PC1_abbr,PC1_val,PC2_abbr,PC2_val,PC3_abbr,PC3_val,PC4_abbr,PC4_val,PC5_abbr,PC5_val,PC6_abbr,PC6_val,PC7_abbr,PC7_val
+1,tiltD,-0.437,safeD,-0.492,swing,-0.401,leanD,-0.446,swing,-0.475,leanR,-0.365,tiltD,-0.358
+2,safeR,-0.416,swing,-0.481,lockedD,-0.359,tiltR,-0.406,leanD,-0.444,leanD,-0.296,leanR,-0.161
+3,leanR,-0.411,leanR,-0.225,leanR,-0.353,leanR,-0.280,lockedR,-0.197,lockedD,-0.255,lockedD,+0.016
+4,safeD,-0.101,leanD,-0.091,lockedR,-0.047,lockedD,-0.116,lockedD,-0.026,safeD,-0.239,leanD,+0.099
+5,swing,-0.027,tiltR,-0.000,safeR,+0.049,swing,-0.096,tiltD,+0.007,lockedR,-0.119,lockedR,+0.132
+6,leanD,+0.090,lockedR,+0.113,tiltR,+0.086,safeR,-0.030,safeR,+0.044,safeR,+0.064,tiltR,+0.154
+7,lockedD,+0.124,tiltD,+0.219,safeD,+0.245,tiltD,+0.219,leanR,+0.226,tiltR,+0.409,swing,+0.283
+8,lockedR,+0.444,safeR,+0.393,tiltD,+0.330,safeD,+0.392,safeD,+0.408,swing,+0.461,safeD,+0.299
+9,tiltR,+0.485,lockedD,+0.502,leanD,+0.636,lockedR,+0.577,tiltR,+0.564,tiltD,+0.509,safeR,+0.791

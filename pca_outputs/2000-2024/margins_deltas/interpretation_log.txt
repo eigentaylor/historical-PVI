@@ -1,0 +1,116 @@
+PCA interpretation (top features per component):
+National column (NAT) included: No
+
+PC1: 35.8% variance
+  Strongly positive (move together):
+    +              SD: D+23.0 (+0.230)
+    +              ND: D+21.6 (+0.216)
+    +              ME: D+21.3 (+0.213)
+    +              WY: D+21.0 (+0.210)
+    +              MT: D+20.8 (+0.208)
+    +              VT: D+20.5 (+0.205)
+    +              WI: D+20.2 (+0.202)
+    +              NH: D+19.8 (+0.198)
+  Strongly negative (opposite direction):
+    -              CA: R+19.1 (-0.191)
+    -              FL: R+18.7 (-0.187)
+    -              MD: R+17.4 (-0.174)
+    -              NJ: R+16.4 (-0.164)
+    -              DC: R+15.1 (-0.151)
+    -              MA: R+13.1 (-0.131)
+    -              AZ: R+11.9 (-0.119)
+    -              NY: R+10.3 (-0.103)
+
+PC2: 24.9% variance
+  Strongly positive (move together):
+    +              LA: D+26.3 (+0.263)
+    +              AR: D+25.7 (+0.257)
+    +              OK: D+22.5 (+0.225)
+    +              AZ: D+21.8 (+0.218)
+    +              AK: D+20.9 (+0.209)
+    +              MS: D+19.0 (+0.190)
+    +              MA: D+18.2 (+0.182)
+    +              SC: D+16.7 (+0.167)
+  Strongly negative (opposite direction):
+    -              NM: R+25.9 (-0.259)
+    -              VA: R+24.3 (-0.243)
+    -              IL: R+24.2 (-0.242)
+    -              HI: R+22.7 (-0.227)
+    -              NV: R+22.4 (-0.224)
+    -              IN: R+21.3 (-0.213)
+    -              DE: R+18.2 (-0.182)
+    -              NE: R+16.1 (-0.161)
+
+PC3: 18.1% variance
+  Strongly positive (move together):
+    +              RI: D+31.0 (+0.310)
+    +              AL: D+24.6 (+0.246)
+    +              CT: D+22.3 (+0.223)
+    +              PA: D+22.1 (+0.221)
+    +              TN: D+20.7 (+0.207)
+    +              IA: D+20.5 (+0.205)
+    +              MD: D+20.4 (+0.204)
+    +              NJ: D+20.3 (+0.203)
+  Strongly negative (opposite direction):
+    -              TX: R+30.1 (-0.301)
+    -              UT: R+27.1 (-0.271)
+    -              WA: R+18.1 (-0.181)
+    -              ID: R+16.1 (-0.161)
+    -              VA: R+13.6 (-0.136)
+    -              OR: R+12.9 (-0.129)
+    -              GA: R+12.0 (-0.120)
+    -              IL: R+12.0 (-0.120)
+
+PC4: 10.3% variance
+  Strongly positive (move together):
+    +              KS: D+34.4 (+0.344)
+    +              GA: D+29.2 (+0.292)
+    +              CT: D+22.6 (+0.226)
+    +              UT: D+21.9 (+0.219)
+    +              TN: D+19.2 (+0.192)
+    +              NE: D+19.1 (+0.191)
+    +              MO: D+18.2 (+0.182)
+    +              OK: D+17.5 (+0.175)
+  Strongly negative (opposite direction):
+    -              NY: R+27.8 (-0.278)
+    -              MS: R+24.7 (-0.247)
+    -              FL: R+22.5 (-0.225)
+    -              AK: R+20.6 (-0.206)
+    -              SC: R+20.5 (-0.205)
+    -              OH: R+18.7 (-0.187)
+    -              VT: R+16.8 (-0.168)
+    -              IA: R+12.9 (-0.129)
+
+PC5: 7.1% variance
+  Strongly positive (move together):
+    +              DC: D+38.1 (+0.381)
+    +              PA: D+34.0 (+0.340)
+    +              WA: D+30.9 (+0.309)
+    +              OR: D+24.2 (+0.242)
+    +              NV: D+22.5 (+0.225)
+    +              NC: D+22.3 (+0.223)
+    +              KS: D+20.6 (+0.206)
+    +              IL: D+16.5 (+0.165)
+  Strongly negative (opposite direction):
+    -              GA: R+23.8 (-0.238)
+    -              HI: R+21.0 (-0.210)
+    -              TX: R+18.5 (-0.185)
+    -              NY: R+18.4 (-0.184)
+    -              NJ: R+15.6 (-0.156)
+    -              RI: R+15.1 (-0.151)
+    -              NE: R+13.1 (-0.131)
+    -              ID: R+11.7 (-0.117)
+
+Notes:
+- Features with large positive loadings rise/fall together along that PC; large negatives move inversely.
+- For margins datasets: positive = more Democratic relative to nation; negative = more Republican relative to nation.
+- For EC datasets: positive loadings increase the share in those buckets; negatives decrease it.
+
+PC scores by year:
+  2000: PC1: -5.647, PC2: -2.389, PC3: +4.268, PC4: +0.246, PC5: +2.336, PC6: +0.785, PC7: +0.000
+  2004: PC1: +5.301, PC2: +0.674, PC3: -2.459, PC4: -2.671, PC5: +2.269, PC6: +1.378, PC7: +0.000
+  2008: PC1: +1.955, PC2: -7.448, PC3: -0.508, PC4: -0.722, PC5: -2.014, PC6: -0.579, PC7: +0.000
+  2012: PC1: -2.321, PC2: +4.276, PC3: +1.948, PC4: -3.524, PC5: -2.101, PC6: -0.721, PC7: +0.000
+  2016: PC1: -5.987, PC2: +0.929, PC3: -5.758, PC4: +1.391, PC5: -0.012, PC6: -0.178, PC7: +0.000
+  2020: PC1: +2.855, PC2: +2.261, PC3: +1.478, PC4: +3.228, PC5: -2.014, PC6: +1.858, PC7: +0.000
+  2024: PC1: +3.846, PC2: +1.697, PC3: +1.031, PC4: +2.053, PC5: +1.535, PC6: -2.543, PC7: +0.000

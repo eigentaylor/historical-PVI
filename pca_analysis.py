@@ -36,6 +36,7 @@ from sklearn.preprocessing import StandardScaler
 import matplotlib.pyplot as plt
 import seaborn as sns
 import utils
+import import_csv
 
 # Use dark mode for all plots
 plt.style.use("dark_background")
@@ -65,7 +66,7 @@ def _find_default_paths(margins_csv: str | None, ec_csv: str | None) -> Tuple[st
     return margins_path, ec_path
 
 
-def load_margins(margins_csv: str, mode: str, year_start: int | None, year_end: int | None) -> PCAData:
+def load_margins(margins_csv: str, mode: str, year_start: int | None, year_end: int | None, include_nat: bool = True) -> PCAData:
     df = pd.read_csv(margins_csv)
 
     # Ensure correct types
@@ -83,8 +84,10 @@ def load_margins(margins_csv: str, mode: str, year_start: int | None, year_end: 
     if mode == "margins_all":
         # Pivot relative margins by state (columns are state abbrs). Add national margin as separate column.
         pivot = df.pivot_table(index="year", columns="abbr", values="relative_margin", aggfunc="first")
-        nat = df.drop_duplicates("year").set_index("year")["national_margin"]
-        pivot["NAT"] = nat
+        # Add national margin column only if requested and present in source
+        if include_nat and "national_margin" in df.columns:
+            nat = df.drop_duplicates("year").set_index("year")["national_margin"]
+            pivot["NAT"] = nat
         pivot = pivot.sort_index()
         # Drop any years with missing data (common for early years or partial datasets)
         pivot = pivot.dropna(how="any")
@@ -95,8 +98,10 @@ def load_margins(margins_csv: str, mode: str, year_start: int | None, year_end: 
 
     if mode == "margins_deltas":
         pivot = df.pivot_table(index="year", columns="abbr", values="relative_margin_delta", aggfunc="first")
-        nat = df.drop_duplicates("year").set_index("year")["national_margin_delta"]
-        pivot["NAT"] = nat
+        # Add national delta only if requested and present
+        if include_nat and "national_margin_delta" in df.columns:
+            nat = df.drop_duplicates("year").set_index("year")["national_margin_delta"]
+            pivot["NAT"] = nat
         pivot = pivot.sort_index()
         # Drop first/any years lacking a previous-year delta
         pivot = pivot.dropna(how="any")
@@ -197,6 +202,8 @@ def plot_scree(explained: np.ndarray, out_dir: str):
     ax.set_xlabel("Principal component")
     ax.set_ylabel("Explained variance (%)")
     ax.set_title("PCA Scree Plot")
+    # set y ticks to intervals of 10%
+    ax.set_yticks(np.arange(0, 101, 10))
     ax.grid(True, alpha=0.2)
     ax.legend()
     fig.tight_layout()
@@ -323,11 +330,12 @@ def plot_biplot(scores: np.ndarray, loadings: np.ndarray, feature_names: List[st
     plt.close(fig)
 
 
-def save_interpretation_log(feature_names: List[str], loadings: np.ndarray, explained: np.ndarray, out_dir: str, top_n: int = 8):
+def save_interpretation_log(feature_names: List[str], loadings: np.ndarray, explained: np.ndarray, out_dir: str, top_n: int = 8, include_nat: bool = True, years: List[int] | None = None, scores: np.ndarray | None = None):
     labels = _format_feature_labels(feature_names)
     log_path = os.path.join(out_dir, "interpretation_log.txt")
     with open(log_path, "w") as f:
         f.write("PCA interpretation (top features per component):\n")
+        f.write(f"National column (NAT) included: {'Yes' if include_nat else 'No'}\n")
         for i in range(min(5, loadings.shape[1])):
             comp = loadings[:, i]
             order = np.argsort(comp)
@@ -345,11 +353,44 @@ def save_interpretation_log(feature_names: List[str], loadings: np.ndarray, expl
         f.write("- Features with large positive loadings rise/fall together along that PC; large negatives move inversely.\n")
         f.write("- For margins datasets: positive = more Democratic relative to nation; negative = more Republican relative to nation.\n")
         f.write("- For EC datasets: positive loadings increase the share in those buckets; negatives decrease it.\n")
+        # Add scores by year if available
+        if years is not None and scores is not None:
+            f.write("\nPC scores by year:\n")
+            # limit decimals to 3 per score
+            for year, score_row in zip(years, scores):
+                scores_str = ", ".join(f"PC{i+1}: {float(s):+.3f}" for i, s in enumerate(score_row))
+                f.write(f"  {year}: {scores_str}\n")
+
 
 
 def _total_variance(X_scaled: np.ndarray) -> float:
     # Use sample variance (ddof=1) to match sklearn PCA explained_variance
     return float(np.var(X_scaled, axis=0, ddof=1).sum())
+
+
+def save_feature_rankings_csv(out_dir: str, feature_names: List[str], loadings: np.ndarray):
+    """Create CSV where rows are ranks (1..n_features) and columns are grouped per PC:
+    for each PC there are three columns: PCn_abbr, PCn_label, PCn_val.
+    Rows are ordered from most negative (rank 1) to most positive (rank N).
+    """
+    n_features, n_comps = loadings.shape
+    pretty_labels = _format_feature_labels(feature_names)
+
+    data = {}
+    for j in range(n_comps):
+        comp = loadings[:, j]
+        order = np.argsort(comp)  # most negative -> most positive
+        abbrs = [feature_names[idx] for idx in order]
+        labels = [pretty_labels[idx] for idx in order]
+        vals = [float(comp[idx]) for idx in order]
+        data[f"PC{j+1}_abbr"] = abbrs
+        #data[f"PC{j+1}_label"] = labels
+        data[f"PC{j+1}_val"] = [f"{v:+.3f}" for v in vals]
+
+    df_rank = pd.DataFrame(data)
+    df_rank.index = pd.RangeIndex(start=1, stop=n_features+1, name="rank")
+    df_rank.to_csv(os.path.join(out_dir, "feature_rankings_per_pc.csv"), index=True)
+
 
 
 def varimax(Phi: np.ndarray, gamma: float = 1.0, q: int = 20, tol: float = 1e-6) -> np.ndarray:
@@ -395,9 +436,10 @@ def main(year_start: int | None = None, year_end: int | None = None,
          margins_csv: str | None = None, ec_csv: str | None = None, 
          out_dir: str | None = None,
          dataset: str = "margins_all", no_plot: bool = False,
+         include_nat: bool = False,
          rotation: str = "none", biplot: bool = False, biplot_top: int = 25):
     parser = argparse.ArgumentParser(description="PCA on presidential margins and EC proportions (dark-mode plots)")
-    parser.add_argument("--dataset", required=True, choices=[
+    parser.add_argument("--dataset", required=False, choices=[
         "margins_all", "margins_deltas", "ec", "ec_deltas"
     ], help="Which dataset to analyze")
     parser.add_argument("--year-start", type=int, default=None, help="Start year inclusive (e.g., 2000)")
@@ -410,15 +452,17 @@ def main(year_start: int | None = None, year_end: int | None = None,
     parser.add_argument("--rotation", type=str, default="none", choices=["none", "varimax"], help="Optional rotation for interpretability")
     parser.add_argument("--biplot", action="store_true", help="Also generate biplot (PC1 vs PC2) with top feature vectors")
     parser.add_argument("--biplot-top", type=int, default=25, help="Number of top features to draw in biplot")
+    parser.add_argument("--no-nat", action="store_true", help="Exclude national (NAT) column from margins datasets")
     #args = parser.parse_args()
 
     margins_path, ec_path = _find_default_paths(margins_csv, ec_csv)
 
     # Prepare data
+    #include_nat = not getattr(parser.parse_args(), "no_nat", False)
     if dataset in ("margins_all", "margins_deltas"):
         if not margins_path:
             raise FileNotFoundError("presidential_margins.csv not found. Provide --margins-csv.")
-        data = load_margins(margins_path, dataset, year_start, year_end)
+        data = load_margins(margins_path, dataset, year_start, year_end, include_nat=include_nat)
     else:
         if not ec_path:
             raise FileNotFoundError("EC_proportions.csv not found under EC_proportion/. Provide --ec-csv.")
@@ -446,11 +490,13 @@ def main(year_start: int | None = None, year_end: int | None = None,
     # Output directory (include rotation)
     yr_part = f"{data.years[0]}-{data.years[-1]}" if data.years else "all"
     label_rot = "" if rot == "none" else f"_{rot}"
-    out_dir = out_dir or os.path.join("pca_outputs", f"{dataset}_{yr_part}{label_rot}")
+    out_dir = out_dir or os.path.join("pca_outputs", f"{yr_part}/{label_rot}/{dataset}")
     _ensure_dir(out_dir)
 
     # Save CSVs
     _save_csvs(out_dir, data.years, data.feature_names, scores_used, loadings_used)
+    # Save feature rankings per PC for quick lookup
+    save_feature_rankings_csv(out_dir, data.feature_names, loadings_used)
 
     # Plots
     if not no_plot:
@@ -467,7 +513,7 @@ def main(year_start: int | None = None, year_end: int | None = None,
     pc1 = f"{explained_used[0]*100:.1f}%" if len(explained_used) >= 1 else "n/a"
     pc2 = f"{explained_used[1]*100:.1f}%" if len(explained_used) >= 2 else "n/a"
     print(f"Explained variance by first {len(explained_used)} PCs: {total:.1f}% (PC1: {pc1}, PC2: {pc2})")
-    save_interpretation_log(data.feature_names, loadings_used, explained_used, out_dir, top_n=8)
+    save_interpretation_log(data.feature_names, loadings_used, explained_used, out_dir, top_n=8, include_nat=include_nat, years=data.years, scores=scores_used)
     print(f"\nSaved interpretation log to: {os.path.join(out_dir, 'interpretation_log.txt')}")
     print(f"\nSaved outputs to: {os.path.abspath(out_dir)}")
 
@@ -478,4 +524,4 @@ if __name__ == "__main__":
     ]
     for dataset in datasets:
         print(f"\nRunning PCA for dataset: {dataset}")
-        main(dataset=dataset, year_start=2000, year_end=2024, n_components=None, no_plot=False, rotation="varimax", biplot=True, biplot_top=25)
+        main(dataset=dataset, year_start=2000, year_end=2024, n_components=None, no_plot=False, rotation="none", biplot=True, biplot_top=25)
