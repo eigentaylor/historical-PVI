@@ -38,3 +38,38 @@ def emoji_from_lean(
         return "🔴"  # Red for Republican lean
     else:
         return "🟣"  # Purple for swing
+    
+def categorize_relative_margin(x: float) -> str:
+    """Map relative_margin to category per provided thresholds."""
+    # Using strict < thresholds, otherwise falls into the next band toward center.
+    for cat in params.CATEGORY_ORDER:
+        if x < params.CATEGORY_THRESHOLDS[cat]:
+            return cat
+    return params.CATEGORY_ORDER[-1]
+
+
+def final_margin_color_key(margin) -> str:
+    """Return a final-margin color key based on params.FINAL_MARGIN_THRESHOLDS.
+
+    margin: final margin as a float in [-1, 1] (negative = Republican advantage).
+    Returns one of the keys from params.FINAL_MARGIN_THRESHOLDS (e.g. 'RED', 'red', 'lblue', 'BLUE')
+    or 'swing' when the margin is within the narrow center band that isn't captured by the
+    explicit thresholds.
+    """
+    # Normalize input
+    if margin is None:
+        return "swing"
+    try:
+        m = float(margin)
+    except (ValueError, TypeError):
+        return "swing"
+
+    # Iterate in insertion order defined in params.FINAL_MARGIN_THRESHOLDS.
+    # For negative cutoffs we check margin <= cutoff (Republican advantages).
+    # For positive cutoffs we check margin >= cutoff (Democratic advantages).
+    for key, cutoff in params.FINAL_MARGIN_THRESHOLDS.items():
+        if m <= cutoff:
+            return key
+
+    # If no explicit threshold matched (e.g., margin between small negative and small positive)
+    return "BLUE"

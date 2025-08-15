@@ -2,18 +2,31 @@ import argparse
 import csv
 import os
 from collections import defaultdict
-from typing import Dict, List, Tuple
+from typing import Dict, List, Tuple, Optional
 import utils
 
+# Try to read SWING_MARGIN from params if available; otherwise default to 0.03
+try:
+    import params
+    SWING_MARGIN = float(getattr(params, 'SWING_MARGIN', 0.03))
+except Exception:
+    SWING_MARGIN = 0.03
+
 # Toggle for including future projections (>2024) in addition to historical
-USE_FUTURE = True
+USE_FUTURE = False
 HIST_CSV_PATH = 'presidential_margins.csv'
 FUTURE_CSV_PATH = 'presidential_margins_future.csv'
 CSV_PATH = HIST_CSV_PATH
 OUTPUT_DIR = 'tipping_points'
 if USE_FUTURE:
-    OUTPUT_DIR = os.path.join(OUTPUT_DIR, 'future')
+    #OUTPUT_DIR = os.path.join(OUTPUT_DIR, 'future')
     os.makedirs(OUTPUT_DIR, exist_ok=True)
+# clear all files and subdirectories in the output directory
+for root, dirs, files in os.walk(OUTPUT_DIR, topdown=False):
+    for name in files:
+        os.remove(os.path.join(root, name))
+    for name in dirs:
+        os.rmdir(os.path.join(root, name))
 
 # Outcome thresholds (total EVs for a party)
 TARGET_EVS = {
@@ -215,12 +228,13 @@ def compute_ec_totals_at_margin(states: List[Dict], national_margin: float) -> T
 
 def find_closest_state_for_margin(states: List[Dict], national_margin: float) -> Tuple[str, float, int]:
     """Find the closest state on the winning PV side at the given national margin.
-    If D wins PV (m >= 0): pick the blue state with the smallest positive state margin.
+    If D wins PV (m > 0): pick the blue state with the smallest positive state margin.
     If R wins PV (m < 0): pick the red state with the smallest absolute negative state margin.
+    If m == 0: we pick the logic based on which party has more electoral votes (ex. if D has more EVs, pick the blue state with the smallest positive margin).
     Returns (abbr, state_margin, evs).
     """
     best = None
-    if national_margin >= 0:
+    if national_margin > 0 or national_margin == 0 and sum(s['evs'] for s in states if s['relative_margin'] > 0) > sum(s['evs'] for s in states if s['relative_margin'] < 0):
         # Closest blue state: minimal positive state margin
         for s in states:
             sm = national_margin + s['relative_margin']
@@ -247,6 +261,15 @@ def find_closest_state_for_margin(states: List[Dict], national_margin: float) ->
         any_state = states[0]
         return any_state['abbr'], national_margin + any_state['relative_margin'], any_state['evs']
     return best
+
+
+def find_state_for_national_margin(states: List[Dict], national_margin: float) -> Tuple[str, float, int]:
+    """Compatibility wrapper naming for external callers: returns (abbr, state_margin, evs)
+
+    Uses the same logic as find_closest_state_for_margin so callers can import this
+    function and rely on stable behavior.
+    """
+    return find_closest_state_for_margin(states, national_margin)
 
 
 def compute_ev_pv_mismatch_ranges(states: List[Dict]) -> Dict[str, Tuple[float, float]]:
@@ -339,70 +362,67 @@ def ensure_output_dir(path: str) -> None:
         os.makedirs(path, exist_ok=True)
 
 
-def build_report(year: int, tipping_points: Dict[str, Dict], ordered_rel: List[Tuple[str, int, float]], actual_info: Dict, mismatch_ranges: Dict[str, Tuple[float, float]], tie_ranges: List[Dict]) -> str:
+def build_report(year: int, tipping_points: Dict[str, Dict], ordered_rel: List[Tuple[str, int, float]], actual_info: Dict, mismatch_ranges: Dict[str, Tuple[float, float]], tie_ranges: List[Dict], extra_margins: Optional[List[float]] = None, source: str = 'presidential_margins.csv') -> str:
     lines: List[str] = []
     lines.append(f"Year {year} Tipping Point Analysis")
     lines.append("")
     lines.append("Tipping Points by National Margin:")
 
-    # Prepare lines for R and D blocks separately (keep existing order for each block)
-    r_keys = ['R_all', 'R_sweep', 'R_blowout', 'R_landslide', 'R_solid', 'R_squeak']
-    d_keys = ['D_squeak', 'D_solid', 'D_landslide', 'D_blowout', 'D_sweep', 'D_all']
-
-    # Collect margins for keys
-    key_to_margin = {k: (tipping_points[k]['margin'] if k in tipping_points else None) for k in (r_keys + d_keys)}
-
-    r_lines: List[str] = []
-    for key in r_keys:
+    # Prepare a unified list of tipping entries (thresholds + Actual + extra margins)
+    entries: List[Tuple[float, str]] = []
+    # Add threshold entries from tipping_points for both R and D keys
+    threshold_keys = ['R_all', 'R_sweep', 'R_blowout', 'R_landslide', 'R_solid', 'R_squeak',
+                      'D_squeak', 'D_solid', 'D_landslide', 'D_blowout', 'D_sweep', 'D_all']
+    for key in threshold_keys:
         tp = tipping_points.get(key)
         if not tp:
             continue
-        r_lines.append(f"  {key}: {margin_to_str(tp['margin'])} via {tp['state']} (D: {tp['D_evs_after']} EVs, R: {tp['R_evs_after']} EVs)")
+        line = f"  {key}: {margin_to_str(tp['margin'])} via {tp['state']} (D: {tp['D_evs_after']} EVs, R: {tp['R_evs_after']} EVs)"
+        entries.append((float(tp['margin']), line))
 
-    d_items: List[Tuple[float, str]] = []
-    for key in d_keys:
-        tp = tipping_points.get(key)
-        if not tp:
-            continue
-        d_items.append((tp['margin'], f"  {key}: {margin_to_str(tp['margin'])} via {tp['state']} (D: {tp['D_evs_after']} EVs, R: {tp['R_evs_after']} EVs)"))
-
-    # Insert Actual into appropriate block based on sign of national margin
-    am = actual_info['margin']
+    # Actual national margin entry
+    am = float(actual_info.get('margin', 0.0))
     actual_line = f"  Actual: {margin_to_str(am)} via {actual_info['state']} (D: {actual_info['D_evs']} EVs, R: {actual_info['R_evs']} EVs)"
+    entries.append((am, actual_line))
 
-    if am >= 0 and d_items and year <= 2024:
-        # Insert by margin order among D thresholds
-        d_items.append((am, actual_line))
-        d_items.sort(key=lambda x: x[0])
-    else:
-        # Negative or no D thresholds: keep D items order and append Actual to R side by best effort
-        # Try to place among R thresholds by closest margin
-        inserted = False
-        if r_lines and any(key_to_margin.get(k) is not None for k in r_keys):
-            # Build sortable list of (margin, line) for R keys to find position
-            r_items = []
-            for key in r_keys:
-                tp = tipping_points.get(key)
-                if tp:
-                    r_items.append((tp['margin'], f"  {key}: {margin_to_str(tp['margin'])} via {tp['state']} (D: {tp['D_evs_after']} EVs, R: {tp['R_evs_after']} EVs)"))
-            if year <= 2024:
-                r_items.append((am, actual_line))
-            r_items.sort(key=lambda x: x[0])
-            # Rebuild r_lines in sorted order to ensure proper placement
-            r_lines = [item[1] for item in r_items]
-            inserted = True
-        if not inserted and year <= 2024:
-            # Fallback: put Actual at the end of R block
-            r_lines.append(actual_line)
+    # Add extra margins as entries (use same formatting style)
+    if extra_margins:
+        # prepare inline states list from ordered_rel
+        states_list = [{'abbr': a, 'evs': e, 'relative_margin': rm} for a, e, rm in ordered_rel]
+        seen_m = set()
+        for m in extra_margins:
+            if m in seen_m:
+                continue
+            seen_m.add(m)
+            d_evs, r_evs = compute_ec_totals_at_margin(states_list, m)
+            st_abbr, st_margin, st_evs = find_closest_state_for_margin(states_list, m)
+            line = f"  {margin_to_str(m)}: D {d_evs} EV, R {r_evs} EV via {st_abbr} ({rel_margin_to_str(st_margin)})"
+            entries.append((float(m), line))
 
-    # Emit lines
-    lines.extend(r_lines)
-    if am >= 0:
-        # If we inserted Actual into d_items, it is already included
-        lines.extend(item[1] for item in d_items)
-    else:
-        # Print D items as-is
-        lines.extend(item[1] for item in d_items)
+    # Sort all entries by numeric margin (R-most negative first -> D-most positive last)
+    entries.sort(key=lambda x: x[0])
+    # Emit entries in order
+    for _, text in entries:
+        lines.append(text)
+
+    # Insert extra margins into the tipping list itself (use same state dict shape as other helpers)
+    if extra_margins:
+        # prepare states list from ordered_rel tuples
+        states_list = [{'abbr': a, 'evs': e, 'relative_margin': rm} for a, e, rm in ordered_rel]
+        # Unique margins preserving order
+        seen_m = set()
+        uniq_m = []
+        for m in extra_margins:
+            if m not in seen_m:
+                seen_m.add(m)
+                uniq_m.append(m)
+        # Add as additional tipping entries
+        lines.append("")
+        lines.append("  Selected national margins:")
+        for m in uniq_m:
+            d_evs, r_evs = compute_ec_totals_at_margin(states_list, m)
+            st_abbr, st_margin, st_evs = find_closest_state_for_margin(states_list, m)
+            lines.append(f"    {margin_to_str(m)}: D {d_evs} EV, R {r_evs} EV via {st_abbr} ({rel_margin_to_str(st_margin)})")
 
     # EV/PV mismatch ranges
     if mismatch_ranges:
@@ -432,16 +452,35 @@ def build_report(year: int, tipping_points: Dict[str, Dict], ordered_rel: List[T
     for abbr, evs, rm in ordered_rel:
         state_emoji = utils.emoji_from_lean(rm, use_swing=True)
         lines.append(f"  {state_emoji} {abbr}: {rel_margin_to_str(rm)} ({evs} EV)")
-
     lines.append("")
-    lines.append("Source: presidential_margins.csv")
+    lines.append(f"Source: {source}")
 
     return "\n".join(lines)
 
 
-def process_year(year: int, states: List[Dict]) -> str:
+def process_year(year: int, states: List[Dict], extra_margins: Optional[List[float]] = None, use_future: bool = False) -> str:
+    """Compatibility wrapper: build and save a tipping report for a single year.
+
+    This now delegates to the generic saver `save_tipping_report` so other modules
+    can call that function directly with a list of state dicts and a chosen path.
+    """
+    fname = f"{year}_tipping_points.txt"
+    out_dir = OUTPUT_DIR if not use_future else os.path.join(OUTPUT_DIR, 'future')
+    return save_tipping_report(states, out_dir, fname, year=year, extra_margins=extra_margins)
+
+
+def tipping_report_text_from_states(states: List[Dict], year: int = 0, source: str = 'presidential_margins.csv', extra_margins: Optional[List[float]] = None) -> str:
+    """Generate tipping report text from a list of state dicts.
+
+    states: list of dicts each containing at least: 'abbr', 'evs', 'relative_margin'.
+    year: optional year to include in the header (0 means no-year).
+    source: textual source name to include in the report footer.
+
+    Returns the report as a string (does not write files).
+    """
     tipping_points, ordered_rel = compute_threshold_tipping_points(states)
-    # Actual national margin from CSV rows (assumed consistent across states)
+
+    # Actual national margin from provided rows (optional)
     am_val = next((s.get('national_margin') for s in states if 'national_margin' in s), 0.0)
     am = float(am_val or 0.0)
     d_evs, r_evs = compute_ec_totals_at_margin(states, am)
@@ -452,27 +491,44 @@ def process_year(year: int, states: List[Dict]) -> str:
         'D_evs': d_evs,
         'R_evs': r_evs,
     }
+
     mismatch_ranges = compute_ev_pv_mismatch_ranges(states)
     tie_ranges = compute_ec_tie_ranges(states)
 
-    report = build_report(year, tipping_points, ordered_rel, actual_info, mismatch_ranges, tie_ranges)
-    ensure_output_dir(OUTPUT_DIR)
-    out_path = os.path.join(OUTPUT_DIR, f"{year}_tipping_points.txt")
+    # Default extra margins if client did not pass any
+    if extra_margins is None:
+        extra_margins = [0.0, SWING_MARGIN, -SWING_MARGIN, 0.1, -0.1]
+
+    report = build_report(year, tipping_points, ordered_rel, actual_info, mismatch_ranges, tie_ranges, extra_margins=extra_margins, source=source)
+    return report
+
+
+def save_tipping_report(states: List[Dict], out_dir: str, filename: str, year: Optional[int] = None, source: str = 'presidential_margins.csv', extra_margins: Optional[List[float]] = None) -> str:
+    """Generate a tipping report from states and save it to out_dir/filename.
+
+    Returns the absolute path to the written file.
+    """
+    report = tipping_report_text_from_states(states, year=(year or 0), source=source, extra_margins=extra_margins)
+    ensure_output_dir(out_dir)
+    out_path = os.path.join(out_dir, filename)
     with open(out_path, 'w', encoding='utf-8') as f:
         f.write(report)
     return out_path
 
 
-def main():
-    by_year = read_data(USE_FUTURE)
+def main(use_future=False):
+    by_year = read_data(use_future)
     if not by_year:
         print(f"No data found in {CSV_PATH}")
         return
     years = sorted(by_year.keys())
     for y in years:
-        out_path = process_year(y, by_year[y])
+        if use_future and y <= 2024:
+            continue
+        out_path = process_year(y, by_year[y], extra_margins=[0.0, SWING_MARGIN, -SWING_MARGIN, 0.1, -0.1], use_future=use_future)
         print(f"Wrote {out_path}")
 
 
 if __name__ == '__main__':
     main()
+    main(use_future=True)

@@ -4,6 +4,7 @@ from typing import List
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import params
 import utils  # Import utils for lean_str
 
 
@@ -25,42 +26,18 @@ FUTURE_YEAR_MARK = 2026  # Vertical marker year when future data present
 
 # Category thresholds (relative_margin)
 # Order matters (from strong R to strong D)
-CATEGORY_ORDER: List[str] = [
-    "lockedR", "safeR", "leanR", "tiltR",
-    "swing",
-    "tiltD", "leanD", "safeD", "lockedD",
-]
+CATEGORY_ORDER = params.CATEGORY_ORDER
 
 # Colors (dark mode friendly): R darkest -> lightest, swing purple, D lightest -> darkest
-CATEGORY_COLORS = {
-    "lockedR": "#8B0000",      # darkred
-    "safeR":   "#B22222",      # firebrick
-    "leanR":   "#CD5C5C",      # indianred
-    "tiltR":   "#F08080",      # lightcoral
-    "swing":   "#C3B1E1",      # light purple
-    "tiltD":   "#87CEFA",      # lightskyblue
-    "leanD":   "#6495ED",      # cornflowerblue
-    "safeD":   "#4169E1",      # royalblue
-    "lockedD": "#00008B",      # darkblue
-}
+CATEGORY_COLORS = params.CATEGORY_COLORS
 
-LOCKED = 0.2
-SAFE = 0.1
-LEAN = 0.08
-TILT = 0.05
+LOCKED = params.EC_LOCKED
+SAFE = params.EC_SAFE
+LEAN = params.EC_LEAN
+TILT = params.EC_TILT
 
 # Ranges for each category
-CATEGORY_THRESHOLDS = {
-    "lockedR": -LOCKED,
-    "safeR":   -SAFE,
-    "leanR":   -LEAN,
-    "tiltR":   -TILT,
-    "swing":    TILT,
-    "tiltD":    LEAN,
-    "leanD":    SAFE,
-    "safeD":    LOCKED,
-    "lockedD":  float("inf"),
-}
+CATEGORY_THRESHOLDS = params.CATEGORY_THRESHOLDS
 
 def get_category_ranges(thresholds: dict, order: List[str]) -> dict:
     """Generate human-readable ranges for each category using CATEGORY_THRESHOLDS."""
@@ -122,15 +99,6 @@ def load_data(use_future: bool) -> pd.DataFrame:
     return df
 
 
-def categorize_relative_margin(x: float) -> str:
-    """Map relative_margin to category per provided thresholds."""
-    # Using strict < thresholds, otherwise falls into the next band toward center.
-    for cat in CATEGORY_ORDER:
-        if x < CATEGORY_THRESHOLDS[cat]:
-            return cat
-    return CATEGORY_ORDER[-1]
-
-
 def build_proportion_table(df: pd.DataFrame) -> pd.DataFrame:
     """Return a dataframe indexed by year with columns per category of EV proportions and their deltas."""
     tmp = df.copy()
@@ -139,7 +107,7 @@ def build_proportion_table(df: pd.DataFrame) -> pd.DataFrame:
     tmp = tmp.dropna(subset=["relative_margin", "electoral_votes"])  # drop any malformed rows
 
     # Categorize each state-year
-    tmp["category"] = tmp["relative_margin"].apply(categorize_relative_margin)
+    tmp["category"] = tmp["relative_margin"].apply(utils.categorize_relative_margin)
 
     # Sum EVs by year and category
     by_year_cat = (
@@ -248,7 +216,8 @@ def write_category_details(df: pd.DataFrame, output_dir: str, filename_suffix: s
     # Group by year
     years = df["year"].unique()
     for year in years:
-        year_df = df[df["year"] == year]
+        # Make an explicit copy to avoid SettingWithCopyWarning when we assign new columns
+        year_df = df[df["year"] == year].copy()
         year_file = os.path.join(output_dir, f"{year}_categories{filename_suffix}.txt")
 
         with open(year_file, "w") as f:
@@ -256,7 +225,7 @@ def write_category_details(df: pd.DataFrame, output_dir: str, filename_suffix: s
             for category in CATEGORY_ORDER:
                 # calculate all states in this category
                 # Assign category to each state using categorize_relative_margin
-                year_df["category"] = year_df["relative_margin"].apply(categorize_relative_margin)
+                year_df["category"] = year_df["relative_margin"].apply(utils.categorize_relative_margin)
                 cat_df = year_df[year_df["category"] == category]
                 total_evs = cat_df["electoral_votes"].sum()
 
