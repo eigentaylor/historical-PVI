@@ -217,11 +217,11 @@ def run_import_csv(start_year=1976):
                 row.append(national_margin_delta)
                 row.append(utils.lean_str(national_margin_delta))
             else:
-                row.insert(9, '')  # No previous year data
-                row.insert(10, '')
+                row.insert(9, '0')  # No previous year data
+                row.insert(10, '0')
         else:
-            row.insert(9, '')  # No previous year data
-            row.insert(10, '')
+            row.insert(9, '0')  # No previous year data
+            row.insert(10, '0')
 
     # Sort by state abbreviation
     output_rows.sort(key=lambda x: (x[1], x[0]))
