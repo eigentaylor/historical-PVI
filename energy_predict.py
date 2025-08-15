@@ -6,6 +6,7 @@ from dataclasses import dataclass
 from typing import Dict, List, Tuple, Optional
 
 import numpy as np
+from itertools import permutations
 import pandas as pd
 from sklearn.cluster import KMeans
 import utils
@@ -444,7 +445,7 @@ def run_sampler_for_year(
                 example_str = ""
             else:
                 fm = m + example_margin
-                example_str = f",\tfinal ({utils.lean_str(example_margin)}): {utils.emoji_from_lean(fm)} {utils.lean_str(fm)} {utils.final_margin_color_key(fm)}"
+                example_str = f",\tfinal ({utils.lean_str(example_margin)}):\t{utils.emoji_from_lean(fm)} {utils.lean_str(fm)}\t{utils.final_margin_color_key(fm)}"
             txt_lines.append(f"{utils.emoji_from_lean(m, use_swing=True)}{a},\t{utils.lean_str(m)},\t{e}{example_str}")
 
         # Shock log (|predicted - baseline| >= TAU)
@@ -507,9 +508,218 @@ def run_sampler_for_year(
             "shock_count": int(len(shock_states)),
             "shock_states": shock_states,
         })
-
+    # After finishing 'results' & having 'centroids' ready:
+    if example_margin is not None:
+        write_yapms_color_tables(states, centroids, example_margin, out_root, year_label)
     return {"diagnostics": diag, "results": results, "labels": labels.tolist(), "centroids": centroids}
 
+
+# ---------------------------------------------
+# Color tables for Yapms (constants + highlights)
+# ---------------------------------------------
+def _color_token(margin: float) -> str:
+    """
+    Map a final margin to color token used in TXT outputs:
+    one of {'RED','Red','red','lred','BLUE','Blue','blue','lblue'}.
+    Uses your existing utils.final_margin_color_key.
+    """
+    return utils.final_margin_color_key(margin)
+
+def _build_colors_df(states, centroids, example_margin: float, col_names: Optional[List[str]] = None) -> "pd.DataFrame":
+    """
+    Rows = states, Cols = centroid_1..centroid_5, Values = color tokens at (m + example_margin).
+    centroids: np.ndarray shape (5, S)
+    """
+    if col_names is None:
+        cols = [f"centroid_{i+1}" for i in range(len(centroids))]
+    else:
+        # use provided column names (preserve original cluster labels if centroids reordered)
+        cols = list(col_names)
+    data = {s: {} for s in states}
+    for j, c in enumerate(centroids):
+        for s_idx, s in enumerate(states):
+            fm = float(c[s_idx]) + float(example_margin)
+            data[s][cols[j]] = _color_token(fm)
+    df = pd.DataFrame.from_dict(data, orient="index")
+    # nice alphabetical row order
+    df = df.loc[sorted(df.index)]
+    return df
+
+def _constant_states_df(colors_df: "pd.DataFrame") -> "pd.DataFrame":
+    """
+    Return only states whose colors are identical across all centroids.
+    Sorted/grouped by color family and shade.
+    """
+    same_mask = (colors_df.nunique(axis=1) == 1)
+    const_df = colors_df.loc[same_mask].copy()
+    if const_df.empty:
+        return const_df
+
+    # First column represents the constant color
+    const_df["__color__"] = const_df.iloc[:, 0]
+
+    # Sort by color in a deterministic family/shade order (Blue family first)
+    order = {
+        "BLUE":  0, "Blue":  1, "blue":  2, "lblue": 3,
+        "RED":  10, "Red":  11, "red":  12, "lred":  13,
+    }
+    const_df["__rank__"] = const_df["__color__"].map(order).fillna(999)
+
+    # Reset the index to a column so we can sort by rank then by the state label (works whether
+    # the index has a name or not and avoids passing an Index object to sort_values).
+    df_reset = const_df.reset_index()
+    idx_col = df_reset.columns[0]
+    df_reset = df_reset.sort_values(["__rank__", idx_col])
+    df_reset = df_reset.set_index(idx_col)
+    const_df = df_reset.drop(columns=["__rank__"])
+    return const_df
+
+def _highlight_changes_df(colors_df: "pd.DataFrame") -> "pd.DataFrame":
+    """
+    Keep the first column; for subsequent centroids, show the color only if it differs
+    from the previous centroid for that state. Otherwise leave blank.
+    Includes ALL states that vary at least once. States that never vary are excluded.
+    """
+    # Identify varying rows first
+    varying = colors_df.loc[colors_df.nunique(axis=1) > 1].copy()
+    if varying.empty:
+        return varying
+
+    cols = list(varying.columns)
+    out = varying.copy()
+    # first column stays visible
+    for r in out.index:
+        prev = out.at[r, cols[0]]
+        # subsequent columns only when different vs previous col
+        for c in cols[1:]:
+            cur = out.at[r, c]
+            if cur == prev:
+                out.at[r, c] = ""
+            else:
+                # keep the token and update prev
+                prev = cur
+    return out
+
+def _write_markdown_and_csvs(year_label: int, out_root: str,
+                             const_df: "pd.DataFrame",
+                             colors_df: "pd.DataFrame",
+                             highlight_df: "pd.DataFrame") -> None:
+    """
+    Save:
+      - {year}_color_tables.md (markdown with constant groups + change-only highlight)
+      - {year}_colors_by_centroid.csv (full table)
+      - {year}_constant_colors.csv (state + constant colors)
+      - {year}_color_changes_only.csv (change-only highlight table)
+    """
+    # CSVs
+    colors_csv = os.path.join(out_root, f"{year_label}_colors_by_centroid.csv")
+    colors_df.to_csv(colors_csv, index=True)
+
+    const_csv = os.path.join(out_root, f"{year_label}_constant_colors.csv")
+    if not const_df.empty:
+        # compress constant table to a single 'color' column
+        const_export = const_df.iloc[:, [0]].rename(columns={const_df.columns[0]: "color"})
+        const_export.to_csv(const_csv, index=True)
+    else:
+        # write empty placeholder
+        pd.DataFrame(columns=["color"]).to_csv(const_csv, index=True)
+
+    highlight_csv = os.path.join(out_root, f"{year_label}_color_changes_only.csv")
+    if not highlight_df.empty:
+        highlight_df.to_csv(highlight_csv, index=True)
+    else:
+        pd.DataFrame().to_csv(highlight_csv, index=True)
+
+    # Markdown
+    md_lines = []
+    md_lines.append(f"# {year_label} Color Tables\n")
+
+    # Constant states grouped by color
+    md_lines.append("## Constant-color states (same in all centroids)\n")
+    if const_df.empty:
+        md_lines.append("_None_\n")
+    else:
+        # Group sections by color value in first column
+        # Ensure family/shade order
+        family_order = ["BLUE", "Blue", "blue", "lblue", "RED", "Red", "red", "lred"]
+        for tok in family_order:
+            group = const_df[const_df.iloc[:, 0] == tok]
+            if group.empty:
+                continue
+            md_lines.append(f"**{tok}**\n")
+            md_lines.append(group.drop(columns=[]).to_markdown())
+            md_lines.append("")
+
+    # Change-only highlight (first column always included)
+    md_lines.append("## Change-only highlight (blank = same as previous centroid)\n")
+    if highlight_df.empty:
+        md_lines.append("_No changes across centroids._\n")
+    else:
+        md_lines.append(highlight_df.to_markdown())
+        md_lines.append("")
+
+    # (Optional) full table at the end if you ever want it visible:
+    md_lines.append("<details><summary>Full color table by centroid</summary>\n\n")
+    md_lines.append(colors_df.to_markdown())
+    md_lines.append("\n</details>\n")
+
+    md_path = os.path.join(out_root, f"{year_label}_color_tables.md")
+    with open(md_path, "w", encoding="utf-8") as f:
+        f.write("\n".join(md_lines))
+
+def write_yapms_color_tables(states, centroids, example_margin, out_root, year_label) -> None:
+    """
+    Public helper: call this AFTER you've computed centroids for a year.
+    Only writes tables if example_margin is not None.
+    """
+    if example_margin is None:
+        return
+
+    # Reorder centroids to minimize the total number of highlighted changes across
+    # states (i.e., minimize transitions between adjacent centroid columns).
+    # k is typically small (default 5) so brute-force over permutations is fine.
+    def _order_centroids_by_min_changes(states, centroids, example_margin):
+        k = len(centroids)
+        if k <= 1:
+            return centroids, list(range(k))
+
+        S = len(states)
+        # tokens[r][j] = color token for state r under centroid j
+        # use empty-string placeholders to keep types consistent
+        tokens = [[""] * k for _ in range(S)]
+        for j, c in enumerate(centroids):
+            for s_idx in range(S):
+                fm = float(c[s_idx]) + float(example_margin)
+                tokens[s_idx][j] = _color_token(fm)
+        best_cost = float("inf")
+        best_perm = tuple(range(k))
+        for perm in permutations(range(k)):
+            cost = 0
+            # count transitions between adjacent columns across all states
+            for r in range(S):
+                prev = tokens[r][perm[0]]
+                for idx in perm[1:]:
+                    cur = tokens[r][idx]
+                    if cur != prev:
+                        cost += 1
+                        prev = cur
+            if cost < best_cost:
+                best_cost = cost
+                best_perm = perm
+
+        ordered = [centroids[i] for i in best_perm]
+        return ordered, list(best_perm)
+
+    centroids, chosen_order = _order_centroids_by_min_changes(states, centroids, example_margin)
+    # small debug trace written to stdout so users know the chosen ordering
+    print(f"Reordered centroids to minimize changes: order={chosen_order}")
+    # Build column names that preserve original cluster indices (1-based)
+    orig_cols = [f"centroid_{i+1}" for i in chosen_order]
+    colors_df = _build_colors_df(states, centroids, example_margin, col_names=orig_cols)
+    const_df = _constant_states_df(colors_df)
+    # Only varying rows appear in highlight; first column always included
+    highlight_df = _highlight_changes_df(colors_df)
+    _write_markdown_and_csvs(year_label, out_root, const_df, colors_df, highlight_df)
 
 # ----------
 # Main flow
@@ -578,6 +788,7 @@ def main(
         n_draw=n_draw,
         n_keep=n_keep,
         kmeans_k=kmeans_k,
+        example_margin=0.07
     )
 
     # Summary log

@@ -40,7 +40,13 @@
       "R_EV@0": 265,
       "D_EV@+3": 292,
       "R_EV@+3": 246,
-      "flips_vs_baseline": 3
+      "flips_vs_baseline": 3,
+      "shock_count": 3,
+      "shock_states": [
+        "IA",
+        "ND",
+        "SD"
+      ]
     },
     {
       "centroid_index": 2,
@@ -51,7 +57,12 @@
       "R_EV@0": 275,
       "D_EV@+3": 302,
       "R_EV@+3": 236,
-      "flips_vs_baseline": 2
+      "flips_vs_baseline": 2,
+      "shock_count": 2,
+      "shock_states": [
+        "AR",
+        "HI"
+      ]
     },
     {
       "centroid_index": 3,
@@ -62,7 +73,12 @@
       "R_EV@0": 262,
       "D_EV@+3": 276,
       "R_EV@+3": 262,
-      "flips_vs_baseline": 2
+      "flips_vs_baseline": 2,
+      "shock_count": 2,
+      "shock_states": [
+        "ND",
+        "SD"
+      ]
     },
     {
       "centroid_index": 4,
@@ -73,7 +89,11 @@
       "R_EV@0": 271,
       "D_EV@+3": 302,
       "R_EV@+3": 236,
-      "flips_vs_baseline": 1
+      "flips_vs_baseline": 1,
+      "shock_count": 1,
+      "shock_states": [
+        "ME"
+      ]
     },
     {
       "centroid_index": 5,
@@ -84,7 +104,11 @@
       "R_EV@0": 295,
       "D_EV@+3": 278,
       "R_EV@+3": 260,
-      "flips_vs_baseline": 4
+      "flips_vs_baseline": 4,
+      "shock_count": 1,
+      "shock_states": [
+        "HI"
+      ]
     }
   ],
   "chosen_centroid_index_2028": 5,
@@ -117,7 +141,7 @@
     "mu_shock": 0.20098039215686272,
     "sd_shock": 0.1424101867287642,
     "resid_scale": 0.017607068835327123,
-    "example_margin": null
+    "example_margin": 0.07
   },
   "2032_results": [
     {
@@ -129,7 +153,13 @@
       "R_EV@0": 277,
       "D_EV@+3": 287,
       "R_EV@+3": 251,
-      "flips_vs_baseline": 3
+      "flips_vs_baseline": 3,
+      "shock_count": 3,
+      "shock_states": [
+        "AR",
+        "HI",
+        "ND"
+      ]
     },
     {
       "centroid_index": 2,
@@ -140,7 +170,13 @@
       "R_EV@0": 295,
       "D_EV@+3": 272,
       "R_EV@+3": 266,
-      "flips_vs_baseline": 0
+      "flips_vs_baseline": 0,
+      "shock_count": 3,
+      "shock_states": [
+        "MT",
+        "ND",
+        "WY"
+      ]
     },
     {
       "centroid_index": 3,
@@ -151,7 +187,13 @@
       "R_EV@0": 279,
       "D_EV@+3": 294,
       "R_EV@+3": 244,
-      "flips_vs_baseline": 1
+      "flips_vs_baseline": 1,
+      "shock_count": 3,
+      "shock_states": [
+        "AR",
+        "HI",
+        "ND"
+      ]
     },
     {
       "centroid_index": 4,
@@ -162,7 +204,12 @@
       "R_EV@0": 280,
       "D_EV@+3": 274,
       "R_EV@+3": 264,
-      "flips_vs_baseline": 2
+      "flips_vs_baseline": 2,
+      "shock_count": 2,
+      "shock_states": [
+        "ME",
+        "UT"
+      ]
     },
     {
       "centroid_index": 5,
@@ -173,7 +220,9 @@
       "R_EV@0": 296,
       "D_EV@+3": 319,
       "R_EV@+3": 219,
-      "flips_vs_baseline": 3
+      "flips_vs_baseline": 3,
+      "shock_count": 0,
+      "shock_states": []
     }
   ]
 }

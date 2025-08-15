@@ -27,5 +27,5 @@
   "mu_shock": 0.20098039215686272,
   "sd_shock": 0.1424101867287642,
   "resid_scale": 0.017607068835327123,
-  "example_margin": null
+  "example_margin": 0.07
 }
