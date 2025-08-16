@@ -1,5 +1,5 @@
 Year: 2008
-Democratic EC: 365
+Democratic EC: 364
 Republican EC: 174
 Popular Vote: D+7.5
 
@@ -15,7 +15,7 @@ IL: D+25.5 🔵 (21 EV)
 DE: D+25.3 🔵 (3 EV)
 CA: D+24.6 🔵 (55 EV)
 CT: D+22.6 🔵 (7 EV)
-ME: D+17.7 🔵 (5 EV)
+ME: D+17.7 🔵 (4 EV)
 WA: D+17.5 🔵 (11 EV)
 OR: D+16.8 🔵 (7 EV)
 MI: D+16.7 🔵 (17 EV)

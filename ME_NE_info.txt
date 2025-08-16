@@ -1,0 +1,122 @@
+NE
+1992
+Year,District,R %,D %,Perot %,Representative
+1992,NE-01,43.2%,32.6%,24.2%,Doug Bereuter
+1992,NE-02,47.5%,32.4%,20.1%,Peter Hoagland
+1992,NE-03,49.7%,23.5%,26.8%,Bill Barrett
+
+1996
+Year,District,R %,D %,Representative
+1996,NE-01,50.0%,38.0%,Doug Bereuter
+1996,NE-02,53.0%,38.0%,Jon Lynn Christensen
+1996,NE-03,59.0%,29.0%,Bill Barrett
+
+2000
+Year,District,R %,D %,Representative
+2000,NE-01,59%,36%,Doug Bereuter
+2000,NE-02,57%,39%,Lee Terry
+2000,NE-03,71%,25%,
+
+2004
+Year,District,R %,D %,Representative
+2004,NE-01,63%,36%,Jeff Fortenberry
+2004,NE-02,60%,38%,Lee Terry
+2004,NE-03,75%,24%,
+
+2008
+Year,District,R %,D %,Representative
+2008,NE-01,54%,44%,Jeff Fortenberry
+2008,NE-02,49%,50%,Lee Terry
+2008,NE-03,69%,30%,
+
+2012
+Year,District,R %,D %,Representative
+2012,NE-01,57%,41%,Jeff Fortenberry
+2012,NE-02,53%,46%,Lee Terry
+2012,NE-03,70%,28%,
+
+2016
+Year,District,R %,D %,Representative
+2016,NE-01,56%,35%,Jeff Fortenberry
+2016,NE-02,47%,45%,Brad AshR
+2016,NE-03,74%,20%,
+
+2020
+Year,District,R #,R %,D #,D %,Other #,Other %,Representative
+2020,NE-01,180290,56.01%,132261,41.09%,9335,2.90%,Jeff Fortenberry
+2020,NE-02,154377,45.45%,176468,51.95%,8821,2.60%,Don Bacon
+2020,NE-03,222179,75.36%,65854,22.34%,6798,2.31%,Adrian Smith
+
+2024
+Year,District,R #,R %,D #,D %,Other #,Other %,Representative
+2024,NE-01,177666,55.49%,136153,42.52%,6375,1.99%,Mike Flood
+2024,NE-02,148905,46.73%,163541,51.32%,6200,1.95%,Don Bacon
+2024,NE-03,238245,76.03%,70301,22.44%,4796,1.53%,Adrian Smith
+
+
+ME
+
+1976
+Year,District,R %,D %,Representative
+1976,ME-01,49.22%,47.90%,David F. Emery
+1976,ME-02,48.54%,48.27%,William Cohen
+
+1980
+Year,District,R %,D %,Representative
+1980,ME-01,45.02%,41.93%,David F. Emery
+1980,ME-02,46.29%,42.62%,Olympia Snowe
+
+1984
+Year,District,R %,Mondale %,Representative
+1984,ME-01,59.69%,39.95%,John R. McKernan Jr.
+1984,ME-02,62.16%,37.47%,Olympia Snowe
+
+1988
+Year,District,R %,Dukakis %,Representative
+1988,ME-01,55.92%,43.29%,Joseph E. Brennan
+1988,ME-02,54.64%,44.59%,Olympia Snowe
+
+1992
+Year,District,D %,R %,Perot %,Representative
+1992,ME-01,39.90%,31.80%,28.30%,Thomas Andrews
+1992,ME-02,37.80%,29.00%,33.20%,Olympia Snowe
+
+1996
+Year,District,D %,D %,Perot %,Representative
+1996,ME-01,52.1%,31.8%,12.6%,"James B. Longley Jr. (104th Congress); Tom Allen (105th Congress)"
+1996,ME-02,51.2%,29.6%,16.0%,John Baldacci
+
+2000
+Year,District,D %,R %,Representative
+2000,ME-01,50.52%,42.59%,Tom Allen
+2000,ME-02,47.43%,45.56%,John Baldacci
+
+2004
+Year,District,R %,D %,Representative
+2004,ME-01,43%,55%,Tom Allen
+2004,ME-02,46%,52%,Mike Michaud
+
+2008
+Year,District,D #,D %,R #,R %,Other1 #,Other1 %,Other2 #,Other2 %,Other3 #,Other3 %,Margin #,Margin %,Representative
+2008,ME-01,232145,60.51%,144604,37.69%,5263,1.37%,1362,0.36%,252,0.07%,87541,22.82%,Chellie Pingree
+2008,ME-02,189778,54.61%,150669,43.35%,5373,1.55%,1538,0.44%,179,0.05%,39109,11.25%,Mike Michaud
+
+2012
+Year,District,D %,R %,Representative
+2012,ME-01,59.57%,38.18%,Chellie Pingree
+2012,ME-02,52.94%,44.38%,Mike Michaud
+
+2016
+Year,District,D %,R %,Representative
+2016,ME-01,54%,39%,Chellie Pingree
+2016,ME-02,41%,51%,Bruce Poliquin
+
+2020
+Year,District,D #,D %,R #,R %,Other #,Other %,Representative
+2020,ME-01,266376,60.11%,164045,37.02%,12691,2.86%,Chellie Pingree
+2020,ME-02,168696,44.82%,196692,52.26%,10961,2.91%,Jared Golden
+
+2024
+Year,District,D #,D %,R #,R %,Other #,Other %,Representative
+2024,ME-01,258863,59.69%,165214,38.09%,9632,2.22%,Chellie Pingree
+2024,ME-02,176789,44.46%,212763,53.50%,8114,2.04%,Jared Golden

@@ -12,9 +12,12 @@ ABBR_TO_NAME = {
     'NJ': 'New Jersey', 'NM': 'New Mexico', 'NY': 'New York', 'NC': 'North Carolina', 'ND': 'North Dakota',
     'OH': 'Ohio', 'OK': 'Oklahoma', 'OR': 'Oregon', 'PA': 'Pennsylvania', 'RI': 'Rhode Island',
     'SC': 'South Carolina', 'SD': 'South Dakota', 'TN': 'Tennessee', 'TX': 'Texas', 'UT': 'Utah',
-    'VT': 'Vermont', 'VA': 'Virginia', 'WA': 'Washington', 'WV': 'West Virginia', 'WI': 'Wisconsin', 'WY': 'Wyoming'
+    'VT': 'Vermont', 'VA': 'Virginia', 'WA': 'Washington', 'WV': 'West Virginia', 'WI': 'Wisconsin', 'WY': 'Wyoming',
+    'ME-01': 'Maine First District', 'ME-02': 'Maine Second District', 'ME-AL': 'Maine At-Large',
+    'NE-01': 'Nebraska First District', 'NE-02': 'Nebraska Second District', 'NE-03': 'Nebraska Third District', 'NE-AL': 'Nebraska At-Large'
 }
 
+SEPARATE_BY_DISTRICT = True  # Set to True to separate Maine and Nebraska by district
 
 def load_electoral_college_map(path: str = 'Electoral_College.csv'):
     """Load Electoral College votes by (year, full_state_name) from CSV.
@@ -92,7 +95,7 @@ def load_existing_2024_evs(path: str = 'presidential_margins.csv'):
     return evs_2024
 
 
-def run_import_csv(start_year=1976):
+def run_import_csv(start_year=1976, separate_by_district: bool = True, me_ne_enhanced_path: str = 'ME_NE_enhanced.csv'):
     input_file = "data/1976-2020-president.csv"
     output_file = "presidential_margins.csv"
 
@@ -180,6 +183,79 @@ def run_import_csv(start_year=1976):
             
     # check what 2016 AZ D_votes were
     az_2016_d_votes = next((row[2] for row in output_rows if row[0] == 2016 and row[1] == "AZ"), None)
+
+    # Optionally replace ME/NE rows with district/AL rows from ME_NE_enhanced.csv
+    if separate_by_district:
+        # Load enhanced rows
+        enhanced = []
+        try:
+            with open(me_ne_enhanced_path, newline='', encoding='utf-8') as f:
+                ereader = csv.DictReader(f)
+                for er in ereader:
+                    try:
+                        y = int((er.get('year') or '').strip())
+                    except ValueError:
+                        continue
+                    abbr = (er.get('abbr') or '').strip()
+                    if not (abbr.startswith('ME-') or abbr.startswith('NE-')):
+                        continue
+                    # Parse fields we need; tolerate blanks
+                    def parse_int(s):
+                        s = (s or '').replace(',', '').strip()
+                        try:
+                            return int(s)
+                        except ValueError:
+                            return 0
+                    def parse_float(s):
+                        s = (s or '').strip()
+                        try:
+                            return float(s)
+                        except ValueError:
+                            return ''
+                    Dv = parse_int(er.get('D_votes'))
+                    Rv = parse_int(er.get('R_votes'))
+                    pm = parse_float(er.get('pres_margin'))
+                    ev = parse_int(er.get('electoral_votes'))
+                    enhanced.append({'year': y, 'abbr': abbr, 'D': Dv, 'R': Rv, 'pres_margin': pm, 'ev': ev})
+        except FileNotFoundError:
+            enhanced = []
+
+        # Index enhanced by (year, state_prefix)
+        enh_by_year_state = {}
+        for r in enhanced:
+            state_prefix = r['abbr'].split('-')[0]
+            enh_by_year_state.setdefault((r['year'], state_prefix), []).append(r)
+
+        def replace_state(rows, state_po: str):
+            new_rows = []
+            for row in rows:
+                y, ab, D, R, margin, margin_str, ev = row[:7]
+                if ab == state_po:
+                    group = enh_by_year_state.get((y, state_po), None)
+                    if group:
+                        # Require an -AL row to do full replacement; else rename fallback
+                        has_al = any(gr['abbr'].endswith('-AL') for gr in group)
+                        if has_al:
+                            # Replace with all district and AL rows for that state/year
+                            for gr in sorted(group, key=lambda g: g['abbr']):
+                                g_margin = gr['pres_margin']
+                                g_margin_str = utils.lean_str(g_margin) if g_margin != '' else ''
+                                new_rows.append([y, gr['abbr'], gr['D'], gr['R'], g_margin, g_margin_str, gr['ev']])
+                        else:
+                            # Fallback: just rename the state row to -AL for consistency
+                            al_abbr = f"{state_po}-AL"
+                            new_rows.append([y, al_abbr, D, R, margin, margin_str, ev])
+                    else:
+                        # No enhanced data; leave as-is but rename to -AL for consistency
+                        al_abbr = f"{state_po}-AL"
+                        new_rows.append([y, al_abbr, D, R, margin, margin_str, ev])
+                else:
+                    new_rows.append(row)
+            return new_rows
+
+        # First replace ME, then NE
+        output_rows = replace_state(output_rows, 'ME')
+        output_rows = replace_state(output_rows, 'NE')
             
     years = sorted(list(set(row[0] for row in output_rows)))
 

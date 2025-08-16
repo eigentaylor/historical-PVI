@@ -1,6 +1,6 @@
 Year: 2004
-Democratic EC: 253
-Republican EC: 287
+Democratic EC: 252
+Republican EC: 286
 Popular Vote: R+2.5
 
 States sorted by presidential margin:
@@ -13,7 +13,7 @@ MD: D+13.1 🔵 (10 EV)
 CT: D+10.5 🔵 (7 EV)
 IL: D+10.4 🔵 (21 EV)
 CA: D+10.1 🔵 (55 EV)
-ME: D+9.2 🔵 (5 EV)
+ME: D+9.2 🔵 (4 EV)
 HI: D+8.8 🔵 (4 EV)
 DE: D+7.7 🔵 (3 EV)
 WA: D+7.3 🔵 (11 EV)
@@ -51,7 +51,7 @@ AL: R+25.8 🔴 (9 EV)
 AK: R+26.5 🔴 (3 EV)
 ND: R+27.8 🔴 (3 EV)
 OK: R+31.1 🔴 (7 EV)
-NE: R+33.7 🔴 (6 EV)
+NE: R+33.7 🔴 (5 EV)
 ID: R+38.6 🔴 (4 EV)
 WY: R+40.6 🔴 (3 EV)
 UT: R+46.7 🔴 (5 EV)

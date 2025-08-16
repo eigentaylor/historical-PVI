@@ -1,7 +1,7 @@
-Cluster (dist: 2.048)
+Cluster (dist: 2.055)
   DC
-  Cluster (dist: 1.548)
-    Cluster (dist: 0.545)
+  Cluster (dist: 1.579)
+    Cluster (dist: 0.577)
       Cluster (dist: 0.228)
         UT
         Cluster (dist: 0.159)
@@ -10,36 +10,42 @@ Cluster (dist: 2.048)
             WY
           Cluster (dist: 0.078)
             ID
-            NE
-      Cluster (dist: 0.288)
-        Cluster (dist: 0.123)
-          Cluster (dist: 0.060)
-            SC
-            Cluster (dist: 0.037)
-              AZ
-              FL
-          Cluster (dist: 0.062)
-            NH
-            NV
-        Cluster (dist: 0.229)
-          Cluster (dist: 0.045)
-            VA
-            Cluster (dist: 0.032)
-              MS
-              Cluster (dist: 0.018)
-                AL
-                IN
-          Cluster (dist: 0.175)
-            Cluster (dist: 0.064)
-              SD
-              TX
-            Cluster (dist: 0.096)
-              ND
-              Cluster (dist: 0.068)
-                KS
-                OK
-    Cluster (dist: 0.828)
-      Cluster (dist: 0.274)
+            NE-AL
+      Cluster (dist: 0.520)
+        Cluster (dist: 0.224)
+          NE-03
+          Cluster (dist: 0.049)
+            NE-01
+            NE-02
+        Cluster (dist: 0.288)
+          Cluster (dist: 0.123)
+            Cluster (dist: 0.060)
+              SC
+              Cluster (dist: 0.037)
+                AZ
+                FL
+            Cluster (dist: 0.062)
+              NH
+              NV
+          Cluster (dist: 0.229)
+            Cluster (dist: 0.045)
+              VA
+              Cluster (dist: 0.032)
+                MS
+                Cluster (dist: 0.018)
+                  AL
+                  IN
+            Cluster (dist: 0.175)
+              Cluster (dist: 0.064)
+                SD
+                TX
+              Cluster (dist: 0.096)
+                ND
+                Cluster (dist: 0.068)
+                  KS
+                  OK
+    Cluster (dist: 0.846)
+      Cluster (dist: 0.283)
         Cluster (dist: 0.114)
           Cluster (dist: 0.057)
             GA
@@ -51,12 +57,16 @@ Cluster (dist: 2.048)
               Cluster (dist: 0.023)
                 KY
                 NJ
-        Cluster (dist: 0.181)
-          Cluster (dist: 0.106)
+        Cluster (dist: 0.191)
+          Cluster (dist: 0.111)
             AR
-            Cluster (dist: 0.030)
-              DE
-              ME
+            Cluster (dist: 0.062)
+              Cluster (dist: 0.009)
+                DE
+                ME-01
+              Cluster (dist: 0.030)
+                ME-02
+                ME-AL
           Cluster (dist: 0.136)
             Cluster (dist: 0.053)
               MO

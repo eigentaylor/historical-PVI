@@ -1,6 +1,6 @@
 Year: 2016
 Democratic EC: 233
-Republican EC: 306
+Republican EC: 305
 Popular Vote: D+2.3
 
 States sorted by presidential margin:
@@ -44,7 +44,7 @@ LA: R+20.3 🔴 (8 EV)
 MT: R+22.2 🔴 (3 EV)
 KS: R+22.2 🔴 (6 EV)
 UT: R+24.8 🔴 (6 EV)
-NE: R+27.1 🔴 (6 EV)
+NE: R+27.1 🔴 (5 EV)
 TN: R+27.2 🔴 (11 EV)
 AR: R+28.6 🔴 (6 EV)
 AL: R+28.7 🔴 (9 EV)

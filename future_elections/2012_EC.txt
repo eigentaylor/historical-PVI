@@ -1,6 +1,6 @@
 Year: 2012
-Democratic EC: 333
-Republican EC: 207
+Democratic EC: 332
+Republican EC: 206
 Popular Vote: D+4.0
 
 States sorted by presidential margin:
@@ -16,7 +16,7 @@ DE: D+18.9 🔵 (3 EV)
 NJ: D+17.9 🔵 (14 EV)
 CT: D+17.5 🔵 (7 EV)
 IL: D+17.2 🔵 (20 EV)
-ME: D+15.7 🔵 (5 EV)
+ME: D+15.7 🔵 (4 EV)
 WA: D+15.3 🔵 (12 EV)
 OR: D+12.5 🔵 (7 EV)
 NM: D+10.6 🔵 (5 EV)
@@ -46,7 +46,7 @@ SD: R+18.4 🔴 (3 EV)
 ND: R+20.2 🔴 (3 EV)
 TN: R+20.7 🔴 (11 EV)
 KS: R+22.2 🔴 (6 EV)
-NE: R+22.3 🔴 (6 EV)
+NE: R+22.3 🔴 (5 EV)
 AL: R+22.4 🔴 (9 EV)
 KY: R+23.1 🔴 (8 EV)
 AR: R+24.3 🔴 (6 EV)

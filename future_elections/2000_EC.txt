@@ -1,6 +1,6 @@
 Year: 2000
-Democratic EC: 268
-Republican EC: 272
+Democratic EC: 267
+Republican EC: 271
 Popular Vote: D+0.5
 
 States sorted by presidential margin:
@@ -17,7 +17,7 @@ CA: D+12.4 🔵 (54 EV)
 IL: D+12.4 🔵 (22 EV)
 VT: D+10.9 🔵 (3 EV)
 WA: D+5.9 🔵 (11 EV)
-ME: D+5.5 🔵 (5 EV)
+ME: D+5.5 🔵 (4 EV)
 MI: D+5.3 🔵 (18 EV)
 PA: D+4.3 🔵 (23 EV)
 MN: D+2.6 🔵 (10 EV)
@@ -50,7 +50,7 @@ OK: R+22.2 🔴 (8 EV)
 SD: R+23.2 🔴 (3 EV)
 MT: R+27.3 🔴 (3 EV)
 ND: R+29.5 🔴 (3 EV)
-NE: R+30.4 🔴 (6 EV)
+NE: R+30.4 🔴 (5 EV)
 AK: R+35.9 🔴 (3 EV)
 ID: R+41.7 🔴 (4 EV)
 WY: R+42.0 🔴 (3 EV)

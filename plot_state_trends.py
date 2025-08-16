@@ -9,7 +9,18 @@ import utils
 
 # Option to enable subplot mode
 subplot_mode = True  # Set to True for subplot, False for single plot
-USE_FUTURE = True  # Set to True to use the future simulation data
+USE_FUTURE = False  # Set to True to use the future simulation data
+
+# Optional: only include data from this year onward (None means use all years)
+start_year = 2000  # e.g. 2000 to only plot years >= 2000
+# Optional end year (None means up to the latest available)
+end_year = None  # e.g. 2024 to limit to years <= 2024
+if end_year is None:
+    end_year = 2024
+
+# Sine fitting configuration: require a minimum number of points and a minimum R^2
+sine_min_points = 6
+sine_r2_threshold = 0.5
 
 # Option to enable house margins
 plot_house_margins = False  # Set to True to include house margins
@@ -29,10 +40,24 @@ if plot_house_margins:
     house_df = pd.read_csv('house_margins.csv')
     house_df = house_df[house_df['year'] <= 2024]  # Only use years <= 2024
 
-# Ensure output directory exists
-output_dir = 'state_trends/state_trends_future' if USE_FUTURE else 'state_trends'
+# Ensure base output directory exists
+base_output_dir = 'state_trends/state_trends_future' if USE_FUTURE else 'state_trends'
+
+# If a year filter is provided, create a subdirectory to avoid clobbering the default outputs
+if start_year is None and end_year is None:
+    output_dir = base_output_dir
+else:
+    if start_year is not None and end_year is not None:
+        suffix = f"{start_year}_{end_year}"
+    elif start_year is not None:
+        suffix = f"{start_year}_plus"
+    else:
+        suffix = f"up_to_{end_year}"
+    output_dir = os.path.join(base_output_dir, suffix)
+
 os.makedirs(output_dir, exist_ok=True)
-# clear all files in the output directory
+
+# Clear only files in the chosen output directory
 for file in os.listdir(output_dir):
     file_path = os.path.join(output_dir, file)
     if os.path.isfile(file_path):
@@ -43,9 +68,9 @@ states = df['abbr'].unique()
 
 plt.style.use('dark_background')
 
-# Open files for writing outside the loop
-left_file = open("trended_left_in_2024.txt", "w")
-right_file = open("trended_right_in_2024.txt", "w")
+# Open trended files inside the output directory
+left_file = open(os.path.join(output_dir, f"trended_left_in_{end_year}.txt"), "w")
+right_file = open(os.path.join(output_dir, f"trended_right_in_{end_year}.txt"), "w")
 
 # Define the sine function for fitting
 def sine_function(x, A, B, C, D):
@@ -53,6 +78,16 @@ def sine_function(x, A, B, C, D):
 
 for state in states:
     state_df = df[df['abbr'] == state]
+    # Apply start_year / end_year filters if provided
+    if start_year is not None:
+        state_df = state_df[state_df['year'] >= start_year]
+    if end_year is not None:
+        state_df = state_df[state_df['year'] <= end_year]
+
+    # Skip states with no data in the requested range
+    if state_df.empty:
+        print(f"Skipping {state}: no data in requested year range")
+        continue
     years = state_df['year']
     pres_margin = state_df['pres_margin']
     national_margin = state_df['national_margin']
@@ -108,7 +143,7 @@ for state in states:
         axes[1].plot(x_indices, p(x_indices), linestyle='--', color='yellow', label='Line of Best Fit')
 
         # Verify the data being used for sine fitting
-        print(f"Fitting sine for {state} with relative_margin: {relative_margin.values}")
+        print(f"Preparing sine fit for {state} with relative_margin: {relative_margin.values}")
         print(f"Years: {years.values}")
 
         # Ensure data is sorted by year
@@ -116,34 +151,49 @@ for state in states:
         relative_margin = relative_margin.iloc[sorted_indices]
         x_indices = np.arange(len(relative_margin))
 
-        # Add a sine of best fit to the bar plot
-        try:
-            # Fit the sine function to the data
-            params, _ = curve_fit(sine_function, x_indices, relative_margin, p0=[1, 1, 0, np.mean(relative_margin)])
-            A, B, C, D = params
+        # Add a sine of best fit to the bar plot only if it fits well
+        sine_plotted = False
+        if len(x_indices) >= sine_min_points:
+            try:
+                # Fit the sine function to the data
+                params, _ = curve_fit(sine_function, x_indices, relative_margin, p0=[1, 1, 0, np.mean(relative_margin)])
+                A, B, C, D = params
 
-            # Generate the sine curve
-            sine_fit = sine_function(np.array(x_indices), A, B, C, D)
+                # Generate the sine curve on the original x indices
+                sine_fit = sine_function(np.array(x_indices), A, B, C, D)
 
-            # Generate a denser set of x values for a smoother sine curve
-            x_dense = np.linspace(min(x_indices.tolist()), max(x_indices.tolist()), 500)
-            sine_fit_dense = sine_function(x_dense, A, B, C, D)
+                # Compute R^2 to evaluate goodness of fit
+                ss_res = np.sum((relative_margin.values - sine_fit) ** 2)
+                ss_tot = np.sum((relative_margin.values - np.mean(relative_margin.values)) ** 2)
+                r2 = 1 - (ss_res / ss_tot) if ss_tot != 0 else 0
 
-            # Plot the smoother sine of best fit
-            axes[1].plot(x_dense, sine_fit_dense, linestyle='--', color='cyan', label='Sine of Best Fit')
-        except Exception as e:
-            print(f"Could not fit sine function for {state}: {e}")
-            
+                print(f"Sine fit for {state}: R^2={r2:.3f} (n={len(x_indices)})")
+
+                if r2 >= sine_r2_threshold:
+                    # Generate a denser set of x values for a smoother sine curve
+                    x_dense = np.linspace(min(x_indices.tolist()), max(x_indices.tolist()), 500)
+                    sine_fit_dense = sine_function(x_dense, A, B, C, D)
+
+                    # Plot the smoother sine of best fit
+                    axes[1].plot(x_dense, sine_fit_dense, linestyle='--', color='cyan', label='Sine of Best Fit')
+                    sine_plotted = True
+                else:
+                    print(f"Sine fit rejected for {state} because R^2 < {sine_r2_threshold}")
+            except Exception as e:
+                print(f"Could not fit sine function for {state}: {e}")
+        else:
+            print(f"Skipping sine fit for {state}: not enough points (need {sine_min_points}, have {len(x_indices)})")
+
         bars = axes[1].bar(x_indices, relative_margin, width=bar_width, label='Pres Relative Margin', color=pres_colors)
         axes[1].bar_label(bars, labels=[utils.lean_str(v) for v in relative_margin], padding=3, fontsize=8, color='white')
+        if not USE_FUTURE:
+            if relative_margin.iloc[-1] > relative_margin.iloc[-2]:
+                #print(f"{state} trended left")
+                left_file.write(f"{state} trended left ({utils.lean_str(relative_margin.iloc[-2])} -> {utils.lean_str(relative_margin.iloc[-1])},\tdifference: {utils.lean_str(relative_margin.iloc[-1] - relative_margin.iloc[-2])})\n")
+            elif relative_margin.iloc[-1] < relative_margin.iloc[-2]:
+                #print(f"{state} trended right")
+                right_file.write(f"{state} trended right ({utils.lean_str(relative_margin.iloc[-2])} -> {utils.lean_str(relative_margin.iloc[-1])},\tdifference: {utils.lean_str(relative_margin.iloc[-1] - relative_margin.iloc[-2])})\n")
 
-        if relative_margin.iloc[-1] > relative_margin.iloc[-2]:
-            #print(f"{state} trended left")
-            left_file.write(f"{state} trended left ({utils.lean_str(relative_margin.iloc[-2])} -> {utils.lean_str(relative_margin.iloc[-1])},\tdifference: {utils.lean_str(relative_margin.iloc[-1] - relative_margin.iloc[-2])})\n")
-        elif relative_margin.iloc[-1] < relative_margin.iloc[-2]:
-            #print(f"{state} trended right")
-            right_file.write(f"{state} trended right ({utils.lean_str(relative_margin.iloc[-2])} -> {utils.lean_str(relative_margin.iloc[-1])},\tdifference: {utils.lean_str(relative_margin.iloc[-1] - relative_margin.iloc[-2])})\n")
-            
         axes[1].set_title(f'{state} Relative Margins')
         axes[1].set_xlabel('Year')
         axes[1].set_ylabel('Relative Margin')
