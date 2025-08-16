@@ -22,11 +22,11 @@ if USE_FUTURE:
     #OUTPUT_DIR = os.path.join(OUTPUT_DIR, 'future')
     os.makedirs(OUTPUT_DIR, exist_ok=True)
 # clear all files and subdirectories in the output directory
-for root, dirs, files in os.walk(OUTPUT_DIR, topdown=False):
-    for name in files:
-        os.remove(os.path.join(root, name))
-    for name in dirs:
-        os.rmdir(os.path.join(root, name))
+# for root, dirs, files in os.walk(OUTPUT_DIR, topdown=False):
+#     for name in files:
+#         os.remove(os.path.join(root, name))
+#     for name in dirs:
+#         os.rmdir(os.path.join(root, name))
 
 # Outcome thresholds (total EVs for a party)
 TARGET_EVS = {

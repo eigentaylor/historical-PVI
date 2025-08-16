@@ -34,6 +34,14 @@ KMEANS_K = 5
 CSV_PATH = "presidential_margins.csv"
 OUT_DIR = "energy_predict"
 
+# At-large groups: these at-large labels are derived from their districts and should
+# be excluded from sampling; final predicted values will be set to the average of
+# their districts. Adjust lists if your CSV uses different district names.
+AT_LARGE_GROUPS = {
+    "NE-AL": ["NE-01", "NE-02", "NE-03"],
+    "ME-AL": ["ME-01", "ME-02"],
+}
+
 
 @dataclass
 class Targets:
@@ -77,8 +85,9 @@ def load_and_align(csv_path: str) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFr
     pivot_ev = df.pivot_table(index="year", columns="abbr", values="electoral_votes", aggfunc="first")
 
     years = sorted(int(y) for y in pivot_m.index if not pd.isna(y))
-    # Restrict to states present in all years
-    valid_states = [s for s in pivot_m.columns if pivot_m[s].notna().all() and pivot_ev[s].notna().all()]
+    # Keep any state that has at least one non-null margin and at least one electoral_votes entry.
+    # This allows including ME/NE districts that start later in the record (e.g., 1992).
+    valid_states = [s for s in pivot_m.columns if pivot_m[s].notna().any() and pivot_ev[s].notna().any()]
     pivot_m = pivot_m[valid_states].sort_index()
     pivot_ev = pivot_ev[valid_states].sort_index()
 
@@ -110,45 +119,98 @@ def build_delta_targets(
       - F (K x S): factor directions (orthonormal rows), score_sd (K,),
       - mean_Xc (S,), resid_scale (float), idio_scale (float)
     """
-    # Build 4-year deltas for all feasible cycles y where y-4 exists
+    # Build 4-year deltas for all feasible cycles y where y-4 exists.
+    # Now support partial-state histories: if a particular state is missing for a pair,
+    # the delta for that state will be NaN for that row. Rows (pairs) with no usable states
+    # are skipped. This allows including ME/NE districts that only appear from 1992 onward.
     y_pairs = [(y, y - 4) for y in years if (y - 4) in years]
     if not y_pairs:
         raise ValueError("Not enough years to compute deltas (need 4-year pairs).")
 
     deltas_list: List[np.ndarray] = []
     w_list: List[np.ndarray] = []
+    skipped_pairs: List[Tuple[int, int]] = []
     for y, y0 in y_pairs:
-        d = (pivot_m.loc[y].reindex(states).to_numpy() - pivot_m.loc[y0].reindex(states).to_numpy())
+        row_y = pivot_m.loc[y].reindex(states).to_numpy()
+        row_y0 = pivot_m.loc[y0].reindex(states).to_numpy()
+        d = row_y - row_y0  # contains NaN where either year/state is missing
         w = ev_w.loc[y].reindex(states).to_numpy()
+
+        # mask of available (non-NaN) deltas for this pair
+        mask = ~np.isnan(d)
+        if not np.any(mask):
+            skipped_pairs.append((y, y0))
+            continue
+        # If all available deltas are numerically zero, treat as missing and skip
+        if np.allclose(d[mask], 0.0, atol=1e-12):
+            skipped_pairs.append((y, y0))
+            continue
+
         deltas_list.append(d)
         w_list.append(w)
 
-    X = np.vstack(deltas_list)  # (T, S)
-    W = np.vstack(w_list)       # (T, S)
+    if not deltas_list:
+        raise ValueError("No usable 4-year delta pairs after skipping empty/missing rows.")
+
+    X = np.vstack(deltas_list)  # (T_eff, S) may contain NaNs
+    W = np.vstack(w_list)       # (T_eff, S)
     T, S = X.shape
 
-    # EV-weighted delta distribution
-    evd = np.sum(W * X, axis=1)
+    if skipped_pairs:
+        print(f"build_delta_targets: skipped {len(skipped_pairs)} 4-year pair(s) because they had no usable data: {skipped_pairs}")
+
+    # EV-weighted delta distribution computed only over available states for each row.
+    evd_list = []
+    for i in range(T):
+        row = X[i]
+        w_row = W[i]
+        mask = ~np.isnan(row)
+        if not np.any(mask):
+            continue
+        ws = w_row[mask]
+        xs = row[mask]
+        denom = float(np.sum(ws)) if np.sum(ws) > 0 else float(np.sum(~np.isnan(xs)))
+        if denom <= 0:
+            evd_val = float(np.mean(xs))
+        else:
+            # normalize by available weights so the EV-weighted mean remains meaningful
+            evd_val = float(np.sum(ws * xs) / denom)
+        evd_list.append(evd_val)
+    evd = np.array(evd_list)
     mu_evd = float(np.mean(evd))
     sd_evd = float(np.std(evd, ddof=1))
     if sd_evd <= 1e-8:
         sd_evd = 1e-6
 
-    # Per-state volatility
-    state_sigma = np.std(X, axis=0, ddof=1)
+    # Per-state volatility (nan-aware)
+    state_sigma = np.nanstd(X, axis=0, ddof=1)
+    # For states with a single observation, nanstd returns nan -- replace with small floor
+    state_sigma = np.where(np.isnan(state_sigma), 1e-4, state_sigma)
     state_sigma = np.maximum(state_sigma, 1e-4)  # floor to avoid div by ~0
 
-    # Shock fraction stats
-    frac_shock = (np.abs(X) >= tau).mean(axis=1)
+    # Shock fraction stats (nan-aware per row)
+    frac_shock_list = []
+    for i in range(T):
+        row = X[i]
+        mask = ~np.isnan(row)
+        if not np.any(mask):
+            continue
+        frac = float((np.abs(row[mask]) >= tau).mean())
+        frac_shock_list.append(frac)
+    frac_shock = np.array(frac_shock_list)
     mu_shock = float(np.mean(frac_shock))
     sd_shock = float(np.std(frac_shock, ddof=1))
     if sd_shock <= 1e-8:
         sd_shock = 1e-6
 
-    # Factor subspace via SVD on column-centered deltas
-    mean_Xc = np.mean(X, axis=0)
+    # Factor subspace via SVD on column-centered deltas. Use nan-aware column means
+    # and impute missing entries with the column mean (so Xc has zeros where missing).
+    mean_Xc = np.nanmean(X, axis=0)
+    # Center (will produce NaNs where X is NaN)
     Xc = X - mean_Xc
-    U, Svals, Vt = np.linalg.svd(Xc, full_matrices=False)
+    # Replace NaNs in centered matrix with 0.0 (equivalent to imputing by column mean)
+    Xc_filled = np.where(np.isnan(Xc), 0.0, Xc)
+    U, Svals, Vt = np.linalg.svd(Xc_filled, full_matrices=False)
     # Explained variance by singular values
     var = Svals**2
     var_ratio = var / var.sum() if var.sum() > 0 else np.ones_like(var) / len(var)
@@ -165,13 +227,13 @@ def build_delta_targets(
 
     # Residual scale from remaining singular values
     if K < len(Svals):
-        resid_mean_sq = float(np.sum(Svals[K:]**2) / (Xc.shape[0] * Xc.shape[1]))
+        resid_mean_sq = float(np.sum(Svals[K:]**2) / (Xc_filled.shape[0] * Xc_filled.shape[1]))
     else:
         resid_mean_sq = 1e-6
     resid_scale = float(np.sqrt(max(resid_mean_sq, 1e-12)))
 
-    # Idiosyncratic scale from median |delta|
-    idio_scale = 0.5 * float(np.median(np.abs(X)))
+    # Idiosyncratic scale from median |delta| (nan-aware)
+    idio_scale = 0.5 * float(np.nanmedian(np.abs(X)))
     if idio_scale <= 1e-8:
         idio_scale = 0.02
 
@@ -294,6 +356,56 @@ def maps_from_deltas(m_baseline: np.ndarray, keep_d: np.ndarray) -> np.ndarray:
     return m_baseline[None, :] + keep_d
 
 
+def expand_maps_with_atlarge(maps_sample: np.ndarray, sample_states: List[str], full_states: List[str], atlarge_groups: Dict[str, List[str]]):
+    """Expand maps defined over sample_states into full_states by inserting
+    at-large entries computed as the mean of their districts.
+
+    - maps_sample: (N, S_sample)
+    - returns maps_full: (N, S_full) with the same ordering as full_states
+    """
+    S_full = len(full_states)
+    N = maps_sample.shape[0]
+    maps_full = np.full((N, S_full), np.nan, dtype=float)
+
+    # build index maps
+    idx_sample = {s: i for i, s in enumerate(sample_states)}
+    idx_full = {s: i for i, s in enumerate(full_states)}
+
+    # copy over sample-state values
+    for s in sample_states:
+        if s in idx_full:
+            maps_full[:, idx_full[s]] = maps_sample[:, idx_sample[s]]
+
+    # compute at-large values as mean of available districts
+    for al, districts in atlarge_groups.items():
+        if al not in idx_full:
+            continue
+        # gather district indices that exist in full_states
+        avail = [d for d in districts if d in idx_full]
+        # if no districts are present, leave NaN
+        if not avail:
+            continue
+        # For each district, prefer sample value if present, otherwise fall back to full index
+        district_cols = []
+        for d in avail:
+            if d in idx_sample:
+                district_cols.append(maps_sample[:, idx_sample[d]])
+            else:
+                # district was not part of sampling (unlikely) but may exist in baseline/full;
+                # leave as NaN column of length N
+                district_cols.append(np.full((N,), np.nan))
+        # stack and take nanmean across columns
+        stacked = np.vstack(district_cols)
+        maps_full[:, idx_full[al]] = np.nanmean(stacked, axis=0)
+
+    # For any remaining full-state columns that are still nan (e.g., states that were neither
+    # in sample_states nor at-large groups), fill with 0 to avoid downstream issues.
+    nan_mask = np.isnan(maps_full)
+    if np.any(nan_mask):
+        maps_full[nan_mask] = 0.0
+    return maps_full
+
+
 def cluster_maps(maps: np.ndarray, k: int = KMEANS_K, seed: int = SEED) -> Tuple[np.ndarray, np.ndarray]:
     km = KMeans(n_clusters=k, n_init=20, random_state=seed)
     labels = km.fit_predict(maps)
@@ -368,7 +480,7 @@ def tipping_report_for_map(states: List[str], margins: np.ndarray, evs: np.ndarr
             lines.append("States (R→D order):")
             for abbr, ev, rm in ordered:
                 state_emoji = utils.emoji_from_lean(rm, use_swing=True)
-                lines.append(f"  {state_emoji}{abbr}: {utils.lean_str(rm)} ({ev} EV)")
+                lines.append(f"  {state_emoji}{abbr}:\t\t\t{utils.lean_str(rm)} ({int(ev)} EV)")
         except Exception as e:  # pragma: no cover
             lines.append(f"[tipping computation failed: {e}]")
     else:
@@ -396,8 +508,40 @@ def run_sampler_for_year(
 ) -> Dict:
     os.makedirs(out_root, exist_ok=True)
 
-    keep_d, keep_E = sample_deltas(targets, w_target, N_draw=n_draw, N_keep=n_keep, seed=seed)
-    maps = maps_from_deltas(m_baseline, keep_d)
+    # Exclude at-large labels from sampling; we'll set them as district averages later.
+    sample_states = [s for s in states if s not in AT_LARGE_GROUPS]
+    if len(sample_states) != len(states):
+        # Build reduced baseline, ev_vec, and w_target for sampling
+        idx_full = {s: i for i, s in enumerate(states)}
+        m_baseline_sample = np.array([m_baseline[idx_full[s]] for s in sample_states])
+        ev_vec_sample = np.array([ev_vec[idx_full[s]] for s in sample_states])
+        w_target_sample = np.array([w_target[idx_full[s]] for s in sample_states])
+        # Build temporary targets that reflect the reduced state vector. We'll reuse the same
+        # targets.F by selecting the columns corresponding to sample_states, and similarly for mean_Xc/state_sigma.
+        col_idx = [idx_full[s] for s in sample_states]
+        # Make a shallow copy of targets with reduced-dimension arrays
+        targets_sample = Targets(
+            states=sample_states,
+            years=targets.years,
+            state_sigma=targets.state_sigma[col_idx],
+            mu_evd=targets.mu_evd,
+            sd_evd=targets.sd_evd,
+            mu_shock=targets.mu_shock,
+            sd_shock=targets.sd_shock,
+            F=targets.F[:, col_idx] if targets.F.size else targets.F,
+            score_sd=targets.score_sd,
+            mean_Xc=targets.mean_Xc[col_idx],
+            resid_scale=targets.resid_scale,
+            idio_scale=targets.idio_scale,
+        )
+
+        keep_d, keep_E = sample_deltas(targets_sample, w_target_sample, N_draw=n_draw, N_keep=n_keep, seed=seed)
+        maps_sample = maps_from_deltas(m_baseline_sample, keep_d)
+        # Expand sample maps back to full-state vector by filling at-large entries with district averages
+        maps = expand_maps_with_atlarge(maps_sample, sample_states, states, AT_LARGE_GROUPS)
+    else:
+        keep_d, keep_E = sample_deltas(targets, w_target, N_draw=n_draw, N_keep=n_keep, seed=seed)
+        maps = maps_from_deltas(m_baseline, keep_d)
 
     # Diagnostics: energy percentiles and shock fraction of kept
     pct = np.percentile(keep_E, [5, 25, 50, 75, 95])
@@ -446,7 +590,7 @@ def run_sampler_for_year(
             else:
                 fm = m + example_margin
                 example_str = f",\tfinal ({utils.lean_str(example_margin)}):\t{utils.emoji_from_lean(fm)} {utils.lean_str(fm)}\t{utils.final_margin_color_key(fm)}"
-            txt_lines.append(f"{utils.emoji_from_lean(m, use_swing=True)}{a},\t{utils.lean_str(m)},\t{e}{example_str}")
+            txt_lines.append(f"{utils.emoji_from_lean(m, use_swing=True)}{a}\t\t{utils.lean_str(m)},\t{e}{example_str}")
 
         # Shock log (|predicted - baseline| >= TAU)
         deltas = c - m_baseline
@@ -463,7 +607,7 @@ def run_sampler_for_year(
                 base = float(m_baseline[idx])
                 pred = float(c[idx])
                 swing_emoji = utils.emoji_from_lean(dval, use_swing=True)
-                txt_lines.append(f"{swing_emoji}{abbr},\t{utils.lean_str(dval)},\t{utils.lean_str(base)} → {utils.lean_str(pred)}")
+                txt_lines.append(f"{swing_emoji}{abbr}\t\t{utils.lean_str(dval)},\t{utils.lean_str(base)} → {utils.lean_str(pred)}")
         txt_path = os.path.join(out_root, f"{year_label}_centroid_{i+1}.txt")
         with open(txt_path, "w", encoding="utf-8") as f:
             f.write("\n".join(txt_lines))
