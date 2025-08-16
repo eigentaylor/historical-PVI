@@ -25,6 +25,10 @@ sine_r2_threshold = 0.5
 # Option: include delta subplot (bottom row merged). If True, figure is 2x2 with bottom row merged
 include_deltas = True
 
+# Option: merge the bottom delta subplot into a single wide axis (default True).
+# If False, bottom-left will show pres_margin_delta and bottom-right will show relative_margin_delta.
+merge_delta_subplot = False
+
 # Option to enable house margins
 plot_house_margins = False  # Set to True to include house margins
 house_on_same_plot = False  # Set to True to plot house and pres on the same plot
@@ -80,16 +84,24 @@ def sine_function(x, A, B, C, D):
     return A * np.sin(B * x + C) + D
 
 
-def create_figure_axes(include_deltas, figsize=(16, 6)):
-    """Create figure and axes. If include_deltas is True, return three axes (ax_line, ax_bar, ax_delta).
-    Otherwise return (ax_line, ax_bar, None) with a 1x2 layout."""
+def create_figure_axes(include_deltas, merge_bottom: bool = True, figsize=(16, 6)):
+    """Create figure and axes.
+    If include_deltas is True and merge_bottom is True, return three axes (ax_line, ax_bar, ax_delta).
+    If include_deltas is True and merge_bottom is False, return ax_delta as a tuple (ax_delta_left, ax_delta_right).
+    Otherwise return (ax_line, ax_bar, None) with a 1x2 layout.
+    """
     if include_deltas:
         fig = plt.figure(figsize=(16, 10))
         gs = fig.add_gridspec(2, 2, height_ratios=[1, 1])
         ax_line = fig.add_subplot(gs[0, 0])
         ax_bar = fig.add_subplot(gs[0, 1])
-        ax_delta = fig.add_subplot(gs[1, :])
-        return fig, (ax_line, ax_bar, ax_delta)
+        if merge_bottom:
+            ax_delta = fig.add_subplot(gs[1, :])
+            return fig, (ax_line, ax_bar, ax_delta)
+        else:
+            ax_delta_left = fig.add_subplot(gs[1, 0])
+            ax_delta_right = fig.add_subplot(gs[1, 1])
+            return fig, (ax_line, ax_bar, (ax_delta_left, ax_delta_right))
     else:
         fig, axes = plt.subplots(1, 2, figsize=figsize)
         return fig, (axes[0], axes[1], None)
@@ -172,6 +184,7 @@ for state in states:
     national_margin = state_df['national_margin']
     relative_margin = state_df['relative_margin']
     relative_margin_deltas = state_df['relative_margin_delta']
+    pres_margin_deltas = state_df['pres_margin_delta']
 
     if plot_house_margins:
         house_state_df = house_df[house_df['abbr'] == state]
@@ -190,7 +203,7 @@ for state in states:
                 break
     # Create figure & axes using the centralized helper; prefer subplot styling
     if subplot_mode:
-        fig, (ax_line, ax_bar, ax_delta) = create_figure_axes(include_deltas)
+        fig, (ax_line, ax_bar, ax_delta) = create_figure_axes(include_deltas, merge_bottom=merge_delta_subplot)
     else:
         fig, (ax_line, ax_bar, ax_delta) = create_figure_axes(False, figsize=(10, 6))
 
@@ -201,6 +214,7 @@ for state in states:
     nat_sorted = national_margin.values[order]
     rel_sorted = relative_margin.values[order]
     deltas_sorted = relative_margin_deltas.values[order]
+    pres_deltas_sorted = pres_margin_deltas.values[order]
 
     # Line plot (top-left)
     pres_colors = style_line_axis(ax_line, years_sorted, pres_sorted, nat_sorted, state)
@@ -238,23 +252,51 @@ for state in states:
         elif diff < 0:
             right_file.write(f"{state} trended right ({utils.lean_str(rel_sorted[-2])} -> {utils.lean_str(rel_sorted[-1])},\tdifference: {utils.lean_str(diff)})\n")
 
-    # Delta subplot (merged bottom row) if requested
+    # Delta subplot handling (merged or separated) if requested
     if include_deltas and ax_delta is not None:
         # compute year-to-year deltas and skip placeholder zeros
-        years_for_delta = years_sorted[1:] if deltas_sorted[0] == 0 else years_sorted
+        years_for_delta = years_sorted[1:] if deltas_sorted.size > 0 and deltas_sorted[0] == 0 else years_sorted
         # Align deltas with years_for_delta (years_for_delta may drop the first year)
         if len(years_for_delta) == len(deltas_sorted):
-            deltas_for_years = deltas_sorted
+            rel_deltas_for_years = deltas_sorted
+            pres_deltas_for_years = pres_deltas_sorted
         else:
             # assume years_for_delta == years_sorted[1:]
-            deltas_for_years = deltas_sorted[1:]
-        # replace deltas_sorted with the aligned array so subsequent indexing matches years_for_delta
-        deltas_sorted = deltas_for_years
-        mask = deltas_sorted != 0
-    deltas_filtered = deltas_sorted[mask]
-    years_filtered = years_for_delta[mask]
-    x_idx_delta = np.arange(len(deltas_filtered))
-    plot_delta_axis(ax_delta, x_idx_delta, deltas_filtered, years_filtered)
+            rel_deltas_for_years = deltas_sorted[1:]
+            pres_deltas_for_years = pres_deltas_sorted[1:]
+
+        # Apply mask to drop placeholder zeros
+        mask = rel_deltas_for_years != 0
+        rel_deltas_filtered = rel_deltas_for_years[mask]
+        pres_deltas_filtered = pres_deltas_for_years[mask]
+        years_filtered = years_for_delta[mask]
+        x_idx_delta = np.arange(len(rel_deltas_filtered))
+
+        # If bottom delta axes are merged, ax_delta is a single axis
+        if isinstance(ax_delta, tuple):
+            ax_delta_left, ax_delta_right = ax_delta
+            # left: pres_margin_delta
+            colors_left = ['deepskyblue' if d > 0 else 'red' for d in pres_deltas_filtered]
+            bars_l = ax_delta_left.bar(x_idx_delta, pres_deltas_filtered, width=0.4, color=colors_left)
+            ax_delta_left.bar_label(bars_l, labels=[utils.lean_str(v) for v in pres_deltas_filtered], padding=3, fontsize=8, color='white')
+            ax_delta_left.set_title('Change in Presidential Margin')
+            ax_delta_left.set_xticks(x_idx_delta)
+            ax_delta_left.set_xticklabels(years_filtered, rotation=45)
+            ax_delta_left.axhline(0, color='red', linestyle='--', linewidth=1)
+            ax_delta_left.grid(True, alpha=0.3)
+
+            # right: relative_margin_delta
+            colors_right = ['deepskyblue' if d > 0 else 'red' for d in rel_deltas_filtered]
+            bars_r = ax_delta_right.bar(x_idx_delta, rel_deltas_filtered, width=0.4, color=colors_right)
+            ax_delta_right.bar_label(bars_r, labels=[utils.lean_str(v) for v in rel_deltas_filtered], padding=3, fontsize=8, color='white')
+            ax_delta_right.set_title('Change in Relative Margin')
+            ax_delta_right.set_xticks(x_idx_delta)
+            ax_delta_right.set_xticklabels(years_filtered, rotation=45)
+            ax_delta_right.axhline(0, color='red', linestyle='--', linewidth=1)
+            ax_delta_right.grid(True, alpha=0.3)
+        else:
+            # merged single axis: show relative margin delta (backwards-compatible)
+            plot_delta_axis(ax_delta, x_idx_delta, rel_deltas_filtered, years_filtered)
 
     # Finalize and save
     plt.tight_layout()

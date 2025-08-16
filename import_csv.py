@@ -292,12 +292,31 @@ def run_import_csv(start_year=1976, separate_by_district: bool = True, me_ne_enh
                 national_margin_delta = row[11] - prev_row[11]  # national_margin - previous national_margin
                 row.append(national_margin_delta)
                 row.append(utils.lean_str(national_margin_delta))
+                # presidential margin delta (use pres_margin at index 4; not affected by prior inserts)
+                try:
+                    pres_margin_delta = row[4] - prev_row[4]
+                except Exception:
+                    pres_margin_delta = 0
+                row.append(pres_margin_delta)
+                row.append(utils.lean_str(pres_margin_delta))
             else:
                 row.insert(9, '0')  # No previous year data
                 row.insert(10, '0')
+                # keep placeholders for national and pres deltas to maintain column count
+                # national margin delta placeholders
+                row.append('0')
+                row.append('0')
+                # presidential margin delta placeholders
+                row.append('0')
+                row.append('0')
         else:
             row.insert(9, '0')  # No previous year data
             row.insert(10, '0')
+            # keep placeholders for national and pres deltas to maintain column count
+            row.append('0')
+            row.append('0')
+            row.append('0')
+            row.append('0')
 
     # Sort by state abbreviation
     output_rows.sort(key=lambda x: (x[1], x[0]))
@@ -305,7 +324,7 @@ def run_import_csv(start_year=1976, separate_by_district: bool = True, me_ne_enh
     # Write to output CSV
     with open(output_file, "w", newline='', encoding='utf-8') as f:
         writer = csv.writer(f)
-        writer.writerow(["year", "abbr", "D_votes", "R_votes", "pres_margin", "pres_margin_str", "electoral_votes", "relative_margin", "relative_margin_str", "relative_margin_delta", "relative_margin_delta_str", "national_margin", "national_margin_str", "national_margin_delta", "national_margin_delta_str"])
+        writer.writerow(["year", "abbr", "D_votes", "R_votes", "pres_margin", "pres_margin_str", "electoral_votes", "relative_margin", "relative_margin_str", "relative_margin_delta", "relative_margin_delta_str", "national_margin", "national_margin_str", "national_margin_delta", "national_margin_delta_str", "pres_margin_delta", "pres_margin_delta_str"])
         writer.writerows(output_rows)
 
     print(f"Done! Output written to {output_file}")
