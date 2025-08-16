@@ -1,0 +1,62 @@
+Year: 2024
+National margin delta: R+6.0 (right)
+
+States that shifted WITH the nation right (same sign as national_margin_delta):
+	AK		R+3.2
+	AL		R+5.1
+	AR		R+2.9
+	AZ		R+5.9
+	CA		R+9.0
+	CO		R+2.6
+	CT		R+5.6
+	DC		R+2.3
+	DE		R+4.3
+	FL		R+9.8
+	GA		R+2.4
+	HI		R+6.5
+	IA		R+5.1
+	ID		R+5.8
+	IL		R+6.2
+	IN		R+2.9
+	KS		R+1.4
+	KY		R+4.6
+	LA		R+3.4
+	MA		R+8.3
+	MD		R+4.5
+	ME-01	R+1.7
+	ME-02	R+1.6
+	ME-AL	R+2.3
+	MI		R+4.3
+	MN		R+2.9
+	MO		R+3.0
+	MS		R+6.4
+	MT		R+3.8
+	NC		R+1.9
+	ND		R+3.0
+	NE-02	R+2.0
+	NE-03	R+0.2
+	NE-AL	R+1.3
+	NH		R+4.7
+	NJ		R+10.1
+	NM		R+4.9
+	NV		R+5.6
+	NY		R+10.7
+	OH		R+3.2
+	OK		R+1.1
+	OR		R+1.7
+	PA		R+2.9
+	RI		R+7.0
+	SC		R+6.3
+	SD		R+3.0
+	TN		R+6.5
+	TX		R+8.2
+	UT		R+0.8
+	VA		R+4.4
+	VT		R+3.8
+	WA		R+0.9
+	WI		R+1.5
+	WV		R+3.1
+	WY		R+2.0
+
+States that shifted AGAINST the nation left (opposite sign to national_margin_delta):
+	NE-01	D+2.1

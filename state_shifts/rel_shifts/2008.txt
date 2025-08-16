@@ -1,0 +1,62 @@
+Year: 2008
+National margin delta: D+10.1 (left)
+
+States that shifted WITH the nation left (same sign as national_margin_delta):
+	CA		D+4.4
+	CO		D+3.8
+	CT		D+2.0
+	DE		D+7.6
+	GA		D+1.4
+	HI		D+27.1
+	IA		D+0.3
+	ID		D+2.5
+	IL		D+5.0
+	IN		D+11.8
+	KS		D+0.5
+	MD		D+2.7
+	ME-01	D+1.0
+	MI		D+3.2
+	MT		D+8.6
+	NC		D+2.8
+	ND		D+8.9
+	NE-01	D+8.0
+	NE-02	D+14.4
+	NE-03	D+2.9
+	NE-AL	D+8.4
+	NM		D+6.1
+	NV		D+5.4
+	NY		D+1.8
+	OR		D+2.6
+	SD		D+3.2
+	TX		D+1.1
+	UT		D+7.6
+	VA		D+4.6
+	VT		D+7.1
+	WA		D+0.2
+	WI		D+3.7
+
+States that shifted AGAINST the nation right (opposite sign to national_margin_delta):
+	AK		R+5.7
+	AL		R+6.0
+	AR		R+20.5
+	AZ		R+8.1
+	DC		R+4.3
+	FL		R+2.2
+	KY		R+6.5
+	LA		R+14.3
+	MA		R+9.1
+	ME-02	R+4.7
+	ME-AL	R+1.6
+	MN		R+3.1
+	MO		R+2.9
+	MS		R+4.3
+	NH		R+1.7
+	NJ		R+1.1
+	OH		R+3.3
+	OK		R+10.2
+	PA		R+2.1
+	RI		R+2.8
+	SC		R+1.9
+	TN		R+10.9
+	WV		R+10.4
+	WY		R+2.6

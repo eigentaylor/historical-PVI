@@ -1,0 +1,63 @@
+Year: 1992
+National margin delta: D+14.8 (left)
+
+States that shifted WITH the nation left (same sign as national_margin_delta):
+	AK		D+11.2
+	AL		D+11.8
+	AR		D+34.4
+	AZ		D+18.9
+	CA		D+20.6
+	CO		D+13.5
+	CT		D+13.4
+	DC		D+10.1
+	DE		D+22.9
+	FL		D+20.1
+	GA		D+21.1
+	HI		D+3.8
+	ID		D+7.3
+	IL		D+19.3
+	IN		D+12.6
+	KS		D+6.4
+	KY		D+15.4
+	LA		D+15.7
+	MA		D+16.2
+	MD		D+19.5
+	ME-01	D+24.0
+	ME-02	D+23.3
+	ME-AL	D+23.7
+	MI		D+17.2
+	MN		D+8.3
+	MO		D+17.0
+	MS		D+11.2
+	MT		D+9.4
+	NC		D+15.4
+	NH		D+28.1
+	NJ		D+16.6
+	NM		D+15.3
+	NV		D+25.3
+	NY		D+17.4
+	OH		D+13.3
+	OK		D+5.5
+	OR		D+8.5
+	PA		D+13.4
+	RI		D+11.9
+	SC		D+19.4
+	SD		D+1.9
+	TN		D+21.6
+	TX		D+8.2
+	UT		D+7.3
+	VA		D+15.6
+	VT		D+24.1
+	WA		D+13.6
+	WI		D+1.9
+	WV		D+10.8
+	WY		D+15.3
+States that shifted WITH the nation none (same sign as national_margin_delta):
+	NE-01	EVEN
+	NE-02	EVEN
+	NE-03	EVEN
+
+States that shifted AGAINST the nation right (opposite sign to national_margin_delta):
+	IA		R+2.8
+	ND		R+2.6
+	NE-AL	R+1.5
