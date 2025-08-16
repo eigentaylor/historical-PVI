@@ -12,7 +12,7 @@ subplot_mode = True  # Set to True for subplot, False for single plot
 USE_FUTURE = False  # Set to True to use the future simulation data
 
 # Optional: only include data from this year onward (None means use all years)
-start_year = None  # e.g. 2000 to only plot years >= 2000
+start_year = 2000  # e.g. 2000 to only plot years >= 2000
 # Optional end year (None means up to the latest available)
 end_year = None  # e.g. 2024 to limit to years <= 2024
 if end_year is None:
@@ -171,6 +171,7 @@ for state in states:
     pres_margin = state_df['pres_margin']
     national_margin = state_df['national_margin']
     relative_margin = state_df['relative_margin']
+    relative_margin_deltas = state_df['relative_margin_delta']
 
     if plot_house_margins:
         house_state_df = house_df[house_df['abbr'] == state]
@@ -199,6 +200,7 @@ for state in states:
     pres_sorted = pres_margin.values[order]
     nat_sorted = national_margin.values[order]
     rel_sorted = relative_margin.values[order]
+    deltas_sorted = relative_margin_deltas.values[order]
 
     # Line plot (top-left)
     pres_colors = style_line_axis(ax_line, years_sorted, pres_sorted, nat_sorted, state)
@@ -239,10 +241,17 @@ for state in states:
     # Delta subplot (merged bottom row) if requested
     if include_deltas and ax_delta is not None:
         # compute year-to-year deltas and skip placeholder zeros
-        deltas = np.diff(rel_sorted)
-        years_for_delta = years_sorted[1:]
-        mask = deltas != 0
-    deltas_filtered = deltas[mask]
+        years_for_delta = years_sorted[1:] if deltas_sorted[0] == 0 else years_sorted
+        # Align deltas with years_for_delta (years_for_delta may drop the first year)
+        if len(years_for_delta) == len(deltas_sorted):
+            deltas_for_years = deltas_sorted
+        else:
+            # assume years_for_delta == years_sorted[1:]
+            deltas_for_years = deltas_sorted[1:]
+        # replace deltas_sorted with the aligned array so subsequent indexing matches years_for_delta
+        deltas_sorted = deltas_for_years
+        mask = deltas_sorted != 0
+    deltas_filtered = deltas_sorted[mask]
     years_filtered = years_for_delta[mask]
     x_idx_delta = np.arange(len(deltas_filtered))
     plot_delta_axis(ax_delta, x_idx_delta, deltas_filtered, years_filtered)
