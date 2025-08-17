@@ -74,11 +74,6 @@ for file in os.listdir(output_dir):
 states = df['abbr'].unique()
 
 plt.style.use('dark_background')
-
-# Open trended files inside the output directory
-left_file = open(os.path.join(output_dir, f"trended_left_in_{end_year}.txt"), "w")
-right_file = open(os.path.join(output_dir, f"trended_right_in_{end_year}.txt"), "w")
-
 # Define the sine function for fitting
 def sine_function(x, A, B, C, D):
     return A * np.sin(B * x + C) + D
@@ -244,14 +239,6 @@ for state in states:
     else:
         print(f"Skipping sine fit for {state}: not enough points (need {sine_min_points}, have {len(x_indices)})")
 
-    # Write trended files using sorted data (ensure we have at least 2 points)
-    if not USE_FUTURE and len(rel_sorted) >= 2:
-        diff = rel_sorted[-1] - rel_sorted[-2]
-        if diff > 0:
-            left_file.write(f"{state} trended left ({utils.lean_str(rel_sorted[-2])} -> {utils.lean_str(rel_sorted[-1])},\tdifference: {utils.lean_str(diff)})\n")
-        elif diff < 0:
-            right_file.write(f"{state} trended right ({utils.lean_str(rel_sorted[-2])} -> {utils.lean_str(rel_sorted[-1])},\tdifference: {utils.lean_str(diff)})\n")
-
     # Delta subplot handling (merged or separated) if requested
     if include_deltas and ax_delta is not None:
         # compute year-to-year deltas and skip placeholder zeros
@@ -304,6 +291,3 @@ for state in states:
     fig.savefig(os.path.join(output_dir, filename))
     plt.close(fig)
 
-# Close the files after the loop
-left_file.close()
-right_file.close()

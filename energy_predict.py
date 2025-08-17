@@ -303,6 +303,84 @@ def energy_delta(
     return E_EV + E_VAR + E_SHOCK + E_RESID
 
 
+def energy_components(
+    d: np.ndarray,
+    targets: Targets,
+    w_target: np.ndarray,
+    alpha_ev: float = 1.0,
+    alpha_var: float = 1.0,
+    alpha_shock: float = 1.0,
+    alpha_resid: float = 1.0,
+) -> Dict[str, float]:
+    """Return a dict of energy components for a delta vector d.
+
+    This is numerically aligned with energy_delta for fully-observed vectors.
+    For deltas containing NaNs (as can happen with historical 4-year pairs for
+    states that didn't exist yet), computations are done in a NaN-aware manner:
+      - EV term uses available-state weights renormalized to their own sum.
+      - VAR term averages z^2 over available states only.
+      - SHOCK term uses the fraction over available states only.
+      - RESID term imputes missing entries with the column mean (so v = 0 there),
+        and uses sqrt(n_avail) in the denominator.
+    """
+    d = np.asarray(d, dtype=float)
+    S = d.size
+    mask = ~np.isnan(d)
+    n_avail = int(np.sum(mask))
+
+    # EV term (renormalize weights over available states)
+    if n_avail > 0:
+        w_av = w_target[mask]
+        d_av = d[mask]
+        w_sum = float(np.sum(w_av))
+        if w_sum > 0:
+            evd = float(np.sum(w_av * d_av) / w_sum)
+        else:
+            evd = float(np.mean(d_av))
+    else:
+        evd = 0.0
+    z_ev = (evd - targets.mu_evd) / targets.sd_evd
+    E_EV = (z_ev * z_ev) * alpha_ev
+
+    # VAR term over available states
+    if n_avail > 0:
+        z = (d[mask] / targets.state_sigma[mask])
+        E_VAR = float(np.mean(z * z)) * alpha_var
+    else:
+        E_VAR = 0.0
+
+    # SHOCK term over available states
+    if n_avail > 0:
+        frac = float((np.abs(d[mask]) >= TAU).mean())
+    else:
+        frac = 0.0
+    z_shock = (frac - targets.mu_shock) / targets.sd_shock
+    E_SHOCK = (z_shock * z_shock) * alpha_shock
+
+    # Residual (orthogonal to factor subspace), imputing missing with column mean
+    v = np.zeros_like(d)
+    if n_avail > 0:
+        v[mask] = d[mask] - targets.mean_Xc[mask]
+    # Where missing, v stays 0 (i.e., imputed by column mean)
+    r = _proj_residual(v, targets.F)
+    denom = math.sqrt(max(n_avail, 1)) * targets.resid_scale
+    if denom <= 1e-9:
+        denom = 1e-6
+    E_RESID = float((np.linalg.norm(r) / denom) ** 2) * alpha_resid
+
+    total = E_EV + E_VAR + E_SHOCK + E_RESID
+    return {
+        "E_EV": float(E_EV),
+        "E_VAR": float(E_VAR),
+        "E_SHOCK": float(E_SHOCK),
+        "E_RESID": float(E_RESID),
+        "E_TOTAL": float(total),
+        "evd": float(evd),
+        "shock_frac": float(frac),
+        "n_avail": float(n_avail),
+    }
+
+
 # -----------------
 # Sampling deltas
 # -----------------

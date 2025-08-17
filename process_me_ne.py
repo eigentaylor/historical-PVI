@@ -5,7 +5,7 @@ from collections import defaultdict
 
 # Input and output paths
 ROOT = os.path.dirname(os.path.abspath(__file__))
-INPUT_FILE = os.path.join(ROOT, "ME_NE_processed.csv")
+INPUT_FILE = os.path.join(ROOT, "ME_NE_District_Data.csv")
 OUTPUT_FILE = os.path.join(ROOT, "ME_NE_enhanced.csv")
 NATL_FILE = os.path.join(ROOT, "presidential_margins.csv")
 
@@ -24,11 +24,14 @@ def to_float(val: Any):
 
 
 def to_int_or_empty(val: Any):
-    val = (str(val) if val is not None else "").strip()
-    if val == "":
+    if val is None:
+        return ""
+    v = str(val).strip()
+    if v == "":
         return ""
     try:
-        return int(val.replace(",", ""))
+        # handle values like "1,234" or "1234.0"
+        return int(float(v.replace(",", "")))
     except ValueError:
         return ""
 
@@ -55,14 +58,23 @@ def main():
             d_votes = to_int_or_empty(row.get("D_votes"))
             r_votes = to_int_or_empty(row.get("R_votes"))
 
-            # Normalize to D_pct and R_pct (fractions of D+R only)
+            # Prefer using explicit district vote counts when available.
+            # If both D_votes and R_votes are integers, compute shares and margin from them.
             d_pct = r_pct = pres_margin = ""
-            if d_raw is not None and r_raw is not None:
-                denom = d_raw + r_raw
-                if denom > 0:
-                    d_pct = d_raw / denom
-                    r_pct = r_raw / denom
+            if isinstance(d_votes, int) and isinstance(r_votes, int):
+                denom_votes = d_votes + r_votes
+                if denom_votes > 0:
+                    d_pct = d_votes / denom_votes
+                    r_pct = r_votes / denom_votes
                     pres_margin = d_pct - r_pct
+            else:
+                # Fallback: normalize from raw percentage columns if present
+                if d_raw is not None and r_raw is not None:
+                    denom = d_raw + r_raw
+                    if denom > 0:
+                        d_pct = d_raw / denom
+                        r_pct = r_raw / denom
+                        pres_margin = d_pct - r_pct
 
             # Parse year for sorting but keep original for output
             try:
