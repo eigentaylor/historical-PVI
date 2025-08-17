@@ -73,6 +73,8 @@ def load_data(csv_path: Path) -> Dict[int, List[Dict]]:
                 "relative_margin_delta": parse_float(row.get("relative_margin_delta", "")),
                 "national_margin_delta": parse_float(row.get("national_margin_delta", "")),
                 "relative_margin": parse_float(row.get("relative_margin", "")),
+                "pres_margin": parse_float(row.get("pres_margin", "")),
+                "prev_pres_margin": parse_float(row.get("pres_margin", "")) - parse_float(row.get("national_margin_delta", "")) - parse_float(row.get("relative_margin_delta", "")),
             }
             years.setdefault(year, []).append(rec)
     return years
@@ -269,7 +271,8 @@ def main() -> None:
         if away:
             away_lines.extend(
             [
-                f"\t{abbr.strip()} ({fmt(val)}) [Relative margin: {fmt(r.get('relative_margin') - val)} -> {fmt(r.get('relative_margin'))}]"
+                f"\t{abbr.strip()}  \t{fmt(val)}\t[Raw: {fmt(r.get('prev_pres_margin'))} -> {fmt(r.get('pres_margin'))},\t"
+                f"Relative: {fmt(r.get('relative_margin') - val)} -> {fmt(r.get('relative_margin'))}]"
                 for abbr, val in away
                 for r in rows if r.get("abbr") == abbr.strip()
             ]
