@@ -808,27 +808,28 @@ def run_sampler_for_year(
     # Per-centroid outputs
     results = []
     for i, c in enumerate(centroids):
-        # Sorted CSV and TXT
-        pairs = list(zip(states, c.tolist(), ev_vec.tolist()))
-        pairs.sort(key=lambda x: x[1])  # ascending by margin (R→D)
-
-        # CSV
-        df_c = pd.DataFrame(pairs, columns=["abbr", "relative_margin", "electoral_votes"])
-        csv_path = os.path.join(out_root, f"{year_label}_csv_centroid_{i+1}.csv")
-        df_c.to_csv(csv_path, index=False)
 
         # Determine example PV shift to display for this centroid
         pv_shift_this = pv_shift_by_cluster[i]
         ex_margin = pv_shift_this if example_margin is None else example_margin
+        
+        # Sorted CSV and TXT
+        pairs = list(zip(states, c.tolist(), ev_vec.astype(int).tolist(), [ex_margin] * len(states), [ex_margin+c[idx_full[s]] for s in states]))
+        pairs.sort(key=lambda x: x[1])  # ascending by margin (R→D)
+
+        # CSV
+        df_c = pd.DataFrame(pairs, columns=["abbr", "relative_margin", "electoral_votes", "example_margin", "final_margin"])
+        csv_path = os.path.join(out_root, f"{year_label}_csv_centroid_{i+1}.csv")
+        df_c.to_csv(csv_path, index=False)
 
         # TXT lines
         txt_lines = [f"Centroid {i+1} for {year_label}", "abbr,relative_margin"]
         # Append an example final-margin string per state (uses pv shift)
-        for a, m, e in pairs:
+        for a, m, e, _, fm in pairs:
             if ex_margin is None:
                 example_str = ""
             else:
-                fm = m + ex_margin
+                #fm = m + ex_margin
                 example_str = f"\t{utils.final_margin_color_key(fm)}\n\tfinal ({utils.lean_str(ex_margin)}):\t{utils.emoji_from_lean(fm)} {utils.lean_str(fm)}"
             margin_change = f"\tchange: {utils.lean_str(m - m_baseline[idx_full[a]])} (Δ from baseline), was {utils.lean_str(m_baseline[idx_full[a]])}"
             txt_lines.append(f"{utils.emoji_from_lean(m, use_swing=True)}{a}\t\t{utils.lean_str(m)},\t{int(e)}{example_str}\n{margin_change}")

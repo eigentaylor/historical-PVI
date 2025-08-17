@@ -4,3 +4,4 @@ scikit-learn>=1.2
 matplotlib>=3.7
 seaborn>=0.12
 tabulate>=0.8
+playwright>=1.45
