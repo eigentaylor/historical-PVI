@@ -2,32 +2,32 @@
   "2028": {
     "year": 2028,
     "energy_percentiles": {
-      "p5": 3.0666091098793045,
-      "p25": 3.7268962636564944,
-      "p50": 4.143920906838716,
-      "p75": 4.4749593468245745,
-      "p95": 4.7328929337416925
+      "p5": 3.1567061570614023,
+      "p25": 3.9190278523302347,
+      "p50": 4.362850815546523,
+      "p75": 4.783760243477834,
+      "p95": 5.111892237294337
     },
-    "avg_shock_frac": 0.16340740740740742,
+    "avg_shock_frac": 0.17588888888888887,
     "cluster_sizes": [
-      201,
-      197,
+      205,
       189,
-      217,
-      196
+      207,
+      200,
+      199
     ],
     "mean_energy_by_cluster": [
-      4.021983456367077,
-      4.05226455889167,
-      4.028143609499718,
-      4.090484529323241,
-      4.059071187599538
+      4.34565955180038,
+      4.233229253925923,
+      4.265145214724368,
+      4.331600999028782,
+      4.278264718306498
     ],
     "K_factors": 7,
-    "sd_evd": 0.0020336370777723823,
-    "mu_shock": 0.20844564240790656,
-    "sd_shock": 0.14687078427975692,
-    "resid_scale": 0.017572254557168508,
+    "sd_evd": 0.0017364124282893889,
+    "mu_shock": 0.2169683257918552,
+    "sd_shock": 0.1498859348169306,
+    "resid_scale": 0.01737230254085105,
     "example_margin": 0.03
   },
   "2028_results": [
@@ -36,10 +36,41 @@
       "csv": "energy_predict\\2028\\2028_centroid_1.csv",
       "txt": "energy_predict\\2028\\2028_centroid_1.txt",
       "tipping": "energy_predict\\2028\\2028_centroid_1_tipping.txt",
-      "D_EV@0": 261,
-      "R_EV@0": 277,
-      "D_EV@+3": 287,
-      "R_EV@+3": 251,
+      "D_EV@0": 254,
+      "R_EV@0": 284,
+      "D_EV@+3": 305,
+      "R_EV@+3": 233,
+      "flips_vs_baseline": 1,
+      "shock_count": 1,
+      "shock_states": [
+        "ME-02"
+      ]
+    },
+    {
+      "centroid_index": 2,
+      "csv": "energy_predict\\2028\\2028_centroid_2.csv",
+      "txt": "energy_predict\\2028\\2028_centroid_2.txt",
+      "tipping": "energy_predict\\2028\\2028_centroid_2_tipping.txt",
+      "D_EV@0": 260,
+      "R_EV@0": 278,
+      "D_EV@+3": 311,
+      "R_EV@+3": 227,
+      "flips_vs_baseline": 5,
+      "shock_count": 2,
+      "shock_states": [
+        "AR",
+        "HI"
+      ]
+    },
+    {
+      "centroid_index": 3,
+      "csv": "energy_predict\\2028\\2028_centroid_3.csv",
+      "txt": "energy_predict\\2028\\2028_centroid_3.txt",
+      "tipping": "energy_predict\\2028\\2028_centroid_3_tipping.txt",
+      "D_EV@0": 274,
+      "R_EV@0": 264,
+      "D_EV@+3": 304,
+      "R_EV@+3": 234,
       "flips_vs_baseline": 3,
       "shock_count": 3,
       "shock_states": [
@@ -49,50 +80,20 @@
       ]
     },
     {
-      "centroid_index": 2,
-      "csv": "energy_predict\\2028\\2028_centroid_2.csv",
-      "txt": "energy_predict\\2028\\2028_centroid_2.txt",
-      "tipping": "energy_predict\\2028\\2028_centroid_2_tipping.txt",
-      "D_EV@0": 273,
-      "R_EV@0": 265,
-      "D_EV@+3": 302,
-      "R_EV@+3": 236,
-      "flips_vs_baseline": 3,
-      "shock_count": 2,
-      "shock_states": [
-        "ND",
-        "SD"
-      ]
-    },
-    {
-      "centroid_index": 3,
-      "csv": "energy_predict\\2028\\2028_centroid_3.csv",
-      "txt": "energy_predict\\2028\\2028_centroid_3.txt",
-      "tipping": "energy_predict\\2028\\2028_centroid_3_tipping.txt",
-      "D_EV@0": 259,
-      "R_EV@0": 279,
-      "D_EV@+3": 309,
-      "R_EV@+3": 229,
-      "flips_vs_baseline": 5,
-      "shock_count": 2,
-      "shock_states": [
-        "AR",
-        "HI"
-      ]
-    },
-    {
       "centroid_index": 4,
       "csv": "energy_predict\\2028\\2028_centroid_4.csv",
       "txt": "energy_predict\\2028\\2028_centroid_4.txt",
       "tipping": "energy_predict\\2028\\2028_centroid_4_tipping.txt",
-      "D_EV@0": 252,
-      "R_EV@0": 286,
-      "D_EV@+3": 303,
-      "R_EV@+3": 235,
-      "flips_vs_baseline": 1,
-      "shock_count": 1,
+      "D_EV@0": 255,
+      "R_EV@0": 283,
+      "D_EV@+3": 310,
+      "R_EV@+3": 228,
+      "flips_vs_baseline": 3,
+      "shock_count": 3,
       "shock_states": [
-        "ME-02"
+        "AR",
+        "ME-02",
+        "ME-AL"
       ]
     },
     {
@@ -100,48 +101,51 @@
       "csv": "energy_predict\\2028\\2028_centroid_5.csv",
       "txt": "energy_predict\\2028\\2028_centroid_5.txt",
       "tipping": "energy_predict\\2028\\2028_centroid_5_tipping.txt",
-      "D_EV@0": 245,
-      "R_EV@0": 293,
-      "D_EV@+3": 308,
-      "R_EV@+3": 230,
+      "D_EV@0": 263,
+      "R_EV@0": 275,
+      "D_EV@+3": 290,
+      "R_EV@+3": 248,
       "flips_vs_baseline": 3,
-      "shock_count": 2,
+      "shock_count": 5,
       "shock_states": [
-        "ME-02",
-        "ME-AL"
+        "MT",
+        "ND",
+        "NE-01",
+        "NE-03",
+        "SD"
       ]
     }
   ],
-  "chosen_centroid_index_2028": 4,
+  "chosen_centroid_index_2028": 3,
   "2032": {
     "year": 2032,
     "energy_percentiles": {
-      "p5": 3.0568210616945786,
-      "p25": 3.661588147001026,
-      "p50": 4.088338837547857,
-      "p75": 4.444025505724738,
-      "p95": 4.7280765953821
+      "p5": 3.208377454064427,
+      "p25": 3.8702273911959937,
+      "p50": 4.36143108729479,
+      "p75": 4.813553756331019,
+      "p95": 5.122568360903221
     },
-    "avg_shock_frac": 0.16096296296296297,
+    "avg_shock_frac": 0.17944444444444446,
     "cluster_sizes": [
+      179,
+      213,
+      210,
       188,
-      193,
-      235,
-      195,
-      189
+      210
     ],
     "mean_energy_by_cluster": [
-      4.066944677209371,
-      3.9452710711450365,
-      4.0220128337599235,
-      3.9719724685861553,
-      4.069233023226561
+      4.358381140536211,
+      4.262286874032504,
+      4.249686380105981,
+      4.303207973724955,
+      4.303673180208027
     ],
     "K_factors": 7,
-    "sd_evd": 0.0020336370777723823,
-    "mu_shock": 0.20844564240790656,
-    "sd_shock": 0.14687078427975692,
-    "resid_scale": 0.017572254557168508,
+    "sd_evd": 0.0017364124282893889,
+    "mu_shock": 0.2169683257918552,
+    "sd_shock": 0.1498859348169306,
+    "resid_scale": 0.01737230254085105,
     "example_margin": 0.07
   },
   "2032_results": [
@@ -150,14 +154,13 @@
       "csv": "energy_predict\\2032\\2032_centroid_1.csv",
       "txt": "energy_predict\\2032\\2032_centroid_1.txt",
       "tipping": "energy_predict\\2032\\2032_centroid_1_tipping.txt",
-      "D_EV@0": 252,
-      "R_EV@0": 286,
-      "D_EV@+3": 320,
-      "R_EV@+3": 218,
-      "flips_vs_baseline": 0,
-      "shock_count": 2,
+      "D_EV@0": 285,
+      "R_EV@0": 253,
+      "D_EV@+3": 305,
+      "R_EV@+3": 233,
+      "flips_vs_baseline": 2,
+      "shock_count": 1,
       "shock_states": [
-        "AR",
         "HI"
       ]
     },
@@ -166,16 +169,14 @@
       "csv": "energy_predict\\2032\\2032_centroid_2.csv",
       "txt": "energy_predict\\2032\\2032_centroid_2.txt",
       "tipping": "energy_predict\\2032\\2032_centroid_2_tipping.txt",
-      "D_EV@0": 258,
-      "R_EV@0": 280,
-      "D_EV@+3": 299,
-      "R_EV@+3": 239,
-      "flips_vs_baseline": 1,
-      "shock_count": 3,
+      "D_EV@0": 274,
+      "R_EV@0": 264,
+      "D_EV@+3": 301,
+      "R_EV@+3": 237,
+      "flips_vs_baseline": 2,
+      "shock_count": 1,
       "shock_states": [
-        "MT",
-        "ND",
-        "SD"
+        "AR"
       ]
     },
     {
@@ -183,14 +184,15 @@
       "csv": "energy_predict\\2032\\2032_centroid_3.csv",
       "txt": "energy_predict\\2032\\2032_centroid_3.txt",
       "tipping": "energy_predict\\2032\\2032_centroid_3_tipping.txt",
-      "D_EV@0": 268,
-      "R_EV@0": 270,
-      "D_EV@+3": 303,
-      "R_EV@+3": 235,
-      "flips_vs_baseline": 1,
-      "shock_count": 1,
+      "D_EV@0": 278,
+      "R_EV@0": 260,
+      "D_EV@+3": 294,
+      "R_EV@+3": 244,
+      "flips_vs_baseline": 2,
+      "shock_count": 2,
       "shock_states": [
-        "ME-02"
+        "ME-02",
+        "ME-AL"
       ]
     },
     {
@@ -198,16 +200,19 @@
       "csv": "energy_predict\\2032\\2032_centroid_4.csv",
       "txt": "energy_predict\\2032\\2032_centroid_4.txt",
       "tipping": "energy_predict\\2032\\2032_centroid_4_tipping.txt",
-      "D_EV@0": 274,
-      "R_EV@0": 264,
-      "D_EV@+3": 303,
-      "R_EV@+3": 235,
-      "flips_vs_baseline": 3,
-      "shock_count": 4,
+      "D_EV@0": 273,
+      "R_EV@0": 265,
+      "D_EV@+3": 304,
+      "R_EV@+3": 234,
+      "flips_vs_baseline": 4,
+      "shock_count": 7,
       "shock_states": [
         "IA",
         "MT",
         "ND",
+        "NE-01",
+        "NE-03",
+        "NE-AL",
         "SD"
       ]
     },
@@ -216,14 +221,17 @@
       "csv": "energy_predict\\2032\\2032_centroid_5.csv",
       "txt": "energy_predict\\2032\\2032_centroid_5.txt",
       "tipping": "energy_predict\\2032\\2032_centroid_5_tipping.txt",
-      "D_EV@0": 251,
-      "R_EV@0": 287,
-      "D_EV@+3": 292,
-      "R_EV@+3": 246,
+      "D_EV@0": 273,
+      "R_EV@0": 265,
+      "D_EV@+3": 294,
+      "R_EV@+3": 244,
       "flips_vs_baseline": 1,
-      "shock_count": 1,
+      "shock_count": 4,
       "shock_states": [
-        "ME-02"
+        "ND",
+        "NE-01",
+        "NE-03",
+        "SD"
       ]
     }
   ]

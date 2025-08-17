@@ -42,12 +42,17 @@ AT_LARGE_GROUPS = {
     "ME-AL": ["ME-01", "ME-02"],
 }
 
+# Slightly downweight deltas for congressional districts (ME/NE) due to redistricting volatility
+DISTRICT_WEIGHT = 0.85  # in (0,1]; 1.0 means no downweight, smaller reduces impact
+DISTRICT_LABELS = {"ME-01", "ME-02", "NE-01", "NE-02", "NE-03"}
+
 
 @dataclass
 class Targets:
     states: List[str]
     years: List[int]
     state_sigma: np.ndarray  # (S,)
+    state_weights: np.ndarray  # (S,) per-unit weights for energy terms
     mu_evd: float
     sd_evd: float
     mu_shock: float
@@ -84,6 +89,10 @@ def load_and_align(csv_path: str) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFr
     pivot_m = df.pivot_table(index="year", columns="abbr", values="relative_margin")
     pivot_ev = df.pivot_table(index="year", columns="abbr", values="electoral_votes", aggfunc="first")
 
+    # EVs in the input may be missing for some recent cycles (e.g., 2024).
+    # Forward/back-fill per column so every year has a value, then cast to float.
+    pivot_ev = pivot_ev.ffill().bfill()
+
     years = sorted(int(y) for y in pivot_m.index if not pd.isna(y))
     # Keep any state that has at least one non-null margin and at least one electoral_votes entry.
     # This allows including ME/NE districts that start later in the record (e.g., 1992).
@@ -93,6 +102,7 @@ def load_and_align(csv_path: str) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFr
 
     # EV weights per year
     ev_tot = pivot_ev.sum(axis=1)
+    # Normalized EV weights per year (no NaNs thanks to ffill/bfill)
     ev_w = pivot_ev.div(ev_tot, axis=0)
 
     return pivot_m, pivot_ev, ev_w, valid_states, years
@@ -112,9 +122,10 @@ def build_delta_targets(
 ) -> Targets:
     """Compute deltas and all stats needed for energy scoring.
 
-    Returns Targets with:
+        Returns Targets with:
       - mu_evd, sd_evd: EV-weighted delta stats across cycles
       - state_sigma: per-state std of deltas
+            - state_weights: per-state energy weights (districts downweighted)
       - mu_shock, sd_shock: avg fraction of |Δ| >= tau per cycle
       - F (K x S): factor directions (orthonormal rows), score_sd (K,),
       - mean_Xc (S,), resid_scale (float), idio_scale (float)
@@ -188,14 +199,22 @@ def build_delta_targets(
     state_sigma = np.where(np.isnan(state_sigma), 1e-4, state_sigma)
     state_sigma = np.maximum(state_sigma, 1e-4)  # floor to avoid div by ~0
 
-    # Shock fraction stats (nan-aware per row)
+    # Per-state energy weights: slightly reduce contribution from ME/NE districts
+    state_weights = np.ones(S, dtype=float)
+    for j, s in enumerate(states):
+        if s in DISTRICT_LABELS:
+            state_weights[j] = DISTRICT_WEIGHT
+
+    # Shock fraction stats (nan-aware per row), using state_weights on available states
     frac_shock_list = []
     for i in range(T):
         row = X[i]
         mask = ~np.isnan(row)
         if not np.any(mask):
             continue
-        frac = float((np.abs(row[mask]) >= tau).mean())
+        w_av = state_weights[mask]
+        w_sum = float(np.sum(w_av)) if np.sum(w_av) > 0 else 1.0
+        frac = float(np.sum((np.abs(row[mask]) >= tau).astype(float) * w_av) / w_sum)
         frac_shock_list.append(frac)
     frac_shock = np.array(frac_shock_list)
     mu_shock = float(np.mean(frac_shock))
@@ -241,6 +260,7 @@ def build_delta_targets(
         states=states,
         years=years,
         state_sigma=state_sigma,
+    state_weights=state_weights,
         mu_evd=mu_evd,
         sd_evd=sd_evd,
         mu_shock=mu_shock,
@@ -283,12 +303,15 @@ def energy_delta(
     z_ev = (evd - targets.mu_evd) / targets.sd_evd
     E_EV = (z_ev * z_ev) * alpha_ev
 
-    # Variance term
+    # Variance term (weighted; downweight ME/NE districts)
     z = d / targets.state_sigma
-    E_VAR = float(np.mean(z * z)) * alpha_var
+    w = targets.state_weights
+    den = float(np.sum(w)) if np.sum(w) > 0 else float(len(z))
+    E_VAR = float(np.sum(w * (z * z)) / den) * alpha_var
 
-    # Shock fraction term
-    frac = float((np.abs(d) >= TAU).mean())
+    # Shock fraction term (weighted by state_weights)
+    shock_mask = (np.abs(d) >= TAU).astype(float)
+    frac = float(np.sum(w * shock_mask) / den)
     z_shock = (frac - targets.mu_shock) / targets.sd_shock
     E_SHOCK = (z_shock * z_shock) * alpha_shock
 
@@ -342,16 +365,20 @@ def energy_components(
     z_ev = (evd - targets.mu_evd) / targets.sd_evd
     E_EV = (z_ev * z_ev) * alpha_ev
 
-    # VAR term over available states
+    # VAR term over available states (weighted)
     if n_avail > 0:
         z = (d[mask] / targets.state_sigma[mask])
-        E_VAR = float(np.mean(z * z)) * alpha_var
+        w = targets.state_weights[mask]
+        den = float(np.sum(w)) if np.sum(w) > 0 else float(len(z))
+        E_VAR = float(np.sum(w * (z * z)) / den) * alpha_var
     else:
         E_VAR = 0.0
 
-    # SHOCK term over available states
+    # SHOCK term over available states (weighted)
     if n_avail > 0:
-        frac = float((np.abs(d[mask]) >= TAU).mean())
+        w = targets.state_weights[mask]
+        den = float(np.sum(w)) if np.sum(w) > 0 else float(n_avail)
+        frac = float(np.sum(((np.abs(d[mask]) >= TAU).astype(float)) * w) / den)
     else:
         frac = 0.0
     z_shock = (frac - targets.mu_shock) / targets.sd_shock
@@ -602,6 +629,7 @@ def run_sampler_for_year(
             states=sample_states,
             years=targets.years,
             state_sigma=targets.state_sigma[col_idx],
+            state_weights=targets.state_weights[col_idx],
             mu_evd=targets.mu_evd,
             sd_evd=targets.sd_evd,
             mu_shock=targets.mu_shock,

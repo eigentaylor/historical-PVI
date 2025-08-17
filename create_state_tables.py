@@ -99,7 +99,7 @@ for year in years:
         f.write("====================\n")
         i = 1
         for idx, row in rankings.iterrows():
-            f.write(f"{i}.\t{row['abbr']}: Rel {utils.lean_str(row['relative_margin'])}\t Actual {utils.lean_str(row['pres_margin'])}\t Nat {utils.lean_str(row['national_margin'])}\n")
+            f.write(f"{i}.\t{row['abbr']}:\t Rel {utils.lean_str(row['relative_margin'])}\t Actual {utils.lean_str(row['pres_margin'])}\t Nat {utils.lean_str(row['national_margin'])}\n")
             i += 1
 
 print(f"Rankings created in {rankings_dir}")
