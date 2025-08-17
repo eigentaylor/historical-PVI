@@ -1,0 +1,4 @@
+Year: 2024
+Shocks (|relative_margin_delta| >= 8.0):
+
+🔴NE-01 		R+19.8->R+11.7	🔵D+8.1

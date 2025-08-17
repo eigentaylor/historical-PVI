@@ -1,0 +1,4 @@
+Year: 2020
+Shocks (|relative_margin_delta| >= 8.0):
+
+(none)

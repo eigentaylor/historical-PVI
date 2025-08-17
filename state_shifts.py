@@ -72,6 +72,7 @@ def load_data(csv_path: Path) -> Dict[int, List[Dict]]:
                 "pres_margin_delta": parse_float(row.get("pres_margin_delta", "")),
                 "relative_margin_delta": parse_float(row.get("relative_margin_delta", "")),
                 "national_margin_delta": parse_float(row.get("national_margin_delta", "")),
+                "relative_margin": parse_float(row.get("relative_margin", "")),
             }
             years.setdefault(year, []).append(rec)
     return years
@@ -94,6 +95,8 @@ def categorize(year: int, rows: List[Dict], use_relative: bool = False) -> str:
 
     with_same = {"left": [], "right": [], "none": []}
     against = {"left": [], "right": [], "none": []}
+    # collect shocks (based on relative margin changes) when requested
+    shocks: List[tuple] = []
 
     for r in rows:
         abbr = r.get("abbr") or ""
@@ -101,7 +104,13 @@ def categorize(year: int, rows: List[Dict], use_relative: bool = False) -> str:
         if len_abbr == 2:
             abbr = f"{abbr}\t"
         val = r.get(key)
+        rel_margin = r.get("relative_margin")
         s = sign(val)
+        # check for shocks based on relative margin delta (>= 8 points)
+        if use_relative:
+            rv = r.get("relative_margin_delta")
+            if rv is not None and abs(rv) >= 0.08:
+                shocks.append((abbr, rv, rel_margin))
         if nsign == 0:
             # national didn't shift: categorize by state direction
             if s > 0:
@@ -170,6 +179,23 @@ def categorize(year: int, rows: List[Dict], use_relative: bool = False) -> str:
         lines.append("")
         lines.append("States with no change:")
         lines.append('  ' + ', '.join(f"{abbr}\t\t{fmt(val)}" for abbr, val in against["none"]))
+
+    # If this categorize call was for relative margins, also write a shocks file for the year.
+    if use_relative:
+        shocks_dir = OUT_DIR / "shocks"
+        shocks_dir.mkdir(exist_ok=True)
+        shock_lines: List[str] = []
+        shock_lines.append(f"Year: {year}")
+        shock_lines.append("Shocks (|relative_margin_delta| >= 8.0):")
+        shock_lines.append("")
+        if shocks:
+            for abbr, rv, rel_margin in sorted(shocks, key=lambda x: x[1]):
+                shock_emoji = utils.emoji_from_lean(rv)
+                rel_emoji = utils.emoji_from_lean(rel_margin, use_swing=True)
+                shock_lines.append(f"{rel_emoji}{abbr} {'\t'*(1 + 1)}{fmt(rel_margin-rv)}->{fmt(rel_margin)}\t{shock_emoji}{fmt(rv)}")
+        else:
+            shock_lines.append("(none)")
+        (shocks_dir / f"{year}.txt").write_text("\n".join(shock_lines), encoding="utf-8")
 
     return "\n".join(lines)
 

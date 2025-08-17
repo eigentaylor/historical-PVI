@@ -1,0 +1,7 @@
+Year: 2004
+Shocks (|relative_margin_delta| >= 8.0):
+
+🔵HI	 		D+19.5->D+11.4	🔴R+8.1
+🔴MT	 		R+27.5->R+18.4	🔵D+9.1
+🔴AK	 		R+36.0->R+23.9	🔵D+12.2
+🔵VT	 		D+10.7->D+23.2	🔵D+12.5
