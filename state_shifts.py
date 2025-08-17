@@ -225,6 +225,28 @@ def raw_shifts_away(rows: List[Dict]) -> List[tuple]:
     # sort by abbreviation
     return sorted(out, key=lambda x: x[0])
 
+def rel_shifts_away(rows: List[Dict]) -> List[tuple]:
+    """Return list of (abbr, relative_margin_delta) for states that shifted against the
+    national relative margin delta. If the national margin delta is zero or missing,
+    return an empty list.
+    """
+    national_vals = [r["national_margin_delta"] for r in rows if r.get("national_margin_delta") is not None]
+    national_delta = national_vals[0] if national_vals else 0.0
+    nsign = sign(national_delta)
+    if nsign == 0:
+        return []
+    out: List[tuple] = []
+    for r in rows:
+        abbr = r.get("abbr") or ""
+        # keep two-letter abbr alignment consistent with other outputs
+        if len(abbr) == 2:
+            abbr = f"{abbr}\t"
+        val = r.get("relative_margin_delta")
+        s = sign(val)
+        if s != 0 and s != nsign:
+            out.append((abbr, val))
+    # sort by abbreviation
+    return sorted(out, key=lambda x: x[0])
 
 def main() -> None:
     if not CSV.exists():
@@ -251,36 +273,56 @@ def main() -> None:
         (raw_dir / f"{year}.txt").write_text(raw_text, encoding="utf-8")
         (rel_dir / f"{year}.txt").write_text(rel_text, encoding="utf-8")
         # collect raw-away shifts for summary
-        away = raw_shifts_away(rows)
+        raw_away = raw_shifts_away(rows)
         # write per-year short summary in the raw_shifts dir as well for quick glance
         summary_lines = [f"Year: {year}"]
-        if away:
+        if raw_away:
             summary_lines.extend(
-                [f"\t{abbr.strip()} ({fmt(val)})\n" for abbr, val in away]
+                [f"\t{abbr.strip()} ({fmt(val)})\n" for abbr, val in raw_away]
             )
         else:
             summary_lines.append("(none)")
         #(raw_dir / f"{year}_away.txt").write_text("\n".join(summary_lines), encoding="utf-8")
 
     # write an aggregated year-by-year summary of states that shifted against the national raw shift
-    away_summary_path = OUT_DIR / "away_from_nation.txt"
-    away_lines: List[str] = []
+    raw_away_summary_path = OUT_DIR / "raw_away_from_nation.txt"
+    raw_away_lines: List[str] = []
     for year, rows in years_to_process:
-        away = raw_shifts_away(rows)
-        away_lines.append(f"Year: {year} (National delta: {fmt(rows[0].get('national_margin_delta'))})")
-        if away:
-            away_lines.extend(
+        raw_away = raw_shifts_away(rows)
+        raw_away_lines.append(f"Year: {year} (National delta: {fmt(rows[0].get('national_margin_delta'))})")
+        if raw_away:
+            raw_away_lines.extend(
             [
                 f"\t{abbr.strip()}  \t{fmt(val)}\t[Raw: {fmt(r.get('prev_pres_margin'))} -> {fmt(r.get('pres_margin'))},\t"
                 f"Relative: {fmt(r.get('relative_margin') - val)} -> {fmt(r.get('relative_margin'))}]"
-                for abbr, val in away
+                for abbr, val in raw_away
                 for r in rows if r.get("abbr") == abbr.strip()
             ]
             )
         else:
-            away_lines.append("(none)")
-        away_lines.append("")
-    away_summary_path.write_text("\n".join(away_lines), encoding="utf-8")
+            raw_away_lines.append("(none)")
+        raw_away_lines.append("")
+    raw_away_summary_path.write_text("\n".join(raw_away_lines), encoding="utf-8")
+
+    # do the same for relative shifts
+    rel_away_summary_path = OUT_DIR / "rel_away_from_nation.txt"
+    rel_away_lines: List[str] = []
+    for year, rows in years_to_process:
+        rel_away = rel_shifts_away(rows)
+        rel_away_lines.append(f"Year: {year} (National delta: {fmt(rows[0].get('national_margin_delta'))})")
+        if rel_away:
+            rel_away_lines.extend(
+                [
+                    f"\t{abbr.strip()}  \t{fmt(val)}\t[Relative: {fmt(r.get('relative_margin') - val)} -> {fmt(r.get('relative_margin'))},\t\t"
+                    f"Raw: {fmt(r.get('prev_pres_margin'))} -> {fmt(r.get('pres_margin'))}]"
+                    for abbr, val in rel_away
+                    for r in rows if r.get("abbr") == abbr.strip()
+                ]
+            )
+        else:
+            rel_away_lines.append("(none)")
+        rel_away_lines.append("")
+    rel_away_summary_path.write_text("\n".join(rel_away_lines), encoding="utf-8")
 
     print(f"Wrote shift files to: {raw_dir} and {rel_dir}")
 
