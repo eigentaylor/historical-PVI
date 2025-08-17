@@ -313,7 +313,8 @@ def energy_delta(
     shock_mask = (np.abs(d) >= TAU).astype(float)
     frac = float(np.sum(w * shock_mask) / den)
     z_shock = (frac - targets.mu_shock) / targets.sd_shock
-    E_SHOCK = (z_shock * z_shock) * alpha_shock
+    E_SHOCK = 0 #(z_shock * z_shock) * alpha_shock
+    # we are trying not to penalize shocks, as they happen actually quite often
 
     # Residual (orthogonal to factor subspace)
     v = d - targets.mean_Xc
@@ -382,7 +383,7 @@ def energy_components(
     else:
         frac = 0.0
     z_shock = (frac - targets.mu_shock) / targets.sd_shock
-    E_SHOCK = (z_shock * z_shock) * alpha_shock
+    E_SHOCK = 0 #(z_shock * z_shock) * alpha_shock
 
     # Residual (orthogonal to factor subspace), imputing missing with column mean
     v = np.zeros_like(d)
@@ -696,7 +697,7 @@ def run_sampler_for_year(
             else:
                 fm = m + example_margin
                 example_str = f",\tfinal ({utils.lean_str(example_margin)}):\t{utils.emoji_from_lean(fm)} {utils.lean_str(fm)}\t{utils.final_margin_color_key(fm)}"
-            txt_lines.append(f"{utils.emoji_from_lean(m, use_swing=True)}{a}\t\t{utils.lean_str(m)},\t{e}{example_str}")
+            txt_lines.append(f"{utils.emoji_from_lean(m, use_swing=True)}{a}\t\t{utils.lean_str(m)},\t{int(e)}{example_str}")
 
         # Shock log (|predicted - baseline| >= TAU)
         deltas = c - m_baseline

@@ -1,64 +1,64 @@
 Centroid 4 for 2028
 abbr,relative_margin
-🔴NE-03		R+53.7,	1.0,	final (D+3.0):	🔴 R+50.7	RED
-🔴WY		R+50.9,	3.0,	final (D+3.0):	🔴 R+47.9	RED
-🔴WV		R+47.5,	5.0,	final (D+3.0):	🔴 R+44.5	RED
-🔴AR		R+38.5,	6.0,	final (D+3.0):	🔴 R+35.5	RED
-🔴ND		R+37.3,	3.0,	final (D+3.0):	🔴 R+34.3	RED
-🔴ID		R+37.1,	4.0,	final (D+3.0):	🔴 R+34.1	RED
-🔴OK		R+35.4,	7.0,	final (D+3.0):	🔴 R+32.4	RED
-🔴KY		R+33.0,	8.0,	final (D+3.0):	🔴 R+30.0	RED
-🔴SD		R+30.3,	3.0,	final (D+3.0):	🔴 R+27.3	RED
-🔴AL		R+29.8,	9.0,	final (D+3.0):	🔴 R+26.8	RED
-🔴TN		R+29.5,	11.0,	final (D+3.0):	🔴 R+26.5	RED
-🔴LA		R+26.0,	8.0,	final (D+3.0):	🔴 R+23.0	RED
-🔴MS		R+24.0,	6.0,	final (D+3.0):	🔴 R+21.0	RED
-🔴MT		R+21.7,	3.0,	final (D+3.0):	🔴 R+18.7	RED
-🔴MO		R+19.5,	10.0,	final (D+3.0):	🔴 R+16.5	RED
-🔴SC		R+19.0,	9.0,	final (D+3.0):	🔴 R+16.0	RED
-🔴ME-02		R+18.7,	1.0,	final (D+3.0):	🔴 R+15.7	RED
-🔴NE-AL		R+17.1,	2.0,	final (D+3.0):	🔴 R+14.1	RED
-🔴IN		R+16.4,	11.0,	final (D+3.0):	🔴 R+13.4	RED
-🔴UT		R+15.6,	6.0,	final (D+3.0):	🔴 R+12.6	RED
-🔴AK		R+15.1,	3.0,	final (D+3.0):	🔴 R+12.1	RED
-🔴OH		R+12.3,	18.0,	final (D+3.0):	🔴 R+9.3	Red
-🔴IA		R+12.0,	6.0,	final (D+3.0):	🔴 R+9.0	Red
-🔴TX		R+11.9,	38.0,	final (D+3.0):	🔴 R+8.9	Red
-🔴KS		R+11.8,	6.0,	final (D+3.0):	🔴 R+8.8	Red
-🔴FL		R+11.3,	29.0,	final (D+3.0):	🔴 R+8.3	Red
-🔴NE-01		R+9.7,	1.0,	final (D+3.0):	🔴 R+6.7	Red
-🟣AZ		R+3.7,	11.0,	final (D+3.0):	🔴 R+0.7	lred
-🟣NC		R+2.3,	15.0,	final (D+3.0):	🔵 D+0.7	lblue
-🟣GA		R+2.2,	16.0,	final (D+3.0):	🔵 D+0.8	lblue
-🟣MI		R+1.8,	16.0,	final (D+3.0):	🔵 D+1.2	blue
-🟣NV		R+0.7,	6.0,	final (D+3.0):	🔵 D+2.3	blue
-🟣ME-AL		R+0.5,	2.0,	final (D+3.0):	🔵 D+2.5	blue
-🟣NH		D+0.3,	4.0,	final (D+3.0):	🔵 D+3.3	blue
-🟣PA		D+0.6,	20.0,	final (D+3.0):	🔵 D+3.6	blue
-🟣WI		D+0.7,	10.0,	final (D+3.0):	🔵 D+3.7	blue
-🟣MN		D+3.8,	10.0,	final (D+3.0):	🔵 D+6.8	Blue
-🔵VA		D+8.7,	13.0,	final (D+3.0):	🔵 D+11.7	Blue
-🔵NJ		D+8.9,	14.0,	final (D+3.0):	🔵 D+11.9	Blue
-🔵NM		D+9.0,	5.0,	final (D+3.0):	🔵 D+12.0	Blue
-🔵NE-02		D+12.2,	1.0,	final (D+3.0):	🔵 D+15.2	BLUE
-🔵CO		D+13.2,	9.0,	final (D+3.0):	🔵 D+16.2	BLUE
-🔵RI		D+13.8,	4.0,	final (D+3.0):	🔵 D+16.8	BLUE
-🔵IL		D+13.9,	20.0,	final (D+3.0):	🔵 D+16.9	BLUE
-🔵NY		D+14.6,	29.0,	final (D+3.0):	🔵 D+17.6	BLUE
-🔵DE		D+16.0,	3.0,	final (D+3.0):	🔵 D+19.0	BLUE
-🔵OR		D+17.1,	7.0,	final (D+3.0):	🔵 D+20.1	BLUE
-🔵CT		D+17.3,	7.0,	final (D+3.0):	🔵 D+20.3	BLUE
-🔵ME-01		D+17.8,	1.0,	final (D+3.0):	🔵 D+20.8	BLUE
-🔵WA		D+21.2,	12.0,	final (D+3.0):	🔵 D+24.2	BLUE
-🔵CA		D+26.8,	55.0,	final (D+3.0):	🔵 D+29.8	BLUE
-🔵MA		D+27.7,	11.0,	final (D+3.0):	🔵 D+30.7	BLUE
-🔵HI		D+28.5,	4.0,	final (D+3.0):	🔵 D+31.5	BLUE
-🔵VT		D+29.7,	3.0,	final (D+3.0):	🔵 D+32.7	BLUE
-🔵MD		D+32.9,	10.0,	final (D+3.0):	🔵 D+35.9	BLUE
-🔵DC		D+92.6,	3.0,	final (D+3.0):	🔵 D+95.6	BLUE
+🔴NE-03		R+53.5,	1,	final (D+3.0):	🔴 R+50.5	RED
+🔴WY		R+51.0,	3,	final (D+3.0):	🔴 R+48.0	RED
+🔴WV		R+47.7,	5,	final (D+3.0):	🔴 R+44.7	RED
+🔴AR		R+38.8,	6,	final (D+3.0):	🔴 R+35.8	RED
+🔴ND		R+37.4,	3,	final (D+3.0):	🔴 R+34.4	RED
+🔴ID		R+37.3,	4,	final (D+3.0):	🔴 R+34.3	RED
+🔴OK		R+35.1,	7,	final (D+3.0):	🔴 R+32.1	RED
+🔴KY		R+32.8,	8,	final (D+3.0):	🔴 R+29.8	RED
+🔴SD		R+30.5,	3,	final (D+3.0):	🔴 R+27.5	RED
+🔴TN		R+29.5,	11,	final (D+3.0):	🔴 R+26.5	RED
+🔴AL		R+29.4,	9,	final (D+3.0):	🔴 R+26.4	RED
+🔴LA		R+25.7,	8,	final (D+3.0):	🔴 R+22.7	RED
+🔴MS		R+23.6,	6,	final (D+3.0):	🔴 R+20.6	RED
+🔴MT		R+22.0,	3,	final (D+3.0):	🔴 R+19.0	RED
+🔴MO		R+19.4,	10,	final (D+3.0):	🔴 R+16.4	RED
+🔴SC		R+18.7,	9,	final (D+3.0):	🔴 R+15.7	RED
+🔴ME-02		R+18.4,	1,	final (D+3.0):	🔴 R+15.4	RED
+🔴NE-AL		R+17.0,	2,	final (D+3.0):	🔴 R+14.0	RED
+🔴IN		R+16.6,	11,	final (D+3.0):	🔴 R+13.6	RED
+🔴UT		R+16.3,	6,	final (D+3.0):	🔴 R+13.3	RED
+🔴AK		R+15.0,	3,	final (D+3.0):	🔴 R+12.0	Red
+🔴OH		R+12.1,	18,	final (D+3.0):	🔴 R+9.1	Red
+🔴IA		R+12.1,	6,	final (D+3.0):	🔴 R+9.1	Red
+🔴TX		R+11.8,	38,	final (D+3.0):	🔴 R+8.8	Red
+🔴KS		R+11.7,	6,	final (D+3.0):	🔴 R+8.7	Red
+🔴FL		R+11.5,	29,	final (D+3.0):	🔴 R+8.5	Red
+🔴NE-01		R+9.8,	1,	final (D+3.0):	🔴 R+6.8	Red
+🟣AZ		R+4.0,	11,	final (D+3.0):	🔴 R+1.0	red
+🟣NC		R+2.1,	15,	final (D+3.0):	🔵 D+0.9	lblue
+🟣GA		R+2.0,	16,	final (D+3.0):	🔵 D+1.0	blue
+🟣MI		R+1.8,	16,	final (D+3.0):	🔵 D+1.2	blue
+🟣NV		R+1.1,	6,	final (D+3.0):	🔵 D+1.9	blue
+🟣ME-AL		R+0.2,	2,	final (D+3.0):	🔵 D+2.8	blue
+🟣NH		D+0.1,	4,	final (D+3.0):	🔵 D+3.1	blue
+🟣PA		D+0.4,	20,	final (D+3.0):	🔵 D+3.4	blue
+🟣WI		D+0.9,	10,	final (D+3.0):	🔵 D+3.9	blue
+🟣MN		D+3.8,	10,	final (D+3.0):	🔵 D+6.8	Blue
+🔵NM		D+8.7,	5,	final (D+3.0):	🔵 D+11.7	Blue
+🔵VA		D+8.9,	13,	final (D+3.0):	🔵 D+11.9	Blue
+🔵NJ		D+8.9,	14,	final (D+3.0):	🔵 D+11.9	Blue
+🔵NE-02		D+12.2,	1,	final (D+3.0):	🔵 D+15.2	BLUE
+🔵CO		D+13.1,	9,	final (D+3.0):	🔵 D+16.1	BLUE
+🔵IL		D+13.7,	20,	final (D+3.0):	🔵 D+16.7	BLUE
+🔵RI		D+14.4,	4,	final (D+3.0):	🔵 D+17.4	BLUE
+🔵NY		D+14.6,	29,	final (D+3.0):	🔵 D+17.6	BLUE
+🔵DE		D+16.3,	3,	final (D+3.0):	🔵 D+19.3	BLUE
+🔵OR		D+17.1,	7,	final (D+3.0):	🔵 D+20.1	BLUE
+🔵CT		D+17.6,	7,	final (D+3.0):	🔵 D+20.6	BLUE
+🔵ME-01		D+18.1,	1,	final (D+3.0):	🔵 D+21.1	BLUE
+🔵WA		D+21.3,	12,	final (D+3.0):	🔵 D+24.3	BLUE
+🔵CA		D+26.7,	55,	final (D+3.0):	🔵 D+29.7	BLUE
+🔵MA		D+27.7,	11,	final (D+3.0):	🔵 D+30.7	BLUE
+🔵HI		D+28.8,	4,	final (D+3.0):	🔵 D+31.8	BLUE
+🔵VT		D+29.5,	3,	final (D+3.0):	🔵 D+32.5	BLUE
+🔵MD		D+33.0,	10,	final (D+3.0):	🔵 D+36.0	BLUE
+🔵DC		D+92.4,	3,	final (D+3.0):	🔵 D+95.4	BLUE
 
 Shocks (|predicted - baseline| ≥ 0.080): 3 states (0.054)
 abbr, Δ(pred-baseline), baseline → predicted
-🔴ME-02		R+11.1,	R+7.7 → R+18.7
-🔴ME-AL		R+9.1,	D+8.7 → R+0.5
-🔴AR		R+8.7,	R+29.8 → R+38.5
+🔴ME-02		R+10.7,	R+7.7 → R+18.4
+🔴AR		R+9.0,	R+29.8 → R+38.8
+🔴ME-AL		R+8.8,	D+8.7 → R+0.2
