@@ -27,5 +27,19 @@
   "mu_shock": 0.2169683257918552,
   "sd_shock": 0.1498859348169306,
   "resid_scale": 0.01737230254085105,
-  "example_margin": 0.03
+  "example_margin": null,
+  "nat_baseline": -0.0157166517997343,
+  "nat_mu": -0.003045985305201565,
+  "nat_sd": 0.0859579155382838,
+  "nat_idio_scale": 0.0347674646178561,
+  "pv_shift_by_cluster": [
+    0.031569597504134225,
+    0.03491704531035232,
+    0.034756474971425894,
+    0.033816661807966955,
+    0.032631950212972466
+  ],
+  "nat_party_constraint": "D",
+  "nat_min_delta_required": 0.0157166517997343,
+  "nat_max_delta_required": null
 }

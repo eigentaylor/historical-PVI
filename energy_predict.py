@@ -33,6 +33,7 @@ SEED = 17
 KMEANS_K = 5
 CSV_PATH = "presidential_margins.csv"
 OUT_DIR = "energy_predict"
+NAT_CLIP = 0.12  # soft bounds for national margin delta proposals
 
 # At-large groups: these at-large labels are derived from their districts and should
 # be excluded from sampling; final predicted values will be set to the average of
@@ -62,16 +63,21 @@ class Targets:
     mean_Xc: np.ndarray  # (S,)
     resid_scale: float
     idio_scale: float
+    # National margin delta stats
+    nat_mu: float  # mean 4-year national delta
+    nat_sd: float  # std of 4-year national delta
+    nat_idio_scale: float  # Laplace scale for national delta proposals
+    nat_by_year: Dict[int, float]  # national margin per year
 
 
 # ----------------------
 # Data loading and prep
 # ----------------------
-def load_and_align(csv_path: str) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, List[str], List[int]]:
-    """Load CSV; return (pivot_m, pivot_ev, ev_w, states, years).
+def load_and_align(csv_path: str) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, List[str], List[int], pd.Series]:
+    """Load CSV; return (pivot_m, pivot_ev, ev_w, states, years, nat_series).
 
-    Requires columns: year, abbr, relative_margin, electoral_votes
-    Restricts to states that appear in all years present in the file.
+    Requires columns: year, abbr, relative_margin, electoral_votes.
+    If national_margin exists, it will be aggregated per year and returned as a Series.
     """
     df = pd.read_csv(csv_path)
     required = {"year", "abbr", "relative_margin", "electoral_votes"}
@@ -105,7 +111,15 @@ def load_and_align(csv_path: str) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFr
     # Normalized EV weights per year (no NaNs thanks to ffill/bfill)
     ev_w = pivot_ev.div(ev_tot, axis=0)
 
-    return pivot_m, pivot_ev, ev_w, valid_states, years
+    # National margin per year (if present). If missing, fill with 0.0 to avoid crashes.
+    if "national_margin" in df.columns:
+        nat_series = (
+            df.dropna(subset=["year"]).groupby("year")["national_margin"].first().astype(float)
+        )
+    else:
+        nat_series = pd.Series({y: 0.0 for y in years}, name="national_margin")
+
+    return pivot_m, pivot_ev, ev_w, valid_states, years, nat_series
 
 
 # ------------------------------------
@@ -116,6 +130,7 @@ def build_delta_targets(
     ev_w: pd.DataFrame,
     years: List[int],
     states: List[str],
+    nat_series: pd.Series,
     tau: float = TAU,
     var_frac: float = VAR_FRAC,
     K_min: int = K_MIN,
@@ -256,11 +271,35 @@ def build_delta_targets(
     if idio_scale <= 1e-8:
         idio_scale = 0.02
 
+    # National 4-year deltas (y - (y-4)) using nat_series
+    nat_pairs = [(y, y - 4) for y in years if (y - 4) in years and (y in nat_series.index) and ((y - 4) in nat_series.index)]
+    nat_d = []
+    for y, y0 in nat_pairs:
+        try:
+            ny = float(nat_series.loc[y])
+            ny0 = float(nat_series.loc[y0])
+            if not (np.isnan(ny) or np.isnan(ny0)):
+                nat_d.append(ny - ny0)
+        except Exception:
+            continue
+    if len(nat_d) == 0:
+        # fallback small scales
+        nat_mu = 0.0
+        nat_sd = 0.02
+        nat_idio = 0.01
+    else:
+        nat_d_arr = np.asarray(nat_d, dtype=float)
+        nat_mu = float(np.mean(nat_d_arr))
+        nat_sd = float(np.std(nat_d_arr, ddof=1)) if len(nat_d_arr) > 1 else float(np.std(nat_d_arr))
+        nat_sd = max(nat_sd, 1e-6)
+        med_abs = float(np.median(np.abs(nat_d_arr)))
+        nat_idio = 0.5 * med_abs if med_abs > 1e-6 else 0.01
+
     return Targets(
         states=states,
         years=years,
         state_sigma=state_sigma,
-    state_weights=state_weights,
+        state_weights=state_weights,
         mu_evd=mu_evd,
         sd_evd=sd_evd,
         mu_shock=mu_shock,
@@ -270,6 +309,10 @@ def build_delta_targets(
         mean_Xc=mean_Xc,
         resid_scale=resid_scale,
         idio_scale=idio_scale,
+        nat_mu=nat_mu,
+        nat_sd=nat_sd,
+        nat_idio_scale=nat_idio,
+        nat_by_year={int(k): float(v) for k, v in nat_series.to_dict().items()},
     )
 
 
@@ -424,7 +467,7 @@ def sample_deltas(
     alpha_var: float = 1.0,
     alpha_shock: float = 1.0,
     alpha_resid: float = 1.0,
-) -> Tuple[np.ndarray, np.ndarray]:
+) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
     """Draw factor+noise proposals, score by energy, return lowest-energy subset.
 
     Returns (keep_d, energies) where keep_d is (N_keep, S) and energies is (N_keep,).
@@ -455,7 +498,7 @@ def sample_deltas(
     idx = np.argsort(energies)[:N_keep]
     keep = proposals[idx]
     keep_E = energies[idx]
-    return keep, keep_E
+    return keep, keep_E, idx
 
 
 def maps_from_deltas(m_baseline: np.ndarray, keep_d: np.ndarray) -> np.ndarray:
@@ -610,7 +653,9 @@ def run_sampler_for_year(
     n_draw: int = N_DRAW,
     n_keep: int = N_KEEP,
     kmeans_k: int = KMEANS_K,
-    example_margin: Optional[float] = None
+    example_margin: Optional[float] = None,
+    nat_baseline: Optional[float] = None,
+    nat_party: Optional[str] = None,
 ) -> Dict:
     os.makedirs(out_root, exist_ok=True)
 
@@ -640,15 +685,78 @@ def run_sampler_for_year(
             mean_Xc=targets.mean_Xc[col_idx],
             resid_scale=targets.resid_scale,
             idio_scale=targets.idio_scale,
+            nat_mu=targets.nat_mu,
+            nat_sd=targets.nat_sd,
+            nat_idio_scale=targets.nat_idio_scale,
+            nat_by_year=targets.nat_by_year,
         )
 
-        keep_d, keep_E = sample_deltas(targets_sample, w_target_sample, N_draw=n_draw, N_keep=n_keep, seed=seed)
+        keep_d, keep_E, idx = sample_deltas(targets_sample, w_target_sample, N_draw=n_draw, N_keep=n_keep, seed=seed)
         maps_sample = maps_from_deltas(m_baseline_sample, keep_d)
         # Expand sample maps back to full-state vector by filling at-large entries with district averages
         maps = expand_maps_with_atlarge(maps_sample, sample_states, states, AT_LARGE_GROUPS)
     else:
-        keep_d, keep_E = sample_deltas(targets, w_target, N_draw=n_draw, N_keep=n_keep, seed=seed)
+        keep_d, keep_E, idx = sample_deltas(targets, w_target, N_draw=n_draw, N_keep=n_keep, seed=seed)
         maps = maps_from_deltas(m_baseline, keep_d)
+
+    # Sample national margin deltas independently (optionally constrained by nat_party) and align with kept proposals
+    rng_nat = np.random.default_rng(seed + 101)
+    # Determine constraint thresholds
+    constraint = None
+    nat_party_norm = (nat_party or "").strip().upper() if nat_party else None
+    min_delta = None
+    max_delta = None
+    if nat_party_norm in ("D", "R"):
+        # Require the resulting national margin to favor the requested party
+        # national_margin_final = nat_baseline + delta; positive favors D, negative favors R
+        if nat_party_norm == "D":
+            # delta >= -nat_baseline (e.g., nat_baseline=-0.016 -> delta>=0.016)
+            min_delta = max(0.0 - float(nat_baseline or 0.0), 0.0)
+            constraint = ("min", min_delta)
+        else:
+            # R: delta <= -nat_baseline (e.g., nat_baseline=+0.01 -> delta<=-0.01)
+            max_delta = min(0.0 - float(nat_baseline or 0.0), 0.0)
+            constraint = ("max", max_delta)
+
+    def _sample_nat_batch(sz: int) -> np.ndarray:
+        arr = rng_nat.laplace(loc=targets.nat_mu, scale=targets.nat_idio_scale, size=(sz,))
+        arr = np.clip(arr, -NAT_CLIP, NAT_CLIP)
+        if constraint is None:
+            return arr
+        kind, thr = constraint
+        if kind == "min":
+            return arr[arr >= thr]
+        else:
+            return arr[arr <= thr]
+
+    if constraint is None:
+        nat_proposals = _sample_nat_batch(n_draw)
+        # In theory size should be n_draw; if not, resample simply
+        while nat_proposals.size < n_draw:
+            nat_proposals = np.concatenate([nat_proposals, _sample_nat_batch(n_draw)])
+        nat_proposals = nat_proposals[:n_draw]
+    else:
+        # Rejection sample until we have n_draw respecting the constraint
+        acc: List[float] = []
+        max_iters = 50
+        it = 0
+        while len(acc) < n_draw and it < max_iters:
+            batch = _sample_nat_batch(n_draw)
+            if batch.size:
+                acc.extend(batch.tolist())
+            it += 1
+        if len(acc) < n_draw:
+            # Fallback: enforce threshold with small tail noise in allowed direction
+            rem = n_draw - len(acc)
+            noise = np.abs(rng_nat.laplace(loc=0.0, scale=max(1e-3, targets.nat_idio_scale * 0.25), size=(rem,)))
+            if constraint[0] == "min":
+                fill = (min_delta if min_delta is not None else 0.0) + noise
+            else:
+                fill = (max_delta if max_delta is not None else 0.0) - noise
+            acc.extend(fill.tolist())
+        nat_proposals = np.array(acc[:n_draw], dtype=float)
+
+    nat_keep = nat_proposals[idx]
 
     # Diagnostics: energy percentiles and shock fraction of kept
     pct = np.percentile(keep_E, [5, 25, 50, 75, 95])
@@ -658,6 +766,19 @@ def run_sampler_for_year(
     labels, centroids = cluster_maps(maps, k=kmeans_k, seed=seed)
     cluster_sizes = [int(np.sum(labels == i)) for i in range(kmeans_k)]
     mean_E_by_cluster = [float(np.mean(keep_E[labels == i])) if np.any(labels == i) else float("nan") for i in range(kmeans_k)]
+
+    # Per-cluster national PV shift (baseline + mean sampled nat delta for that cluster)
+    if nat_baseline is None:
+        # default to 0 baseline if not provided
+        nat_baseline = 0.0
+    pv_shift_by_cluster = []
+    for i in range(kmeans_k):
+        mask = (labels == i)
+        if np.any(mask):
+            pv_shift = float(nat_baseline + np.mean(nat_keep[mask]))
+        else:
+            pv_shift = float(nat_baseline)
+        pv_shift_by_cluster.append(pv_shift)
 
     # Save diagnostics
     diag = {
@@ -672,6 +793,14 @@ def run_sampler_for_year(
         "sd_shock": float(targets.sd_shock),
         "resid_scale": float(targets.resid_scale),
         "example_margin": example_margin,
+        "nat_baseline": float(nat_baseline),
+        "nat_mu": float(targets.nat_mu),
+        "nat_sd": float(targets.nat_sd),
+        "nat_idio_scale": float(targets.nat_idio_scale),
+        "pv_shift_by_cluster": pv_shift_by_cluster,
+    "nat_party_constraint": nat_party_norm,
+    "nat_min_delta_required": float(min_delta) if min_delta is not None else None,
+    "nat_max_delta_required": float(max_delta) if max_delta is not None else None,
     }
     with open(os.path.join(out_root, f"{year_label}_diagnostics.json"), "w", encoding="utf-8") as f:
         json.dump(diag, f, indent=2)
@@ -685,19 +814,24 @@ def run_sampler_for_year(
 
         # CSV
         df_c = pd.DataFrame(pairs, columns=["abbr", "relative_margin", "electoral_votes"])
-        csv_path = os.path.join(out_root, f"{year_label}_centroid_{i+1}.csv")
+        csv_path = os.path.join(out_root, f"{year_label}_csv_centroid_{i+1}.csv")
         df_c.to_csv(csv_path, index=False)
+
+        # Determine example PV shift to display for this centroid
+        pv_shift_this = pv_shift_by_cluster[i]
+        ex_margin = pv_shift_this if example_margin is None else example_margin
 
         # TXT lines
         txt_lines = [f"Centroid {i+1} for {year_label}", "abbr,relative_margin"]
-        # If example_margin provided, append an example final-margin string per state
+        # Append an example final-margin string per state (uses pv shift)
         for a, m, e in pairs:
-            if example_margin is None:
+            if ex_margin is None:
                 example_str = ""
             else:
-                fm = m + example_margin
-                example_str = f",\tfinal ({utils.lean_str(example_margin)}):\t{utils.emoji_from_lean(fm)} {utils.lean_str(fm)}\t{utils.final_margin_color_key(fm)}"
-            txt_lines.append(f"{utils.emoji_from_lean(m, use_swing=True)}{a}\t\t{utils.lean_str(m)},\t{int(e)}{example_str}")
+                fm = m + ex_margin
+                example_str = f"\t{utils.final_margin_color_key(fm)}\n\tfinal ({utils.lean_str(ex_margin)}):\t{utils.emoji_from_lean(fm)} {utils.lean_str(fm)}"
+            margin_change = f"\tchange: {utils.lean_str(m - m_baseline[idx_full[a]])} (Δ from baseline), was {utils.lean_str(m_baseline[idx_full[a]])}"
+            txt_lines.append(f"{utils.emoji_from_lean(m, use_swing=True)}{a}\t\t{utils.lean_str(m)},\t{int(e)}{example_str}\n{margin_change}")
 
         # Shock log (|predicted - baseline| >= TAU)
         deltas = c - m_baseline
@@ -719,17 +853,18 @@ def run_sampler_for_year(
         with open(txt_path, "w", encoding="utf-8") as f:
             f.write("\n".join(txt_lines))
 
-        # EV counts under PV shifts
+        # EV counts under PV shifts for this centroid
         D0, R0 = ev_counts_for_map(c, ev_vec, pv_shift=0.0)
+        Dnat_D, Dnat_R = ev_counts_for_map(c, ev_vec, pv_shift=pv_shift_this)
         Dp3, Rp3 = ev_counts_for_map(c, ev_vec, pv_shift=0.03)
 
         # Flips relative to baseline and shock metadata
         flips = int(np.sum(np.sign(c) != np.sign(m_baseline)))
-        shock_states = [states[idx] for idx in shock_idx]
+        shock_states = [states[s_idx] for s_idx in shock_idx]
 
         # Tipping point log — prefer centralized historical_tipping_points saver when available
         tp_title = f"Tipping points for {year_label} centroid {i+1}"
-        tp_path = os.path.join(out_root, f"{year_label}_centroid_{i+1}_tipping.txt")
+        tp_path = os.path.join(out_root, f"{year_label}_tipping_centroid_{i+1}.txt")
         if htp is not None:
             # Build state dicts expected by historical_tipping_points helpers
             rows = [{"abbr": s, "relative_margin": float(m), "evs": int(e), "national_margin": 0.0}
@@ -754,6 +889,8 @@ def run_sampler_for_year(
             "txt": txt_path,
             "tipping": tp_path,
             "D_EV@0": D0, "R_EV@0": R0,
+            "pv_shift": pv_shift_this,
+            "D_EV@nat": Dnat_D, "R_EV@nat": Dnat_R,
             "D_EV@+3": Dp3, "R_EV@+3": Rp3,
             "flips_vs_baseline": flips,
             "shock_count": int(len(shock_states)),
@@ -762,6 +899,9 @@ def run_sampler_for_year(
     # After finishing 'results' & having 'centroids' ready:
     if example_margin is not None:
         write_yapms_color_tables(states, centroids, example_margin, out_root, year_label)
+    else:
+        # Use per-centroid PV shifts for Yapms tables
+        write_yapms_color_tables(states, centroids, None, out_root, year_label, col_offsets=pv_shift_by_cluster)
     return {"diagnostics": diag, "results": results, "labels": labels.tolist(), "centroids": centroids}
 
 
@@ -776,7 +916,7 @@ def _color_token(margin: float) -> str:
     """
     return utils.final_margin_color_key(margin)
 
-def _build_colors_df(states, centroids, example_margin: float, col_names: Optional[List[str]] = None) -> "pd.DataFrame":
+def _build_colors_df(states, centroids, example_margin: Optional[float], col_names: Optional[List[str]] = None, col_offsets: Optional[List[float]] = None) -> "pd.DataFrame":
     """
     Rows = states, Cols = centroid_1..centroid_5, Values = color tokens at (m + example_margin).
     centroids: np.ndarray shape (5, S)
@@ -787,9 +927,14 @@ def _build_colors_df(states, centroids, example_margin: float, col_names: Option
         # use provided column names (preserve original cluster labels if centroids reordered)
         cols = list(col_names)
     data = {s: {} for s in states}
+    # Determine offsets per column
+    if example_margin is not None:
+        offsets = [float(example_margin)] * len(centroids)
+    else:
+        offsets = [0.0] * len(centroids) if not col_offsets else [float(x) for x in col_offsets]
     for j, c in enumerate(centroids):
         for s_idx, s in enumerate(states):
-            fm = float(c[s_idx]) + float(example_margin)
+            fm = float(c[s_idx]) + float(offsets[j])
             data[s][cols[j]] = _color_token(fm)
     df = pd.DataFrame.from_dict(data, orient="index")
     # nice alphabetical row order
@@ -918,12 +1063,12 @@ def _write_markdown_and_csvs(year_label: int, out_root: str,
     with open(md_path, "w", encoding="utf-8") as f:
         f.write("\n".join(md_lines))
 
-def write_yapms_color_tables(states, centroids, example_margin, out_root, year_label) -> None:
+def write_yapms_color_tables(states, centroids, example_margin, out_root, year_label, col_offsets: Optional[List[float]] = None) -> None:
     """
     Public helper: call this AFTER you've computed centroids for a year.
     Only writes tables if example_margin is not None.
     """
-    if example_margin is None:
+    if example_margin is None and not col_offsets:
         return
 
     # Reorder centroids to minimize the total number of highlighted changes across
@@ -961,12 +1106,18 @@ def write_yapms_color_tables(states, centroids, example_margin, out_root, year_l
         ordered = [centroids[i] for i in best_perm]
         return ordered, list(best_perm)
 
-    centroids, chosen_order = _order_centroids_by_min_changes(states, centroids, example_margin)
+    centroids, chosen_order = _order_centroids_by_min_changes(states, centroids, example_margin if example_margin is not None else 0.0)
     # small debug trace written to stdout so users know the chosen ordering
     print(f"Reordered centroids to minimize changes: order={chosen_order}")
     # Build column names that preserve original cluster indices (1-based)
     orig_cols = [f"centroid_{i+1}" for i in chosen_order]
-    colors_df = _build_colors_df(states, centroids, example_margin, col_names=orig_cols)
+    # Reorder offsets to match centroid order
+    offsets = None
+    if example_margin is not None:
+        offsets = [float(example_margin)] * len(centroids)
+    elif col_offsets:
+        offsets = [col_offsets[i] for i in chosen_order]
+    colors_df = _build_colors_df(states, centroids, example_margin, col_names=orig_cols, col_offsets=offsets)
     const_df = _constant_states_df(colors_df)
     # Only varying rows appear in highlight; first column always included
     highlight_df = _highlight_changes_df(colors_df)
@@ -986,10 +1137,10 @@ def main(
     os.makedirs(out_dir, exist_ok=True)
 
     # 1) Load CSV and align
-    pivot_m, pivot_ev, ev_w, states, years = load_and_align(csv_path)
+    pivot_m, pivot_ev, ev_w, states, years, nat_series = load_and_align(csv_path)
 
     # 2) Targets from full history
-    targets = build_delta_targets(pivot_m, ev_w, years, states, tau=TAU, var_frac=VAR_FRAC, K_min=K_MIN)
+    targets = build_delta_targets(pivot_m, ev_w, years, states, nat_series, tau=TAU, var_frac=VAR_FRAC, K_min=K_MIN)
 
     # Helper: baseline and weights (use 2024 values)
     if 2024 not in pivot_m.index:
@@ -997,6 +1148,11 @@ def main(
     m_2024 = pivot_m.loc[2024].reindex(states).to_numpy()
     ev_2024 = pivot_ev.loc[2024].reindex(states).to_numpy()
     w_2024 = ev_w.loc[2024].reindex(states).to_numpy()
+
+    # Baseline national margin for 2024
+    if 2024 not in targets.nat_by_year:
+        raise ValueError("CSV must include national_margin for 2024.")
+    nat_2024 = float(targets.nat_by_year[2024])
 
     # 3) YEAR = 2028
     year = 2028
@@ -1014,7 +1170,9 @@ def main(
         n_draw=n_draw,
         n_keep=n_keep,
         kmeans_k=kmeans_k,
-        example_margin=0.03
+        example_margin=None,
+        nat_party="D",
+        nat_baseline=nat_2024,
     )
 
     # Choose a 2028 centroid: largest cluster
@@ -1022,6 +1180,9 @@ def main(
     sizes = [np.sum(labels_2028 == i) for i in range(kmeans_k)]
     chosen_idx = int(np.argmax(sizes))
     m_2028 = out_2028["centroids"][chosen_idx]
+    # Choose national margin for 2028 from the same centroid
+    pv_shifts_2028 = out_2028["diagnostics"].get("pv_shift_by_cluster", [nat_2024] * kmeans_k)
+    nat_2028 = float(pv_shifts_2028[chosen_idx])
 
     # 4) YEAR = 2032 (iterate using chosen 2028 centroid as baseline)
     year = 2032
@@ -1039,7 +1200,8 @@ def main(
         n_draw=n_draw,
         n_keep=n_keep,
         kmeans_k=kmeans_k,
-        example_margin=0.07
+        example_margin=None,
+        nat_baseline=nat_2028,
     )
 
     # Summary log
@@ -1047,6 +1209,7 @@ def main(
         "2028": out_2028["diagnostics"],
         "2028_results": out_2028["results"],
         "chosen_centroid_index_2028": int(chosen_idx + 1),
+        "chosen_pv_shift_2028": float(nat_2028),
         "2032": out_2032["diagnostics"],
         "2032_results": out_2032["results"],
     }
@@ -1054,7 +1217,7 @@ def main(
         json.dump(summary, f, indent=2)
 
     # Console prints (brief)
-    print(f"Targets: K={targets.F.shape[0]}, sd_evd={targets.sd_evd:.4f}, mu_shock={targets.mu_shock:.4f}, sd_shock={targets.sd_shock:.4f}, resid_scale={targets.resid_scale:.4f}")
+    print(f"Targets: K={targets.F.shape[0]}, sd_evd={targets.sd_evd:.4f}, mu_shock={targets.mu_shock:.4f}, sd_shock={targets.sd_shock:.4f}, resid_scale={targets.resid_scale:.4f}, nat_mu={targets.nat_mu:.4f}, nat_sd={targets.nat_sd:.4f}")
     print(f"2028: clusters={summary['2028']['cluster_sizes']}, avg_shock_keep={summary['2028']['avg_shock_frac']:.3f}")
     print(f"2032: clusters={summary['2032']['cluster_sizes']}, avg_shock_keep={summary['2032']['avg_shock_frac']:.3f}")
 
