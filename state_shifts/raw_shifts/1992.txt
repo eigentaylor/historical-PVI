@@ -1,5 +1,5 @@
 Year: 1992
-National margin delta: D+14.8 (left)
+National margin delta: D+14.9 (left)
 
 States that shifted WITH the nation left (same sign as national_margin_delta):
 	AK		D+11.2
@@ -23,7 +23,7 @@ States that shifted WITH the nation left (same sign as national_margin_delta):
 	MA		D+16.2
 	MD		D+19.5
 	ME-01	D+24.0
-	ME-02	D+23.3
+	ME-02	D+23.2
 	ME-AL	D+23.7
 	MI		D+17.2
 	MN		D+8.3
@@ -52,12 +52,11 @@ States that shifted WITH the nation left (same sign as national_margin_delta):
 	WI		D+1.9
 	WV		D+10.8
 	WY		D+15.3
-States that shifted WITH the nation none (same sign as national_margin_delta):
-	NE-01	EVEN
-	NE-02	EVEN
-	NE-03	EVEN
 
 States that shifted AGAINST the nation right (opposite sign to national_margin_delta):
 	IA		R+2.8
 	ND		R+2.6
+	NE-01	R+1.5
+	NE-02	R+2.7
+	NE-03	R+0.5
 	NE-AL	R+1.5

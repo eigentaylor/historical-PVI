@@ -7,24 +7,24 @@ States that shifted WITH the nation right (same sign as national_margin_delta):
 	AR		R+2.5
 	CT		R+1.5
 	DE		R+5.1
-	FL		R+0.4
+	FL		R+0.3
 	HI		R+6.8
 	IA		R+14.3
 	ID		R+2.0
 	IN		R+8.1
 	KY		R+6.5
 	LA		R+1.1
-	ME-01	R+3.8
-	ME-02	R+17.7
-	ME-AL	R+10.8
+	ME-01	R+4.4
+	ME-02	R+18.4
+	ME-AL	R+11.0
 	MI		R+8.1
 	MN		R+4.4
 	MO		R+8.3
 	MS		R+4.8
 	MT		R+6.4
 	ND		R+17.6
-	NE-01	R+4.3
-	NE-03	R+12.3
+	NE-01	R+3.9
+	NE-03	R+12.8
 	NE-AL	R+3.1
 	NH		R+3.5
 	NJ		R+1.6
@@ -37,7 +37,7 @@ States that shifted WITH the nation right (same sign as national_margin_delta):
 	SC		R+2.5
 	SD		R+11.7
 	TN		R+4.8
-	VT		R+4.4
+	VT		R+4.3
 	WI		R+6.0
 	WV		R+15.2
 	WY		R+7.3
@@ -53,7 +53,7 @@ States that shifted AGAINST the nation left (opposite sign to national_margin_de
 	MA		D+7.5
 	MD		D+3.2
 	NC		D+0.0
-	NE-02	D+7.4
+	NE-02	D+6.6
 	NM		D+0.5
 	OR		D+1.5
 	TX		D+8.4

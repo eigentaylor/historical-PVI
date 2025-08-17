@@ -1,59 +1,62 @@
 Year: 1980
-National margin delta: R+12.5 (right)
+National margin delta: R+12.6 (right)
 
 States that shifted WITH the nation right (same sign as national_margin_delta):
-	AL		R+2.2
-	AR		R+18.2
-	AZ		R+6.7
-	CA		R+4.6
-	CO		R+3.5
+	AL		R+2.1
+	AR		R+18.1
+	AZ		R+6.6
+	CA		R+4.5
+	CO		R+3.4
 	FL		R+10.9
 	GA		R+6.0
-	IA		R+0.6
+	IA		R+0.5
 	ID		R+9.0
-	KS		R+6.7
-	MA		R+3.9
+	KS		R+6.6
+	MA		R+3.8
 	MT		R+7.2
-	NC		R+0.8
-	ND		R+23.4
-	NE-AL	R+9.4
+	NC		R+0.7
+	ND		R+23.3
+	NE-01	R+8.3
+	NE-02	R+0.9
+	NE-03	R+17.7
+	NE-AL	R+9.3
 	NH		R+10.1
-	NJ		R+0.1
-	NM		R+4.8
-	NV		R+22.8
-	OK		R+13.0
-	SC		R+1.9
+	NJ		R+0.0
+	NM		R+4.7
+	NV		R+22.7
+	OK		R+12.9
+	SC		R+1.8
 	SD		R+17.2
-	TN		R+0.9
-	TX		R+5.0
+	TN		R+0.8
+	TX		R+4.9
 	UT		R+13.4
-	WY		R+6.1
+	WY		R+6.0
 
 States that shifted AGAINST the nation left (opposite sign to national_margin_delta):
-	AK		D+1.7
-	CT		D+6.6
-	DC		D+15.8
-	DE		D+4.5
-	HI		D+12.1
+	AK		D+1.8
+	CT		D+6.7
+	DC		D+15.9
+	DE		D+4.6
+	HI		D+12.2
 	IL		D+5.9
-	IN		D+0.6
-	KY		D+3.8
-	LA		D+1.0
-	MD		D+9.7
+	IN		D+0.7
+	KY		D+3.9
+	LA		D+1.1
+	MD		D+9.8
 	ME-01	D+10.4
-	ME-02	D+8.7
+	ME-02	D+8.8
 	ME-AL	D+9.6
-	MI		D+10.9
+	MI		D+11.0
 	MN		D+3.7
-	MO		D+1.7
-	MS		D+9.2
-	NY		D+7.3
-	OH		D+0.8
-	OR		D+1.6
-	PA		D+2.1
-	RI		D+13.5
+	MO		D+1.8
+	MS		D+9.3
+	NY		D+7.4
+	OH		D+0.9
+	OR		D+1.7
+	PA		D+2.2
+	RI		D+13.6
 	VA		D+0.3
-	VT		D+18.0
-	WA		D+2.4
-	WI		D+5.6
-	WV		D+1.1
+	VT		D+18.1
+	WA		D+2.5
+	WI		D+5.7
+	WV		D+1.2

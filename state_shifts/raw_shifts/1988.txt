@@ -1,5 +1,5 @@
 Year: 1988
-National margin delta: D+10.6 (left)
+National margin delta: D+10.7 (left)
 
 States that shifted WITH the nation left (same sign as national_margin_delta):
 	AK		D+13.8
@@ -31,6 +31,9 @@ States that shifted WITH the nation left (same sign as national_margin_delta):
 	MT		D+16.6
 	NC		D+7.7
 	ND		D+18.3
+	NE-01	D+22.2
+	NE-02	D+18.6
+	NE-03	D+21.1
 	NE-AL	D+20.9
 	NH		D+11.4
 	NJ		D+7.2

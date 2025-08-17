@@ -20,18 +20,18 @@ States that shifted WITH the nation right (same sign as national_margin_delta):
 	KS		R+7.0
 	KY		R+6.6
 	MA		R+2.8
-	ME-01	R+1.4
-	ME-02	R+2.7
-	ME-AL	R+1.9
+	ME-01	R+1.5
+	ME-02	R+2.8
+	ME-AL	R+2.0
 	MI		R+7.1
 	MN		R+2.6
 	MO		R+9.4
 	MT		R+11.7
 	NC		R+2.4
 	ND		R+11.4
-	NE-01	R+6.1
-	NE-02	R+8.1
-	NE-03	R+3.5
+	NE-01	R+7.0
+	NE-02	R+8.5
+	NE-03	R+3.6
 	NE-AL	R+7.0
 	NH		R+4.1
 	NM		R+4.7

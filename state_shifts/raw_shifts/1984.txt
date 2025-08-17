@@ -1,5 +1,5 @@
 Year: 1984
-National margin delta: R+8.0 (right)
+National margin delta: R+7.9 (right)
 
 States that shifted WITH the nation right (same sign as national_margin_delta):
 	AK		R+3.5
@@ -27,6 +27,8 @@ States that shifted WITH the nation right (same sign as national_margin_delta):
 	MO		R+12.9
 	MS		R+23.3
 	NC		R+21.9
+	NE-02	R+0.7
+	NE-03	R+0.4
 	NH		R+3.7
 	NJ		R+6.2
 	NM		R+0.9
@@ -51,6 +53,7 @@ States that shifted AGAINST the nation left (opposite sign to national_margin_de
 	IA		D+6.7
 	MT		D+4.7
 	ND		D+10.5
+	NE-01	D+3.6
 	NE-AL	D+1.2
 	NV		D+5.2
 	PA		D+0.3

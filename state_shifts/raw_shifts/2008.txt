@@ -21,8 +21,8 @@ States that shifted WITH the nation left (same sign as national_margin_delta):
 	KY		D+3.5
 	MA		D+0.9
 	MD		D+12.7
-	ME-01	D+11.0
-	ME-02	D+5.4
+	ME-01	D+11.1
+	ME-02	D+5.5
 	ME-AL	D+8.5
 	MI		D+13.3
 	MN		D+6.9
@@ -31,9 +31,9 @@ States that shifted WITH the nation left (same sign as national_margin_delta):
 	MT		D+18.7
 	NC		D+12.8
 	ND		D+19.0
-	NE-01	D+17.1
-	NE-02	D+23.5
-	NE-03	D+12.1
+	NE-01	D+17.7
+	NE-02	D+23.2
+	NE-03	D+12.2
 	NE-AL	D+18.5
 	NH		D+8.4
 	NJ		D+9.0

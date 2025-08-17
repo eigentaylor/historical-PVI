@@ -1,5 +1,5 @@
 Year: 2004
-National margin delta: R+2.9 (right)
+National margin delta: R+2.7 (right)
 
 States that shifted WITH the nation right (same sign as national_margin_delta):
 	AL		R+10.6
@@ -22,10 +22,10 @@ States that shifted WITH the nation right (same sign as national_margin_delta):
 	MI		R+1.8
 	MO		R+3.8
 	MS		R+1.8
-	NE-01	R+3.1
-	NE-02	R+3.7
-	NE-03	R+3.6
-	NE-AL	R+3.3
+	NE-01	R+3.4
+	NE-02	R+2.7
+	NE-03	R+3.7
+	NE-AL	R+6.8
 	NJ		R+9.7
 	NM		R+0.9
 	NY		R+7.5
@@ -43,8 +43,8 @@ States that shifted AGAINST the nation left (opposite sign to national_margin_de
 	CO		D+4.2
 	DC		D+0.1
 	ID		D+3.1
-	ME-01	D+3.7
-	ME-02	D+4.1
+	ME-01	D+3.6
+	ME-02	D+3.9
 	ME-AL	D+3.7
 	MN		D+0.9
 	MT		D+6.3
