@@ -818,7 +818,7 @@ def run_sampler_for_year(
         pairs.sort(key=lambda x: x[1])  # ascending by margin (R→D)
 
         # CSV
-        df_c = pd.DataFrame(pairs, columns=["abbr", "relative_margin", "electoral_votes", "example_margin", "final_margin"])
+        df_c = pd.DataFrame(pairs, columns=["abbr", "relative_margin", "electoral_votes", "national_margin", "final_margin"])
         csv_path = os.path.join(out_root, f"{year_label}_csv_centroid_{i+1}.csv")
         df_c.to_csv(csv_path, index=False)
 
