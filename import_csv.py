@@ -64,7 +64,7 @@ def get_ev_from_map(year: int, state_po: str, ec_map) -> int:
     return ev
 
 
-def load_existing_2024_evs(path: str = 'presidential_margins.csv'):
+def load_existing_2024_evs(path: str = 'data/2024_info.csv'):
     """Load 2024 EVs from an existing presidential_margins.csv to preserve them.
     Returns dict[str abbr] = int evs. Silently ignores missing file.
     """
@@ -75,20 +75,20 @@ def load_existing_2024_evs(path: str = 'presidential_margins.csv'):
             if not reader or not reader.fieldnames:
                 return evs_2024
             year_field = 'year' if 'year' in reader.fieldnames else None
-            abbr_field = 'abbr' if 'abbr' in reader.fieldnames else ('state_po' if 'state_po' in reader.fieldnames else None)
-            ev_field = 'electoral_votes' if 'electoral_votes' in reader.fieldnames else None
-            if not (year_field and abbr_field and ev_field):
+            abbr_field = 'abbreviation' if 'abbreviation' in reader.fieldnames else ('state_po' if 'state_po' in reader.fieldnames else None)
+            ev_field = 'evs_2024' if 'evs_2024' in reader.fieldnames else None
+            if not (abbr_field and ev_field):
                 return evs_2024
             for row in reader:
-                if str(row.get(year_field, '')).strip() == '2024':
-                    abbr = (row.get(abbr_field) or '').strip()
-                    ev_str = (row.get(ev_field) or '').strip()
-                    if abbr and ev_str:
-                        try:
-                            # handle possible float-like strings
-                            evs_2024[abbr] = int(float(ev_str))
-                        except ValueError:
-                            print(f"Warning: invalid 2024 EV '{ev_str}' for {abbr} in {path}")
+                #if str(row.get(year_field, '')).strip() == '2024':
+                abbr = (row.get(abbr_field) or '').strip()
+                ev_str = (row.get(ev_field) or '').strip()
+                if abbr and ev_str:
+                    try:
+                        # handle possible float-like strings
+                        evs_2024[abbr] = int(float(ev_str))
+                    except ValueError:
+                        print(f"Warning: invalid 2024 EV '{ev_str}' for {abbr} in {path}")
     except FileNotFoundError:
         # OK if the file doesn't exist yet
         pass
@@ -147,7 +147,7 @@ def run_import_csv(start_year=1976, separate_by_district: bool = True, me_ne_enh
     # Load electoral votes mapping from Electoral_College.csv
     ec_map = load_electoral_college_map('Electoral_College.csv')
     # Preserve existing 2024 EVs from current presidential_margins.csv
-    existing_2024_evs = load_existing_2024_evs(output_file)
+    existing_2024_evs = load_existing_2024_evs()
 
     # Prepare output rows
     output_rows = []
