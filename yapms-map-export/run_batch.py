@@ -100,6 +100,23 @@ async def main():
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
-    # run with
-    #& "E:/coding projects/historical-PVI/.venv/Scripts/python.exe" "e:/coding projects/historical-PVI/yapms-map-export/run_batch.py" "e:/coding projects/historical-PVI/energy_predict/2028" --out "e:/coding projects/historical-PVI/energy_predict/2028" --inline
+    # Default convenience: process every subfolder in the repo-level energy_predict/ using inline rendering.
+    repo_root = Path(__file__).resolve().parent.parent
+    energy_root = repo_root / "energy_predict"
+    if energy_root.exists() and energy_root.is_dir():
+        # Process each immediate subdirectory (e.g., 2028, 2032)
+        dirs = sorted([p for p in energy_root.iterdir() if p.is_dir()])
+        if not dirs:
+            print(f"No subfolders found in {energy_root}")
+        for d in dirs:
+            print(f"Processing folder: {d}")
+            try:
+                # Use the folder itself as the out directory and inline rendering
+                asyncio.run(process_year_folder(d, d, "inline"))
+            except Exception as e:
+                print(f"Failed processing {d}: {e}", file=sys.stderr)
+    else:
+        # Fallback: run the normal CLI-driven main
+        asyncio.run(main())
+    # example manual run:
+    # & "E:/coding projects/historical-PVI/.venv/Scripts/python.exe" "e:/coding projects/historical-PVI/yapms-map-export/run_batch.py"

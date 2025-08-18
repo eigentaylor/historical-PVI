@@ -1189,6 +1189,11 @@ def main(
     year = 2032
     ydir = os.path.join(out_dir, str(year))
     os.makedirs(ydir, exist_ok=True)
+    
+    # create a little txt file in the 2032 folder which says which centroid we used for 2028
+    with open(os.path.join(ydir, "centroid_2028.txt"), "w", encoding="utf-8") as f:
+        f.write(f"Chosen centroid for 2028: {chosen_idx + 1}\n")
+
     out_2032 = run_sampler_for_year(
         year_label=year,
         m_baseline=m_2028,
@@ -1226,3 +1231,5 @@ def main(
 if __name__ == "__main__":
     # Simple CLI via environment variables is possible; for now just run defaults
     main()
+    
+    # NOTE: put the following prompts into powershell
