@@ -1,0 +1,86 @@
+@import '@fontsource-variable/roboto-mono' layer(base);
+
+@import 'tailwindcss';
+@plugin 'daisyui' {
+	themes:
+		light --default,
+		dim,
+		cmyk,
+		dark --prefers-dark,
+		nord,
+		black,
+		cupcake,
+		dracula,
+		lofi,
+		night;
+}
+
+html,
+body {
+	width: 100dvw;
+	height: 100dvh;
+	overflow: hidden;
+	touch-action: none;
+}
+
+[data-svelte-typeahead] {
+	@apply flex-grow! bg-transparent!;
+}
+[data-svelte-search] input {
+	@apply input! w-full!;
+}
+[data-svelte-typeahead] .svelte-typeahead-list {
+	@apply mt-2! rounded-md! overflow-hidden! z-50!;
+}
+[data-svelte-typeahead] .svelte-typeahead-list li {
+	@apply bg-base-100;
+}
+[data-svelte-typeahead] .svelte-typeahead-list .selected,
+[data-svelte-typeahead] .svelte-typeahead-list .selected:hover {
+	@apply bg-neutral! text-neutral-content! font-semibold!;
+}
+
+#map-div > svg {
+	--auto-border-stroke-width: 0px;
+	--region-stroke-color: 'var(--color-base-100)';
+}
+
+[map-type='regions'] path,
+rect {
+	stroke-width: var(--auto-border-stroke-width);
+	stroke: var(--region-stroke-color);
+}
+
+[map-type='inset-texts'] {
+	fill: var(--color-base-content);
+}
+
+[map-type='inset-lines'] {
+	fill: var(--color-base-content);
+	opacity: 50%;
+}
+
+.insets-hidden [map-type='insets'],
+.insets-hidden [map-type='inset-region'] {
+	display: none;
+}
+
+.texts-hidden [map-type='region-texts'],
+.texts-hidden [map-type='button'] {
+	display: none;
+}
+
+.resizing-input-split {
+	max-width: 6ch;
+}
+
+@supports (field-sizing: content) {
+	.resizing-input-split {
+		field-sizing: content;
+		max-width: none;
+	}
+}
+
+input[type='color' i]::-webkit-color-swatch-wrapper {
+	padding: 0;
+}

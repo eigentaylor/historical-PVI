@@ -1,0 +1,41 @@
+name: Lint
+
+on:
+  pull_request:
+    branches:
+      - main
+
+env:
+  PUBLIC_POCKETBASE_URI: dummy
+  PUBLIC_REDIRECT_URI: dummy
+  PUBLIC_UMAMI_URI: dummy
+  PUBLIC_UMAMI_DATA_WEBSITE_ID: dummy
+  PUBLIC_TURNSTILE_SITE: dummy
+  PUBLIC_PRIVACY_POLICY_URI: dummy
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.17.1
+
+      - name: install dependencies
+        run: |
+          npm install
+
+      - name: check
+        run: |
+          npm run check
+
+      - name: lint
+        env:
+          NODE_OPTIONS: --max-old-space-size=8192
+        run: |
+          npm run lint-no-warnings

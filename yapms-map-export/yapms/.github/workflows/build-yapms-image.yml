@@ -1,0 +1,48 @@
+name: Build YAPms Image
+
+on:
+  push:
+    tags: [v*]
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}-yapms
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: production
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: docker/metadata-action@v5
+        id: metadata
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Dockerfile.yapms
+          build-args: |
+            PUBLIC_POCKETBASE_URI=${{ vars.PUBLIC_POCKETBASE_URI }}
+            PUBLIC_PRIVACY_POLICY_URI=${{ vars.PUBLIC_PRIVACY_POLICY_URI }}
+            PUBLIC_REDIRECT_URI=${{ vars.PUBLIC_REDIRECT_URI }}
+            PUBLIC_TURNSTILE_SITE=${{ vars.PUBLIC_TURNSTILE_SITE }}
+            PUBLIC_UMAMI_DATA_WEBSITE_ID=${{ vars.PUBLIC_UMAMI_DATA_WEBSITE_ID }}
+            PUBLIC_UMAMI_URI=${{ vars.PUBLIC_UMAMI_URI }}
+
+          push: true
+          tags: ${{ steps.metadata.outputs.tags }}
+          labels: ${{ steps.metadata.outputs.labels }}

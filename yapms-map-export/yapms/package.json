@@ -1,0 +1,26 @@
+{
+  "name": "yapms-project",
+  "engines": {
+    "node": "22"
+  },
+  "packageManager": "npm@11.4.2",
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "start": "turbo run start",
+    "check": "turbo run check",
+    "lint-no-warnings": "turbo run lint-no-warnings",
+    "lint": "turbo run lint",
+    "format": "turbo run format"
+  },
+  "devDependencies": {
+    "@devcontainers/cli": "0.77.0",
+    "dotenv-cli": "8.0.0",
+    "dotenv-vault": "1.27.0",
+    "turbo": "2.5.5"
+  },
+  "workspaces": [
+    "./apps/yapms",
+    "./apps/pocketbase"
+  ]
+}

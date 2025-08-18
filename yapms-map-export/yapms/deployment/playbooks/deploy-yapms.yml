@@ -1,0 +1,71 @@
+---
+- name: deploy
+  hosts: all
+
+  tasks:
+    - name: pull images
+      community.docker.docker_image:
+        name: "{{ item }}"
+        source: pull
+        force_source: true
+      with_items:
+        - ghcr.io/yapms/yapms-yapms:latest
+        - ghcr.io/yapms/yapms-pocketbase:latest
+
+    - name: remove containers
+      community.docker.docker_container:
+        name: "{{ item }}"
+        state: absent
+      with_items:
+        - caddy
+        - yapms
+        - pocketbase
+
+    - name: prune images
+      community.docker.docker_prune:
+        images: true
+
+    - name: copy caddy file
+      copy:
+        src: Caddyfile
+        dest: ./Caddyfile
+
+    - name: create yapms network
+      community.docker.docker_network:
+        name: yapms
+        state: present
+
+    - name: deploy yapms
+      community.docker.docker_container:
+        name: yapms
+        image: ghcr.io/yapms/yapms-yapms:latest
+        restart_policy: always
+        networks:
+          - name: yapms
+
+    - name: deploy pocketbase
+      community.docker.docker_container:
+        name: pocketbase
+        image: ghcr.io/yapms/yapms-pocketbase:latest
+        restart_policy: always
+        networks:
+          - name: yapms
+        volumes:
+          - ./pb_data:/app/pb_data
+        env:
+          BROWSERLESS_URI: "ws://browserless:3000/chrome?token=null"
+          BROWSERLESS_FRONTEND_URI: "http://yapms:3000"
+          TURNSTILE_SECRET: "{{ TURNSTILE_SECRET }}"
+
+    - name: deploy caddy
+      community.docker.docker_container:
+        name: caddy
+        image: caddy:latest
+        restart_policy: always
+        volumes:
+          - ./Caddyfile:/etc/caddy/Caddyfile
+        ports:
+          - 80:80
+          - 443:443
+        networks:
+          - name: yapms
