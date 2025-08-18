@@ -7,6 +7,7 @@ from urllib.parse import urlencode
 from xml.etree import ElementTree as ET
 
 from playwright.async_api import async_playwright
+import utils  # type: ignore
 
 
 def _colorize_svg(svg_text: str, saved_map: dict) -> str:
@@ -156,9 +157,49 @@ async def export_png(base64_data: str, out_path: Path, base_url: str = "inline")
                         rep_ev += ev
                     else:
                         toss_ev += ev
-            total_ev = max(1, dem_ev + rep_ev + toss_ev)
-            threshold_ev = 270
-            threshold_pct = max(0.0, min(100.0, (threshold_ev / total_ev) * 100.0))
+                total_ev = max(1, dem_ev + rep_ev + toss_ev)
+                threshold_ev = 270
+                threshold_pct = max(0.0, min(100.0, (threshold_ev / total_ev) * 100.0))
+
+                # Prepare Tossup label (hide if zero)
+                toss_label_html = f'<span class="toss">Tossup {toss_ev}</span>' if toss_ev else ''
+
+                # Popular vote (national margin) PV bar
+                try:
+                        national_margin = float(saved_json.get("national_margin", 0.0) or 0.0)
+                except Exception:
+                        national_margin = 0.0
+
+                d_pct = (1.0 + national_margin) / 2.0
+                r_pct = (1.0 - national_margin) / 2.0
+                d_pct = max(0.0, min(1.0, d_pct))
+                r_pct = max(0.0, min(1.0, r_pct))
+
+                pv_dem_percent = d_pct * 100.0
+                pv_rep_percent = r_pct * 100.0
+                pv_label = utils.lean_str(national_margin)
+
+                pv_bar_html = f"""
+<!-- Popular vote (PV) bar -->
+<div style="margin-top:8px;width:1200px;">
+    <!-- PV lean label (above the bar) -->
+    <div style="text-align:center;color:#ffffff;font-weight:800;font-size:13px;margin-bottom:6px;">{pv_label}</div>
+    <div class="battle pv" style="width:100%;">
+        <div class="bar pv-bar" style="position:relative;height:24px;background:#0b1220;border-radius:8px;overflow:hidden;">
+            <!-- Democrat portion (left) -->
+            <div style="position:absolute;left:0;top:0;bottom:0;width:{pv_dem_percent:.3f}%;background:#183ebf;"></div>
+            <!-- Republican portion (right) -->
+            <div style="position:absolute;right:0;top:0;bottom:0;width:{pv_rep_percent:.3f}%;background:#bf1d29;"></div>
+            <!-- Center dashed line at 50% -->
+            <div style="position:absolute;left:50%;top:-8px;bottom:-8px;width:0;border-left:3px dashed rgba(255,255,255,0.9);pointer-events:none;"></div>
+            <!-- Democrat percentage (left) -->
+            <div style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:#cfe6ff;font-weight:700;font-size:12px;">{pv_dem_percent:.1f}%</div>
+            <!-- Republican percentage (right) -->
+            <div style="position:absolute;right:10px;top:50%;transform:translateY(-50%);color:#ffc8c8;font-weight:700;font-size:12px;">{pv_rep_percent:.1f}%</div>
+        </div>
+    </div>
+</div>
+"""
 
             # Dark theme + fine borders for region seams
             html = f"""
@@ -254,10 +295,11 @@ async def export_png(base64_data: str, out_path: Path, base_url: str = "inline")
                                 </div>
                                 <div class=\"labels\">
                                     <span class=\"dem\">D {dem_ev}</span>
-                                    <span class=\"toss\">Tossup {toss_ev}</span>
+                                    {toss_label_html}
                                     <span class=\"rep\">R {rep_ev}</span>
                                 </div>
                             </div>
+                            {pv_bar_html}
                         </div>
             """
 

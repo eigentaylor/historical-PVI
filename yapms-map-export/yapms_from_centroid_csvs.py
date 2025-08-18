@@ -73,6 +73,9 @@ def build_saved_map_from_centroid_df(df: pd.DataFrame, year_tag: str = "2024312"
         raise ValueError(f"Missing columns in centroid CSV: {missing}")
 
     regions = []
+    # For national popular vote estimate, compute EV-weighted average of final_margin
+    total_ev_for_pv = 0
+    weighted_margin_sum = 0.0
     for _, row in df.iterrows():
         abbr = str(row["abbr"]).upper()
         rid = abbr.lower()
@@ -86,6 +89,10 @@ def build_saved_map_from_centroid_df(df: pd.DataFrame, year_tag: str = "2024312"
             ev = 0
         if ev <= 0:
             continue
+
+        # accumulate for national PV
+        total_ev_for_pv += ev
+        weighted_margin_sum += fm * ev
 
         tok = token_for_margin(fm)
         if tok in TOKEN_TO_PARTY_AND_INDEX:
@@ -109,6 +116,8 @@ def build_saved_map_from_centroid_df(df: pd.DataFrame, year_tag: str = "2024312"
         "tossup": TOSSUP,
         "candidates": US_CANDIDATES,
         "regions": regions,
+    # national_margin is D-R as a float in [-1,1]
+    "national_margin": (weighted_margin_sum / total_ev_for_pv) if total_ev_for_pv > 0 else 0.0,
     }
     return saved
 
