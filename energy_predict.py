@@ -1363,7 +1363,7 @@ def main(
     try:
         manifest = generate_multi_year_maps(
             start_year=2028,
-            end_year=2044,
+            end_year=2080,
             step=4,
             baseline_margin=m_2024,
             ev_vec_local=ev_2024,
