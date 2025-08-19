@@ -4,9 +4,10 @@
 
 **BLUE**
 
-| index   | centroid_4   | centroid_2   | centroid_3   | centroid_1   | centroid_5   | __color__   |
+| index   | centroid_2   | centroid_1   | centroid_5   | centroid_3   | centroid_4   | __color__   |
 |:--------|:-------------|:-------------|:-------------|:-------------|:-------------|:------------|
 | CA      | BLUE         | BLUE         | BLUE         | BLUE         | BLUE         | BLUE        |
+| CO      | BLUE         | BLUE         | BLUE         | BLUE         | BLUE         | BLUE        |
 | CT      | BLUE         | BLUE         | BLUE         | BLUE         | BLUE         | BLUE        |
 | DC      | BLUE         | BLUE         | BLUE         | BLUE         | BLUE         | BLUE        |
 | DE      | BLUE         | BLUE         | BLUE         | BLUE         | BLUE         | BLUE        |
@@ -15,138 +16,127 @@
 | MA      | BLUE         | BLUE         | BLUE         | BLUE         | BLUE         | BLUE        |
 | MD      | BLUE         | BLUE         | BLUE         | BLUE         | BLUE         | BLUE        |
 | ME-01   | BLUE         | BLUE         | BLUE         | BLUE         | BLUE         | BLUE        |
+| MN      | BLUE         | BLUE         | BLUE         | BLUE         | BLUE         | BLUE        |
+| NM      | BLUE         | BLUE         | BLUE         | BLUE         | BLUE         | BLUE        |
 | NY      | BLUE         | BLUE         | BLUE         | BLUE         | BLUE         | BLUE        |
 | OR      | BLUE         | BLUE         | BLUE         | BLUE         | BLUE         | BLUE        |
 | RI      | BLUE         | BLUE         | BLUE         | BLUE         | BLUE         | BLUE        |
 | VT      | BLUE         | BLUE         | BLUE         | BLUE         | BLUE         | BLUE        |
 | WA      | BLUE         | BLUE         | BLUE         | BLUE         | BLUE         | BLUE        |
 
-**Blue**
-
-| index   | centroid_4   | centroid_2   | centroid_3   | centroid_1   | centroid_5   | __color__   |
-|:--------|:-------------|:-------------|:-------------|:-------------|:-------------|:------------|
-| VA      | Blue         | Blue         | Blue         | Blue         | Blue         | Blue        |
-
-**blue**
-
-| index   | centroid_4   | centroid_2   | centroid_3   | centroid_1   | centroid_5   | __color__   |
-|:--------|:-------------|:-------------|:-------------|:-------------|:-------------|:------------|
-| NC      | blue         | blue         | blue         | blue         | blue         | blue        |
-
 **RED**
 
-| index   | centroid_4   | centroid_2   | centroid_3   | centroid_1   | centroid_5   | __color__   |
+| index   | centroid_2   | centroid_1   | centroid_5   | centroid_3   | centroid_4   | __color__   |
 |:--------|:-------------|:-------------|:-------------|:-------------|:-------------|:------------|
 | AL      | RED          | RED          | RED          | RED          | RED          | RED         |
 | AR      | RED          | RED          | RED          | RED          | RED          | RED         |
 | ID      | RED          | RED          | RED          | RED          | RED          | RED         |
 | KY      | RED          | RED          | RED          | RED          | RED          | RED         |
-| LA      | RED          | RED          | RED          | RED          | RED          | RED         |
-| MS      | RED          | RED          | RED          | RED          | RED          | RED         |
-| ND      | RED          | RED          | RED          | RED          | RED          | RED         |
 | NE-03   | RED          | RED          | RED          | RED          | RED          | RED         |
 | OK      | RED          | RED          | RED          | RED          | RED          | RED         |
-| SD      | RED          | RED          | RED          | RED          | RED          | RED         |
 | TN      | RED          | RED          | RED          | RED          | RED          | RED         |
-| UT      | RED          | RED          | RED          | RED          | RED          | RED         |
 | WV      | RED          | RED          | RED          | RED          | RED          | RED         |
 | WY      | RED          | RED          | RED          | RED          | RED          | RED         |
 
 **Red**
 
-| index   | centroid_4   | centroid_2   | centroid_3   | centroid_1   | centroid_5   | __color__   |
+| index   | centroid_2   | centroid_1   | centroid_5   | centroid_3   | centroid_4   | __color__   |
 |:--------|:-------------|:-------------|:-------------|:-------------|:-------------|:------------|
-| FL      | Red          | Red          | Red          | Red          | Red          | Red         |
-| TX      | Red          | Red          | Red          | Red          | Red          | Red         |
+| MO      | Red          | Red          | Red          | Red          | Red          | Red         |
 
 ## Change-only highlight (blank = same as previous centroid)
 
-|       | centroid_4   | centroid_2   | centroid_3   | centroid_1   | centroid_5   |
+|       | centroid_2   | centroid_1   | centroid_5   | centroid_3   | centroid_4   |
 |:------|:-------------|:-------------|:-------------|:-------------|:-------------|
-| AK    | red          | Red          | red          | RED          | Red          |
-| AZ    | red          | lred         | red          | Red          | red          |
-| CO    | BLUE         |              |              |              | Blue         |
-| GA    | red          | blue         |              |              | Blue         |
-| IA    | blue         | Red          |              | red          | RED          |
-| IN    | Red          | RED          |              | Red          | RED          |
-| KS    | Red          |              | RED          |              |              |
-| ME-02 | blue         | Red          | Blue         | blue         |              |
-| ME-AL | BLUE         | Blue         | BLUE         |              |              |
-| MI    | Blue         | blue         | Blue         |              |              |
-| MN    | BLUE         | Blue         |              |              |              |
-| MO    | Red          | RED          | Red          | RED          |              |
-| MT    | red          | RED          | Red          | RED          |              |
-| NE-01 | blue         | red          | Red          | red          | RED          |
-| NE-02 | BLUE         |              | blue         | BLUE         | blue         |
-| NE-AL | red          | RED          |              |              |              |
-| NH    | Blue         |              |              | blue         | Blue         |
-| NJ    | Blue         |              |              | BLUE         |              |
-| NM    | BLUE         | Blue         |              |              |              |
-| NV    | lblue        | blue         | lred         | red          |              |
-| OH    | red          | Red          | red          |              | Red          |
-| PA    | blue         |              |              |              | lblue        |
-| SC    | RED          |              | Red          | RED          | Red          |
-| WI    | BLUE         | blue         |              | Blue         | blue         |
+| AK    | red          | Red          | lred         | red          | lred         |
+| AZ    | blue         | lred         | blue         |              |              |
+| FL    | red          |              | Red          | red          | Red          |
+| GA    | Blue         | blue         |              |              | red          |
+| IA    | Red          | blue         | red          | lred         | Blue         |
+| IN    | RED          | Red          |              |              |              |
+| KS    | Red          |              |              | red          |              |
+| LA    | Red          | RED          | Red          | RED          |              |
+| ME-02 | Blue         |              | BLUE         | red          | Blue         |
+| ME-AL | BLUE         |              |              | Blue         | BLUE         |
+| MI    | Blue         |              |              | blue         | Blue         |
+| MS    | Red          | RED          |              |              |              |
+| MT    | RED          | Red          | red          | Red          | blue         |
+| NC    | Blue         | blue         |              |              |              |
+| ND    | RED          |              |              |              | Red          |
+| NE-01 | Red          | lblue        | red          | blue         | Blue         |
+| NE-02 | Blue         | BLUE         | Blue         | BLUE         |              |
+| NE-AL | RED          | Red          |              |              | lred         |
+| NH    | BLUE         | Blue         | BLUE         |              |              |
+| NJ    | BLUE         |              | Blue         | BLUE         |              |
+| NV    | blue         |              | Blue         |              |              |
+| OH    | red          | lblue        | blue         | red          | lblue        |
+| PA    | blue         | Blue         | blue         | Blue         |              |
+| SC    | Red          |              |              | RED          |              |
+| SD    | RED          |              |              |              | red          |
+| TX    | Red          |              |              | red          |              |
+| UT    | RED          |              |              | Red          |              |
+| VA    | BLUE         |              |              |              | Blue         |
+| WI    | blue         | BLUE         | Blue         |              | BLUE         |
 
 <details><summary>Full color table by centroid</summary>
 
 
-|       | centroid_4   | centroid_2   | centroid_3   | centroid_1   | centroid_5   |
+|       | centroid_2   | centroid_1   | centroid_5   | centroid_3   | centroid_4   |
 |:------|:-------------|:-------------|:-------------|:-------------|:-------------|
-| AK    | red          | Red          | red          | RED          | Red          |
+| AK    | red          | Red          | lred         | red          | lred         |
 | AL    | RED          | RED          | RED          | RED          | RED          |
 | AR    | RED          | RED          | RED          | RED          | RED          |
-| AZ    | red          | lred         | red          | Red          | red          |
+| AZ    | blue         | lred         | blue         | blue         | blue         |
 | CA    | BLUE         | BLUE         | BLUE         | BLUE         | BLUE         |
-| CO    | BLUE         | BLUE         | BLUE         | BLUE         | Blue         |
+| CO    | BLUE         | BLUE         | BLUE         | BLUE         | BLUE         |
 | CT    | BLUE         | BLUE         | BLUE         | BLUE         | BLUE         |
 | DC    | BLUE         | BLUE         | BLUE         | BLUE         | BLUE         |
 | DE    | BLUE         | BLUE         | BLUE         | BLUE         | BLUE         |
-| FL    | Red          | Red          | Red          | Red          | Red          |
-| GA    | red          | blue         | blue         | blue         | Blue         |
+| FL    | red          | red          | Red          | red          | Red          |
+| GA    | Blue         | blue         | blue         | blue         | red          |
 | HI    | BLUE         | BLUE         | BLUE         | BLUE         | BLUE         |
-| IA    | blue         | Red          | Red          | red          | RED          |
+| IA    | Red          | blue         | red          | lred         | Blue         |
 | ID    | RED          | RED          | RED          | RED          | RED          |
 | IL    | BLUE         | BLUE         | BLUE         | BLUE         | BLUE         |
-| IN    | Red          | RED          | RED          | Red          | RED          |
-| KS    | Red          | Red          | RED          | RED          | RED          |
+| IN    | RED          | Red          | Red          | Red          | Red          |
+| KS    | Red          | Red          | Red          | red          | red          |
 | KY    | RED          | RED          | RED          | RED          | RED          |
-| LA    | RED          | RED          | RED          | RED          | RED          |
+| LA    | Red          | RED          | Red          | RED          | RED          |
 | MA    | BLUE         | BLUE         | BLUE         | BLUE         | BLUE         |
 | MD    | BLUE         | BLUE         | BLUE         | BLUE         | BLUE         |
 | ME-01 | BLUE         | BLUE         | BLUE         | BLUE         | BLUE         |
-| ME-02 | blue         | Red          | Blue         | blue         | blue         |
-| ME-AL | BLUE         | Blue         | BLUE         | BLUE         | BLUE         |
-| MI    | Blue         | blue         | Blue         | Blue         | Blue         |
-| MN    | BLUE         | Blue         | Blue         | Blue         | Blue         |
-| MO    | Red          | RED          | Red          | RED          | RED          |
-| MS    | RED          | RED          | RED          | RED          | RED          |
-| MT    | red          | RED          | Red          | RED          | RED          |
-| NC    | blue         | blue         | blue         | blue         | blue         |
-| ND    | RED          | RED          | RED          | RED          | RED          |
-| NE-01 | blue         | red          | Red          | red          | RED          |
-| NE-02 | BLUE         | BLUE         | blue         | BLUE         | blue         |
+| ME-02 | Blue         | Blue         | BLUE         | red          | Blue         |
+| ME-AL | BLUE         | BLUE         | BLUE         | Blue         | BLUE         |
+| MI    | Blue         | Blue         | Blue         | blue         | Blue         |
+| MN    | BLUE         | BLUE         | BLUE         | BLUE         | BLUE         |
+| MO    | Red          | Red          | Red          | Red          | Red          |
+| MS    | Red          | RED          | RED          | RED          | RED          |
+| MT    | RED          | Red          | red          | Red          | blue         |
+| NC    | Blue         | blue         | blue         | blue         | blue         |
+| ND    | RED          | RED          | RED          | RED          | Red          |
+| NE-01 | Red          | lblue        | red          | blue         | Blue         |
+| NE-02 | Blue         | BLUE         | Blue         | BLUE         | BLUE         |
 | NE-03 | RED          | RED          | RED          | RED          | RED          |
-| NE-AL | red          | RED          | RED          | RED          | RED          |
-| NH    | Blue         | Blue         | Blue         | blue         | Blue         |
-| NJ    | Blue         | Blue         | Blue         | BLUE         | BLUE         |
-| NM    | BLUE         | Blue         | Blue         | Blue         | Blue         |
-| NV    | lblue        | blue         | lred         | red          | red          |
+| NE-AL | RED          | Red          | Red          | Red          | lred         |
+| NH    | BLUE         | Blue         | BLUE         | BLUE         | BLUE         |
+| NJ    | BLUE         | BLUE         | Blue         | BLUE         | BLUE         |
+| NM    | BLUE         | BLUE         | BLUE         | BLUE         | BLUE         |
+| NV    | blue         | blue         | Blue         | Blue         | Blue         |
 | NY    | BLUE         | BLUE         | BLUE         | BLUE         | BLUE         |
-| OH    | red          | Red          | red          | red          | Red          |
+| OH    | red          | lblue        | blue         | red          | lblue        |
 | OK    | RED          | RED          | RED          | RED          | RED          |
 | OR    | BLUE         | BLUE         | BLUE         | BLUE         | BLUE         |
-| PA    | blue         | blue         | blue         | blue         | lblue        |
+| PA    | blue         | Blue         | blue         | Blue         | Blue         |
 | RI    | BLUE         | BLUE         | BLUE         | BLUE         | BLUE         |
-| SC    | RED          | RED          | Red          | RED          | Red          |
-| SD    | RED          | RED          | RED          | RED          | RED          |
+| SC    | Red          | Red          | Red          | RED          | RED          |
+| SD    | RED          | RED          | RED          | RED          | red          |
 | TN    | RED          | RED          | RED          | RED          | RED          |
-| TX    | Red          | Red          | Red          | Red          | Red          |
-| UT    | RED          | RED          | RED          | RED          | RED          |
-| VA    | Blue         | Blue         | Blue         | Blue         | Blue         |
+| TX    | Red          | Red          | Red          | red          | red          |
+| UT    | RED          | RED          | RED          | Red          | Red          |
+| VA    | BLUE         | BLUE         | BLUE         | BLUE         | Blue         |
 | VT    | BLUE         | BLUE         | BLUE         | BLUE         | BLUE         |
 | WA    | BLUE         | BLUE         | BLUE         | BLUE         | BLUE         |
-| WI    | BLUE         | blue         | blue         | Blue         | blue         |
+| WI    | blue         | BLUE         | Blue         | Blue         | BLUE         |
 | WV    | RED          | RED          | RED          | RED          | RED          |
 | WY    | RED          | RED          | RED          | RED          | RED          |
 

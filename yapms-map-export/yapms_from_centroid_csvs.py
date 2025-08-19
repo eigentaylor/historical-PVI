@@ -130,12 +130,20 @@ def to_base64_json(obj: dict) -> str:
 async def process_year_folder(year_dir: Path, out_dir: Path, base_url: str):
     out_dir.mkdir(parents=True, exist_ok=True)
     csvs = sorted(year_dir.glob(f"{year_dir.name}_csv_centroid_*.csv"))
+    # if we're in the final_maps folder, we look for {year}_chosen_centroid.csv for all years
+    if year_dir.name == "final_maps":
+        csvs += sorted(year_dir.glob(f"*_chosen_centroid.csv"))
     for csv_path in csvs:
         df = pd.read_csv(csv_path)
         saved = build_saved_map_from_centroid_df(df)
         b64 = to_base64_json(saved)
-        png_path = out_dir / f"{year_dir.name}_img_centroid_{csv_path.stem.split('_')[-1]}.png"
-        await export_png(b64, png_path, base_url)
+        if year_dir.name == "final_maps":
+            yr = csv_path.stem.split('_')[0]
+            png_path = out_dir / f"img_{yr}_centroid.png"
+        else:
+            yr = year_dir.name
+            png_path = out_dir / f"{yr}_img_centroid_{csv_path.stem.split('_')[-1]}.png"
+        await export_png(b64, png_path, base_url, year=yr)
 
 
 def main():

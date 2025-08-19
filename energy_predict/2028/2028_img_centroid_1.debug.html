@@ -1,0 +1,119 @@
+<!DOCTYPE html><html><head><meta charset="utf-8">
+            <style>
+                            :root { color-scheme: dark; }
+                            html, body { margin: 0; padding: 0; background: #0d1117; }
+                            .wrap {
+                                display: flex;
+                                flex-direction: column;
+                                align-items: center;
+                                justify-content: center;
+                                width: 100vw;
+                                height: 100vh;
+                                gap: 16px;
+                            }
+              svg { width: 1200px; height: auto; background: transparent; }
+              svg [region], svg [short-name] {
+                stroke: #334155;
+                stroke-width: .6;
+                vector-effect: non-scaling-stroke;
+              }
+                            svg text {
+                                /* stronger contrast: white fill with dark outline */
+                                fill: #ffffff;
+                                font: 700 12px system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+                                paint-order: stroke fill;
+                                stroke: rgba(0,0,0,0.85);
+                                stroke-width: 1.6px;
+                                stroke-linejoin: round;
+                                stroke-linecap: round;
+                                letter-spacing: .2px;
+                            }
+                            /* EV number (tspan with map-type=value-text) get an extra-thick outline to stay readable on very light fills */
+                            svg text tspan[map-type="value-text"] {
+                                font-weight: 800;
+                                stroke-width: 2.2px;
+                                font-size: 11px;
+                                fill: #ffffff;
+                            }
+
+                            /* Battle bar */
+                            .battle { width: 1200px; color: #e2e8f0; font: 600 12px system-ui, Segoe UI, Roboto; }
+                            .bar {
+                                position: relative;
+                                display: flex;
+                                height: 18px;
+                                border-radius: 6px;
+                                overflow: hidden;
+                                background: #111827;
+                                box-shadow: inset 0 0 0 1px rgba(148,163,184,.25);
+                            }
+                            .seg { flex-basis: 0; }
+                            .seg.dem { background: #183ebf; }  /* D_called */
+                            .seg.toss { background: #C3B1E1; }
+                            .seg.rep { background: #bf1d29; }  /* R_called */
+                            .threshold {
+                                position: absolute;
+                                top: -4px;
+                                bottom: -4px;
+                                width: 0;
+                                left: 50.186%;
+                                border-left: 2px dashed rgba(226,232,240,.9);
+                                pointer-events: none;
+                            }
+                            .threshold::after {
+                                content: '270';
+                                position: absolute;
+                                top: -18px;
+                                left: 4px;
+                                color: #94a3b8;
+                                font-weight: 700;
+                                letter-spacing: .2px;
+                            }
+                            .labels {
+                                display: flex;
+                                justify-content: space-between;
+                                margin-top: 6px;
+                            }
+                            .labels .dem { color: #93c5fd; }
+                            .labels .toss { color: #d8c7f1; }
+                            .labels .rep { color: #fca5a5; }
+            </style>
+                        </head><body><div class="wrap">
+                            <div style="position:relative;width:1200px;text-align:center;color:#ffffff;font-weight:900;font-size:26px;margin-bottom:6px;">2028</div>
+                            usa-presidential-2024312-blank.svg
+                            <div class="battle">
+                                <div class="bar">
+                                    <div class="seg dem" style="flex-grow: 319;"></div>
+                                    <div class="seg toss" style="flex-grow: 0;"></div>
+                                    <div class="seg rep" style="flex-grow: 219;"></div>
+                                    <div class="threshold"></div>
+                                </div>
+                                <div class="labels">
+                                    <span class="dem">D 319</span>
+                                    
+                                    <span class="rep">R 219</span>
+                                </div>
+                            </div>
+                            
+<!-- Popular vote (PV) bar -->
+<div style="margin-top:8px;width:1200px;">
+    <!-- PV lean label (above the bar) -->
+    <div style="text-align:center;color:#ffffff;font-weight:800;font-size:13px;margin-bottom:6px;">D+3.1</div>
+    <div class="battle pv" style="width:100%;">
+        <div class="bar pv-bar" style="position:relative;height:24px;background:#0b1220;border-radius:8px;overflow:hidden;">
+            <!-- Democrat portion (left) -->
+            <div style="position:absolute;left:0;top:0;bottom:0;width:51.533%;background:#183ebf;"></div>
+            <!-- Republican portion (right) -->
+            <div style="position:absolute;right:0;top:0;bottom:0;width:48.467%;background:#bf1d29;"></div>
+            <!-- Center dashed line at 50% -->
+            <div style="position:absolute;left:50%;top:-8px;bottom:-8px;width:0;border-left:3px dashed rgba(255,255,255,0.9);pointer-events:none;"></div>
+            <!-- Democrat percentage (left) -->
+            <div style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:#cfe6ff;font-weight:700;font-size:12px;">51.5%</div>
+            <!-- Republican percentage (right) -->
+            <div style="position:absolute;right:10px;top:50%;transform:translateY(-50%);color:#ffc8c8;font-weight:700;font-size:12px;">48.5%</div>
+        </div>
+    </div>
+</div>
+
+                        </div>
+            </body></html>

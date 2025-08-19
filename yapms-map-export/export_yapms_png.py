@@ -8,6 +8,7 @@ from xml.etree import ElementTree as ET
 
 from playwright.async_api import async_playwright
 import utils  # type: ignore
+from typing import Optional
 
 
 def _colorize_svg(svg_text: str, saved_map: dict) -> str:
@@ -109,7 +110,7 @@ def _colorize_svg(svg_text: str, saved_map: dict) -> str:
         return svg_text
 
 
-async def export_png(base64_data: str, out_path: Path, base_url: str = "inline"):
+async def export_png(base64_data: str, out_path: Path, base_url: str = "inline", year: Optional[str] = None):
     async with async_playwright() as p:
         browser = await p.chromium.launch()
         page = await browser.new_page(viewport={"width": 1400, "height": 900})
@@ -121,8 +122,12 @@ async def export_png(base64_data: str, out_path: Path, base_url: str = "inline")
             except Exception as e:
                 raise RuntimeError(f"Invalid base64 SavedMap JSON: {e}")
 
-            year = str(saved_json.get("map", {}).get("year", "2024312"))
-            svg_path = (
+            #year = str(saved_json.get("map", {}).get("year", "2024312"))
+            # Prefer the explicit `year` parameter. Do NOT extract year from saved_json
+            # to avoid incorrect fallback values like '2024312'. If no year was passed,
+            # use a harmless placeholder.
+            year = str(year) if year is not None else "unknown"
+            svg_dir = (
                 Path(__file__).resolve().parent
                 / "yapms"
                 / "apps"
@@ -132,12 +137,37 @@ async def export_png(base64_data: str, out_path: Path, base_url: str = "inline")
                 / "assets"
                 / "maps"
                 / "usa"
-                / f"usa-presidential-{year}-blank.svg"
             )
-            if not svg_path.exists():
-                raise FileNotFoundError(f"SVG asset not found: {svg_path}")
 
-            svg_text = svg_path.read_text(encoding="utf-8")
+            def _read_valid_svg(path: Path) -> str:
+                try:
+                    txt = path.read_text(encoding="utf-8")
+                except Exception:
+                    return ""
+                if "<svg" in txt.lower():
+                    return txt
+                return ""
+
+            # Prefer asset matching saved map year, but fall back to any usable usa-presidential blank SVG
+            preferred = svg_dir / f"usa-presidential-{year}-blank.svg"
+            svg_text = _read_valid_svg(preferred)
+            chosen_svg_path = preferred
+            if not svg_text:
+                # Try known 2028 canonical asset
+                cand2028 = svg_dir / "usa-presidential-2028-blank.svg"
+                svg_text = _read_valid_svg(cand2028)
+                if svg_text:
+                    chosen_svg_path = cand2028
+            if not svg_text:
+                # Scan for any usa-presidential-*-blank.svg that actually contains markup
+                for cand in sorted(svg_dir.glob("usa-presidential-*-blank.svg")):
+                    svg_text = _read_valid_svg(cand)
+                    if svg_text:
+                        chosen_svg_path = cand
+                        break
+            if not svg_text:
+                raise RuntimeError(f"No valid SVG asset found in {svg_dir}")
+
             colored_svg = _colorize_svg(svg_text, saved_json)
 
             # Compute battle bar totals
@@ -202,6 +232,9 @@ async def export_png(base64_data: str, out_path: Path, base_url: str = "inline")
 """
 
             # Dark theme + fine borders for region seams
+            # Add a year header above the map for quick identification
+            year_header_html = f"<div style=\"position:relative;width:1200px;text-align:center;color:#ffffff;font-weight:900;font-size:26px;margin-bottom:6px;\">{year}</div>"
+
             html = f"""
             <!doctype html>
             <meta charset=\"utf-8\">
@@ -285,6 +318,7 @@ async def export_png(base64_data: str, out_path: Path, base_url: str = "inline")
                             .labels .rep {{ color: #fca5a5; }}
             </style>
                         <div class=\"wrap\">
+                            {year_header_html}
                             {colored_svg}
                             <div class=\"battle\">
                                 <div class=\"bar\">
@@ -342,8 +376,9 @@ def main():
     parser.add_argument("base64_json", help="Base64-encoded SavedMap JSON")
     parser.add_argument("--out", type=Path, default=Path("map.png"), help="Output PNG path")
     parser.add_argument("--url", default="inline", help="YAPMS base URL (dev server) or 'inline' to render locally")
+    parser.add_argument("--year", default=None, help="Year string to display on the exported image (overrides any value inside the SavedMap)")
     args = parser.parse_args()
-    asyncio.run(export_png(args.base64_json, args.out, args.url))
+    asyncio.run(export_png(args.base64_json, args.out, args.url, year=args.year))
 
 
 if __name__ == "__main__":

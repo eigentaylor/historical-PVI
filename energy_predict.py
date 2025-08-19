@@ -9,7 +9,11 @@ import numpy as np
 from itertools import permutations
 import pandas as pd
 from sklearn.cluster import KMeans
+import matplotlib.pyplot as plt
 import utils
+import subprocess
+import sys
+import shutil
 
 # Optional: import tipping point helpers if available
 try:
@@ -34,6 +38,7 @@ KMEANS_K = 5
 CSV_PATH = "presidential_margins.csv"
 OUT_DIR = "energy_predict"
 NAT_CLIP = 0.12  # soft bounds for national margin delta proposals
+HIST_BINS = np.linspace(-0.5, 0.5, 21)  # edges for margin histogram (20 bins)
 
 # At-large groups: these at-large labels are derived from their districts and should
 # be excluded from sampling; final predicted values will be set to the average of
@@ -63,6 +68,17 @@ class Targets:
     mean_Xc: np.ndarray  # (S,)
     resid_scale: float
     idio_scale: float
+    # Historical margin histogram (bins, state-count mean+sd, ev-weight mean+sd)
+    hist_bins: np.ndarray
+    hist_state_mean: np.ndarray
+    hist_state_sd: np.ndarray
+    hist_ev_mean: np.ndarray
+    hist_ev_sd: np.ndarray
+    # EV-weighted margin statistics (across historical years)
+    mu_ev_margin: float
+    sd_ev_margin: float
+    mu_ev_abs: float
+    sd_ev_abs: float
     # National margin delta stats
     nat_mu: float  # mean 4-year national delta
     nat_sd: float  # std of 4-year national delta
@@ -271,6 +287,78 @@ def build_delta_targets(
     if idio_scale <= 1e-8:
         idio_scale = 0.02
 
+    # -------------------------------
+    # Historical margin histograms
+    # -------------------------------
+    # For each historical year, compute two histograms over the state's relative margins:
+    #  - state-count histogram (number of states per bin)
+    #  - ev-weighted histogram (sum of normalized EV weights per bin)
+    # Also compute EV-weighted mean margin and EV-weighted mean absolute margin per year.
+    bin_edges = HIST_BINS
+    nb = len(bin_edges) - 1
+    state_hist_mat = []  # (T_hist, nb)
+    ev_hist_mat = []
+    ev_margin_list = []
+    ev_abs_list = []
+    for y in years:
+        try:
+            row = pivot_m.loc[y].reindex(states).to_numpy()
+            w_row = ev_w.loc[y].reindex(states).to_numpy()
+        except Exception:
+            continue
+        mask = ~np.isnan(row)
+        if not np.any(mask):
+            continue
+        vals = row[mask]
+        # state-count histogram
+        counts, _ = np.histogram(vals, bins=bin_edges)
+        state_hist_mat.append(counts.astype(float))
+        # ev-weighted histogram: sum of normalized ev weights in each bin
+        wvals = w_row[mask]
+        # ensure normalized over available states
+        wnorm = wvals / float(np.sum(wvals)) if np.sum(wvals) > 0 else np.ones_like(wvals) / len(wvals)
+        ev_counts = np.zeros(nb, dtype=float)
+        inds = np.digitize(vals, bin_edges) - 1
+        inds = np.clip(inds, 0, nb - 1)
+        for ii, wi in zip(inds, wnorm):
+            ev_counts[ii] += wi
+        ev_hist_mat.append(ev_counts)
+        # EV-weighted mean and mean absolute
+        ev_margin = float(np.sum(wvals * vals) / np.sum(wvals)) if np.sum(wvals) > 0 else float(np.mean(vals))
+        ev_margin_list.append(ev_margin)
+        ev_abs = float(np.sum(wvals * np.abs(vals)) / np.sum(wvals)) if np.sum(wvals) > 0 else float(np.mean(np.abs(vals)))
+        ev_abs_list.append(ev_abs)
+
+    if len(state_hist_mat) == 0:
+        # fallback empty
+        hist_state_mean = np.zeros(nb, dtype=float)
+        hist_state_sd = np.ones(nb, dtype=float) * 1.0
+        hist_ev_mean = np.zeros(nb, dtype=float)
+        hist_ev_sd = np.ones(nb, dtype=float) * 1.0
+        mu_ev_margin = 0.0
+        sd_ev_margin = 0.02
+        mu_ev_abs = 0.02
+        sd_ev_abs = 0.01
+    else:
+        state_hist_arr = np.vstack(state_hist_mat)
+        ev_hist_arr = np.vstack(ev_hist_mat)
+        hist_state_mean = np.mean(state_hist_arr, axis=0)
+        hist_state_sd = np.std(state_hist_arr, axis=0, ddof=1)
+        hist_ev_mean = np.mean(ev_hist_arr, axis=0)
+        hist_ev_sd = np.std(ev_hist_arr, axis=0, ddof=1)
+        # floors
+        hist_state_sd = np.where(hist_state_sd <= 1e-8, 1.0, hist_state_sd)
+        hist_ev_sd = np.where(hist_ev_sd <= 1e-8, 1e-3, hist_ev_sd)
+        # ev-margin stats
+        ev_margin_arr = np.asarray(ev_margin_list, dtype=float)
+        ev_abs_arr = np.asarray(ev_abs_list, dtype=float)
+        mu_ev_margin = float(np.mean(ev_margin_arr))
+        sd_ev_margin = float(np.std(ev_margin_arr, ddof=1)) if ev_margin_arr.size > 1 else float(np.std(ev_margin_arr))
+        sd_ev_margin = max(sd_ev_margin, 1e-6)
+        mu_ev_abs = float(np.mean(ev_abs_arr))
+        sd_ev_abs = float(np.std(ev_abs_arr, ddof=1)) if ev_abs_arr.size > 1 else float(np.std(ev_abs_arr))
+        sd_ev_abs = max(sd_ev_abs, 1e-6)
+
     # National 4-year deltas (y - (y-4)) using nat_series
     nat_pairs = [(y, y - 4) for y in years if (y - 4) in years and (y in nat_series.index) and ((y - 4) in nat_series.index)]
     nat_d = []
@@ -309,10 +397,20 @@ def build_delta_targets(
         mean_Xc=mean_Xc,
         resid_scale=resid_scale,
         idio_scale=idio_scale,
-        nat_mu=nat_mu,
-        nat_sd=nat_sd,
-        nat_idio_scale=nat_idio,
-        nat_by_year={int(k): float(v) for k, v in nat_series.to_dict().items()},
+    nat_mu=nat_mu,
+    nat_sd=nat_sd,
+    nat_idio_scale=nat_idio,
+    # histogram & ev-margin stats
+    hist_bins=HIST_BINS,
+    hist_state_mean=hist_state_mean,
+    hist_state_sd=hist_state_sd,
+    hist_ev_mean=hist_ev_mean,
+    hist_ev_sd=hist_ev_sd,
+    mu_ev_margin=mu_ev_margin,
+    sd_ev_margin=sd_ev_margin,
+    mu_ev_abs=mu_ev_abs,
+    sd_ev_abs=sd_ev_abs,
+    nat_by_year={int(k): float(v) for k, v in nat_series.to_dict().items()},
     )
 
 
@@ -332,10 +430,15 @@ def energy_delta(
     d: np.ndarray,
     targets: Targets,
     w_target: np.ndarray,
+    m_baseline: Optional[np.ndarray] = None,
     alpha_ev: float = 1.0,
     alpha_var: float = 1.0,
     alpha_shock: float = 1.0,
     alpha_resid: float = 1.0,
+    alpha_ev_margin: float = 0.0,
+    alpha_ev_quad: float = 0.0,
+    alpha_hist_state: float = 0.0,
+    alpha_hist_ev: float = 0.0,
 ) -> float:
     """Compute E_TOTAL(d) with components as specified.
 
@@ -346,6 +449,45 @@ def energy_delta(
     z_ev = (evd - targets.mu_evd) / targets.sd_evd
     E_EV = (z_ev * z_ev) * alpha_ev
 
+    # Optional: EV-weighted margin term based on baseline + d
+    E_EV_MARGIN = 0.0
+    E_EV_QUAD = 0.0
+    E_HIST_STATE = 0.0
+    E_HIST_EV = 0.0
+    if m_baseline is not None:
+        margins = m_baseline + d
+        # EV-weighted margin (compare to historical mu/sd)
+        ev_margin = float(np.dot(w_target, margins))
+        z_em = (ev_margin - targets.mu_ev_margin) / targets.sd_ev_margin
+        E_EV_MARGIN = (z_em * z_em) * alpha_ev_margin
+
+        # Quadratic signed EV concentration term: sum w_i * sign(m_i) * (|m_i|/mu_ev_abs)^2
+        mu_abs = max(targets.mu_ev_abs, 1e-6)
+        signed = np.sign(margins) * (np.abs(margins) / mu_abs) ** 2
+        ev_quad_raw = float(np.sum(w_target * signed))
+        E_EV_QUAD = (ev_quad_raw * ev_quad_raw) * alpha_ev_quad
+
+        # Histogram match terms
+        try:
+            sim_counts, _ = np.histogram(margins, bins=targets.hist_bins)
+            # ev-weighted sim histogram
+            nb = len(targets.hist_bins) - 1
+            sim_ev = np.zeros(nb, dtype=float)
+            inds = np.digitize(margins, targets.hist_bins) - 1
+            inds = np.clip(inds, 0, nb - 1)
+            wnorm = w_target / float(np.sum(w_target)) if np.sum(w_target) > 0 else w_target
+            for ii, wi in zip(inds, wnorm):
+                sim_ev[ii] += wi
+
+            # z-squared distance using historical mean+sd
+            z_state = (sim_counts - targets.hist_state_mean) / targets.hist_state_sd
+            E_HIST_STATE = float(np.sum(z_state * z_state) / max(len(z_state), 1)) * alpha_hist_state
+            z_ev_hist = (sim_ev - targets.hist_ev_mean) / targets.hist_ev_sd
+            E_HIST_EV = float(np.sum(z_ev_hist * z_ev_hist) / max(len(z_ev_hist), 1)) * alpha_hist_ev
+        except Exception:
+            E_HIST_STATE = 0.0
+            E_HIST_EV = 0.0
+
     # Variance term (weighted; downweight ME/NE districts)
     z = d / targets.state_sigma
     w = targets.state_weights
@@ -353,9 +495,9 @@ def energy_delta(
     E_VAR = float(np.sum(w * (z * z)) / den) * alpha_var
 
     # Shock fraction term (weighted by state_weights)
-    shock_mask = (np.abs(d) >= TAU).astype(float)
-    frac = float(np.sum(w * shock_mask) / den)
-    z_shock = (frac - targets.mu_shock) / targets.sd_shock
+    # shock_mask = (np.abs(d) >= TAU).astype(float)
+    # frac = float(np.sum(w * shock_mask) / den)
+    # z_shock = (frac - targets.mu_shock) / targets.sd_shock
     E_SHOCK = 0 #(z_shock * z_shock) * alpha_shock
     # we are trying not to penalize shocks, as they happen actually quite often
 
@@ -367,17 +509,22 @@ def energy_delta(
         denom = 1e-6
     E_RESID = float((np.linalg.norm(r) / denom) ** 2) * alpha_resid
 
-    return E_EV + E_VAR + E_SHOCK + E_RESID
+    return E_EV + E_VAR + E_SHOCK + E_RESID + E_EV_MARGIN + E_EV_QUAD + E_HIST_STATE + E_HIST_EV
 
 
 def energy_components(
     d: np.ndarray,
     targets: Targets,
     w_target: np.ndarray,
+    m_baseline: Optional[np.ndarray] = None,
     alpha_ev: float = 1.0,
     alpha_var: float = 1.0,
     alpha_shock: float = 1.0,
     alpha_resid: float = 1.0,
+    alpha_ev_margin: float = 0.0,
+    alpha_ev_quad: float = 0.0,
+    alpha_hist_state: float = 0.0,
+    alpha_hist_ev: float = 0.0,
 ) -> Dict[str, float]:
     """Return a dict of energy components for a delta vector d.
 
@@ -409,6 +556,41 @@ def energy_components(
     z_ev = (evd - targets.mu_evd) / targets.sd_evd
     E_EV = (z_ev * z_ev) * alpha_ev
 
+    # Optional EV-margin and histogram components
+    E_EV_MARGIN = 0.0
+    E_EV_QUAD = 0.0
+    E_HIST_STATE = 0.0
+    E_HIST_EV = 0.0
+    ev_margin = 0.0
+    if m_baseline is not None and n_avail > 0:
+        margins = np.array(m_baseline, dtype=float)
+        margins[mask] = margins[mask] + d[mask]
+        ev_margin = float(np.sum(w_target[mask] * margins[mask]) / float(np.sum(w_target[mask])) ) if np.sum(w_target[mask]) > 0 else float(np.mean(margins[mask]))
+        z_em = (ev_margin - targets.mu_ev_margin) / targets.sd_ev_margin
+        E_EV_MARGIN = (z_em * z_em) * alpha_ev_margin
+
+        mu_abs = max(targets.mu_ev_abs, 1e-6)
+        signed = np.sign(margins[mask]) * (np.abs(margins[mask]) / mu_abs) ** 2
+        ev_quad_raw = float(np.sum((w_target[mask] / float(np.sum(w_target[mask]))) * signed)) if np.sum(w_target[mask]) > 0 else float(np.sum(signed) / len(signed))
+        E_EV_QUAD = (ev_quad_raw * ev_quad_raw) * alpha_ev_quad
+
+        try:
+            sim_counts, _ = np.histogram(margins[mask], bins=targets.hist_bins)
+            nb = len(targets.hist_bins) - 1
+            sim_ev = np.zeros(nb, dtype=float)
+            inds = np.digitize(margins[mask], targets.hist_bins) - 1
+            inds = np.clip(inds, 0, nb - 1)
+            wnorm = w_target[mask] / float(np.sum(w_target[mask])) if np.sum(w_target[mask]) > 0 else (w_target[mask] if w_target[mask].size>0 else np.ones_like(inds)/len(inds))
+            for ii, wi in zip(inds, wnorm):
+                sim_ev[ii] += wi
+            z_state = (sim_counts - targets.hist_state_mean) / targets.hist_state_sd
+            E_HIST_STATE = float(np.sum(z_state * z_state) / max(len(z_state), 1)) * alpha_hist_state
+            z_ev_hist = (sim_ev - targets.hist_ev_mean) / targets.hist_ev_sd
+            E_HIST_EV = float(np.sum(z_ev_hist * z_ev_hist) / max(len(z_ev_hist), 1)) * alpha_hist_ev
+        except Exception:
+            E_HIST_STATE = 0.0
+            E_HIST_EV = 0.0
+
     # VAR term over available states (weighted)
     if n_avail > 0:
         z = (d[mask] / targets.state_sigma[mask])
@@ -439,14 +621,19 @@ def energy_components(
         denom = 1e-6
     E_RESID = float((np.linalg.norm(r) / denom) ** 2) * alpha_resid
 
-    total = E_EV + E_VAR + E_SHOCK + E_RESID
+    total = E_EV + E_VAR + E_SHOCK + E_RESID + E_EV_MARGIN + E_EV_QUAD + E_HIST_STATE + E_HIST_EV
     return {
         "E_EV": float(E_EV),
         "E_VAR": float(E_VAR),
         "E_SHOCK": float(E_SHOCK),
         "E_RESID": float(E_RESID),
+        "E_EV_MARGIN": float(E_EV_MARGIN),
+        "E_EV_QUAD": float(E_EV_QUAD),
+        "E_HIST_STATE": float(E_HIST_STATE),
+        "E_HIST_EV": float(E_HIST_EV),
         "E_TOTAL": float(total),
         "evd": float(evd),
+        "ev_margin": float(ev_margin),
         "shock_frac": float(frac),
         "n_avail": float(n_avail),
     }
@@ -458,6 +645,8 @@ def energy_components(
 def sample_deltas(
     targets: Targets,
     w_target: np.ndarray,
+    m_baseline: Optional[np.ndarray] = None,
+    ev_vec: Optional[np.ndarray] = None,
     N_draw: int = N_DRAW,
     N_keep: int = N_KEEP,
     seed: int = SEED,
@@ -467,6 +656,11 @@ def sample_deltas(
     alpha_var: float = 1.0,
     alpha_shock: float = 1.0,
     alpha_resid: float = 1.0,
+    # new knobs (default off)
+    alpha_ev_margin: float = 0.0,
+    alpha_ev_quad: float = 0.0,
+    alpha_hist_state: float = 0.0,
+    alpha_hist_ev: float = 0.0,
 ) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
     """Draw factor+noise proposals, score by energy, return lowest-energy subset.
 
@@ -490,7 +684,20 @@ def sample_deltas(
 
     # Score energies
     energies = np.array([
-        energy_delta(proposals[i], targets, w_target, alpha_ev, alpha_var, alpha_shock, alpha_resid)
+        energy_delta(
+            proposals[i],
+            targets,
+            w_target,
+            m_baseline,
+            alpha_ev,
+            alpha_var,
+            alpha_shock,
+            alpha_resid,
+            alpha_ev_margin=alpha_ev_margin,
+            alpha_ev_quad=alpha_ev_quad,
+            alpha_hist_state=alpha_hist_state,
+            alpha_hist_ev=alpha_hist_ev,
+        )
         for i in range(N_draw)
     ])
 
@@ -638,6 +845,57 @@ def tipping_report_for_map(states: List[str], margins: np.ndarray, evs: np.ndarr
     return "\n".join(lines)
 
 
+def compute_historical_energies(pivot_m: pd.DataFrame, ev_w: pd.DataFrame, states: List[str], targets: Targets, out_root: str) -> pd.DataFrame:
+    """Compute energy components for each historical year map (relative margins).
+
+    Returns a DataFrame with per-year components and saves CSV + a plot PNG to out_root.
+    """
+    rows = []
+    os.makedirs(out_root, exist_ok=True)
+    for y in pivot_m.index:
+        # build margin vector for this year aligned to states
+        try:
+            m = pivot_m.loc[y].reindex(states).to_numpy(dtype=float)
+        except Exception:
+            continue
+        # compute delta relative to mean_Xc (or zero?) --- we want to score the map itself as a "delta" from baseline=0
+        # Use d = m - mean_Xc so residual term behaves as for deltas
+        d = m - targets.mean_Xc
+        # weights for EV term: use ev_w for that year if available
+        if y in ev_w.index:
+            w = ev_w.loc[y].reindex(states).to_numpy(dtype=float)
+        else:
+            # fallback to uniform
+            w = np.ones(len(states), dtype=float) / len(states)
+
+        comps = energy_components(d, targets, w, m_baseline=m, alpha_ev=1.0)
+        comps['year'] = int(y)
+        rows.append(comps)
+
+    if not rows:
+        return pd.DataFrame()
+    df = pd.DataFrame(rows).set_index('year').sort_index()
+    csv_out = os.path.join(out_root, 'historical_energies.csv')
+    df.to_csv(csv_out)
+
+    # plot total energy and E_EV_MARGIN if present
+    plt.figure(figsize=(8, 4))
+    if 'E_TOTAL' in df.columns:
+        plt.plot(df.index, df['E_TOTAL'], marker='o', label='E_TOTAL')
+    if 'E_EV_MARGIN' in df.columns:
+        plt.plot(df.index, df['E_EV_MARGIN'], marker='x', label='E_EV_MARGIN')
+    plt.xlabel('year')
+    plt.ylabel('energy')
+    plt.title('Historical energies per year')
+    plt.legend()
+    plt.grid(True)
+    png_out = os.path.join(out_root, 'historical_energies.png')
+    plt.tight_layout()
+    plt.savefig(png_out)
+    plt.close()
+    return df
+
+
 # ---------------------------
 # Yearly simulation pipeline
 # ---------------------------
@@ -656,6 +914,11 @@ def run_sampler_for_year(
     example_margin: Optional[float] = None,
     nat_baseline: Optional[float] = None,
     nat_party: Optional[str] = None,
+    # sensible defaults for new energy terms (off by default but tunable)
+    alpha_ev_margin: float = 1.0,
+    alpha_ev_quad: float = 0.2,
+    alpha_hist_state: float = 0.2,
+    alpha_hist_ev: float = 0.2,
 ) -> Dict:
     os.makedirs(out_root, exist_ok=True)
 
@@ -688,15 +951,49 @@ def run_sampler_for_year(
             nat_mu=targets.nat_mu,
             nat_sd=targets.nat_sd,
             nat_idio_scale=targets.nat_idio_scale,
+            # histogram & ev-margin stats are shared (not per-state)
+            hist_bins=targets.hist_bins,
+            hist_state_mean=targets.hist_state_mean,
+            hist_state_sd=targets.hist_state_sd,
+            hist_ev_mean=targets.hist_ev_mean,
+            hist_ev_sd=targets.hist_ev_sd,
+            mu_ev_margin=targets.mu_ev_margin,
+            sd_ev_margin=targets.sd_ev_margin,
+            mu_ev_abs=targets.mu_ev_abs,
+            sd_ev_abs=targets.sd_ev_abs,
             nat_by_year=targets.nat_by_year,
         )
-
-        keep_d, keep_E, idx = sample_deltas(targets_sample, w_target_sample, N_draw=n_draw, N_keep=n_keep, seed=seed)
+        # Draw proposals on reduced-dimension targets
+        keep_d, keep_E, idx = sample_deltas(
+            targets_sample,
+            w_target_sample,
+            m_baseline=m_baseline_sample,
+            ev_vec=ev_vec_sample,
+            N_draw=n_draw,
+            N_keep=n_keep,
+            seed=seed,
+            alpha_ev_margin=alpha_ev_margin,
+            alpha_ev_quad=alpha_ev_quad,
+            alpha_hist_state=alpha_hist_state,
+            alpha_hist_ev=alpha_hist_ev,
+        )
         maps_sample = maps_from_deltas(m_baseline_sample, keep_d)
         # Expand sample maps back to full-state vector by filling at-large entries with district averages
         maps = expand_maps_with_atlarge(maps_sample, sample_states, states, AT_LARGE_GROUPS)
     else:
-        keep_d, keep_E, idx = sample_deltas(targets, w_target, N_draw=n_draw, N_keep=n_keep, seed=seed)
+        keep_d, keep_E, idx = sample_deltas(
+            targets,
+            w_target,
+            m_baseline=m_baseline,
+            ev_vec=ev_vec,
+            N_draw=n_draw,
+            N_keep=n_keep,
+            seed=seed,
+            alpha_ev_margin=alpha_ev_margin,
+            alpha_ev_quad=alpha_ev_quad,
+            alpha_hist_state=alpha_hist_state,
+            alpha_hist_ev=alpha_hist_ev,
+        )
         maps = maps_from_deltas(m_baseline, keep_d)
 
     # Sample national margin deltas independently (optionally constrained by nat_party) and align with kept proposals
@@ -1143,6 +1440,12 @@ def main(
     # 2) Targets from full history
     targets = build_delta_targets(pivot_m, ev_w, years, states, nat_series, tau=TAU, var_frac=VAR_FRAC, K_min=K_MIN)
 
+    # Compute and save historical energies for the real-world maps
+    try:
+        compute_historical_energies(pivot_m, ev_w, states, targets, out_dir)
+    except Exception as e:  # pragma: no cover
+        print(f"compute_historical_energies failed: {e}")
+
     # Helper: baseline and weights (use 2024 values)
     if 2024 not in pivot_m.index:
         raise ValueError("CSV must include 2024 to define 2024 baseline.")
@@ -1155,81 +1458,162 @@ def main(
         raise ValueError("CSV must include national_margin for 2024.")
     nat_2024 = float(targets.nat_by_year[2024])
 
-    # 3) YEAR = 2028
-    year = 2028
-    ydir = os.path.join(out_dir, str(year))
-    os.makedirs(ydir, exist_ok=True)
-    out_2028 = run_sampler_for_year(
-        year_label=year,
-        m_baseline=m_2024,
-        ev_vec=ev_2024,
-        w_target=w_2024,
-        states=states,
-        targets=targets,
-        out_root=ydir,
-        seed=seed,
-        n_draw=n_draw,
-        n_keep=n_keep,
-        kmeans_k=kmeans_k,
-        example_margin=None,
-        nat_party="D",
-        nat_baseline=nat_2024,
-    )
+    # If user wants multi-year generation, run the generic driver which will
+    # produce a `final_maps` folder containing chosen centroid CSVs/TXT and a manifest.
+    def generate_multi_year_maps(
+        start_year: int,
+        end_year: int,
+        step: int,
+        baseline_margin: np.ndarray,
+        ev_vec_local: np.ndarray,
+        w_target_local: np.ndarray,
+        states_local: List[str],
+        targets_local: Targets,
+        out_root_local: str,
+        seed_local: int = SEED,
+        n_draw_local: int = N_DRAW,
+        n_keep_local: int = N_KEEP,
+        kmeans_k_local: int = KMEANS_K,
+        pick: str = "largest",
+        alpha_ev_margin_local: float = 1.0,
+        alpha_ev_quad_local: float = 0.2,
+        alpha_hist_state_local: float = 0.2,
+        alpha_hist_ev_local: float = 0.2,
+        nat_party: Optional[str] = None
+    ) -> Dict:
+        final_dir = os.path.join(out_root_local, "final_maps")
+        os.makedirs(final_dir, exist_ok=True)
+        manifest = {"generated": [], "start_year": int(start_year), "end_year": int(end_year), "step": int(step)}
 
-    # Choose a 2028 centroid: largest cluster
-    labels_2028 = np.array(out_2028["labels"]) if isinstance(out_2028["labels"], list) else out_2028["labels"]
-    sizes = [np.sum(labels_2028 == i) for i in range(kmeans_k)]
-    chosen_idx = int(np.argmax(sizes))
-    m_2028 = out_2028["centroids"][chosen_idx]
-    # Choose national margin for 2028 from the same centroid
-    pv_shifts_2028 = out_2028["diagnostics"].get("pv_shift_by_cluster", [nat_2024] * kmeans_k)
-    nat_2028 = float(pv_shifts_2028[chosen_idx])
+        cur_baseline = baseline_margin.copy()
+        cur_nat = float(targets_local.nat_by_year.get(start_year - step, 0.0)) if start_year - step in targets_local.nat_by_year else float(targets_local.nat_by_year.get(start_year, 0.0))
+        cur_seed = int(seed_local)
 
-    # 4) YEAR = 2032 (iterate using chosen 2028 centroid as baseline)
-    year = 2032
-    ydir = os.path.join(out_dir, str(year))
-    os.makedirs(ydir, exist_ok=True)
-    
-    # create a little txt file in the 2032 folder which says which centroid we used for 2028
-    with open(os.path.join(ydir, "centroid_2028.txt"), "w", encoding="utf-8") as f:
-        f.write(f"Chosen centroid for 2028: {chosen_idx + 1}\n")
+        years_seq = list(range(start_year, end_year + 1, step))
+        for yr in years_seq:
+            ydir_local = os.path.join(out_root_local, str(yr))
+            os.makedirs(ydir_local, exist_ok=True)
+            out = run_sampler_for_year(
+                year_label=yr,
+                m_baseline=cur_baseline,
+                ev_vec=ev_vec_local,
+                w_target=w_target_local,
+                states=states_local,
+                targets=targets_local,
+                out_root=ydir_local,
+                seed=cur_seed,
+                n_draw=n_draw_local,
+                n_keep=n_keep_local,
+                kmeans_k=kmeans_k_local,
+                example_margin=None,
+                nat_baseline=cur_nat,
+                alpha_ev_margin=alpha_ev_margin_local,
+                alpha_ev_quad=alpha_ev_quad_local,
+                alpha_hist_state=alpha_hist_state_local,
+                alpha_hist_ev=alpha_hist_ev_local,
+                nat_party=nat_party
+            )
 
-    out_2032 = run_sampler_for_year(
-        year_label=year,
-        m_baseline=m_2028,
-        ev_vec=ev_2024,  # use 2024 EVs unless 2030s apportionment provided
-        w_target=w_2024,
-        states=states,
-        targets=targets,  # stationary targets assumption
-        out_root=ydir,
-        seed=seed + 1,  # slight change
-        n_draw=n_draw,
-        n_keep=n_keep,
-        kmeans_k=kmeans_k,
-        example_margin=None,
-        nat_baseline=nat_2028,
-    )
+            labels_arr = np.array(out["labels"]) if isinstance(out["labels"], list) else out["labels"]
+            sizes = [int(np.sum(labels_arr == i)) for i in range(kmeans_k_local)]
+            if pick == "largest":
+                chosen_idx_local = int(np.argmax(sizes))
+            else:
+                # fallback to cluster 0
+                chosen_idx_local = 0
 
-    # Summary log
-    summary = {
-        "2028": out_2028["diagnostics"],
-        "2028_results": out_2028["results"],
-        "chosen_centroid_index_2028": int(chosen_idx + 1),
-        "chosen_pv_shift_2028": float(nat_2028),
-        "2032": out_2032["diagnostics"],
-        "2032_results": out_2032["results"],
-    }
-    with open(os.path.join(out_dir, "summary.json"), "w", encoding="utf-8") as f:
-        json.dump(summary, f, indent=2)
+            # chosen centroid and metadata
+            chosen_centroid = out["centroids"][chosen_idx_local]
+            pv_shifts = out["diagnostics"].get("pv_shift_by_cluster", [cur_nat] * kmeans_k_local)
+            chosen_pv = float(pv_shifts[chosen_idx_local]) if pv_shifts else float(cur_nat)
+
+            # Copy centroid CSV/TXT/TIPPING to final_maps with standardized names
+            res = out["results"][chosen_idx_local]
+            src_csv = res.get("csv")
+            src_txt = res.get("txt")
+            src_tp = res.get("tipping")
+            dest_csv = os.path.join(final_dir, f"{yr}_chosen_centroid.csv")
+            dest_txt = os.path.join(final_dir, f"{yr}_chosen_centroid.txt")
+            dest_tp = os.path.join(final_dir, f"{yr}_chosen_tipping.txt")
+            try:
+                if src_csv and os.path.exists(src_csv):
+                    shutil.copy(src_csv, dest_csv)
+                if src_txt and os.path.exists(src_txt):
+                    shutil.copy(src_txt, dest_txt)
+                if src_tp and os.path.exists(src_tp):
+                    shutil.copy(src_tp, dest_tp)
+            except Exception:
+                # non-fatal
+                pass
+
+            manifest_entry = {
+                "year": int(yr),
+                "chosen_centroid_index": int(chosen_idx_local + 1),
+                "csv": dest_csv if os.path.exists(dest_csv) else src_csv,
+                "txt": dest_txt if os.path.exists(dest_txt) else src_txt,
+                "tipping": dest_tp if os.path.exists(dest_tp) else src_tp,
+                "pv_shift": chosen_pv,
+                "cluster_size": int(sizes[chosen_idx_local]),
+            }
+            manifest["generated"].append(manifest_entry)
+
+            # prepare next iteration: use chosen centroid as baseline
+            cur_baseline = np.array(chosen_centroid, dtype=float)
+            cur_nat = chosen_pv
+            cur_seed += 1
+
+    # save manifest
+        manifest_path = os.path.join(final_dir, "manifest.json")
+        with open(manifest_path, "w", encoding="utf-8") as mf:
+            json.dump(manifest, mf, indent=2)
+
+        # Attempt to render PNGs from the chosen centroid CSVs using the local run_batch.py
+        try:
+            script = os.path.join(os.path.dirname(__file__), "yapms-map-export", "run_batch.py")
+            if os.path.exists(script):
+                # run in inline mode to avoid starting a dev server
+                subprocess.run([sys.executable, script, final_dir, "--inline"], check=False)
+        except Exception as e:
+            print(f"Rendering final_maps with yapms run_batch failed: {e}")
+
+        return manifest
+
+    # run default multi-year generation (2028->2032) and write final_maps
+    try:
+        manifest = generate_multi_year_maps(
+            start_year=2028,
+            end_year=2044,
+            step=4,
+            baseline_margin=m_2024,
+            ev_vec_local=ev_2024,
+            w_target_local=w_2024,
+            states_local=states,
+            targets_local=targets,
+            out_root_local=out_dir,
+            seed_local=seed,
+            n_draw_local=n_draw,
+            n_keep_local=n_keep,
+            kmeans_k_local=kmeans_k,
+            nat_party='D'
+        )
+        # write a short summary next to main outputs
+        with open(os.path.join(out_dir, "final_maps_manifest.json"), "w", encoding="utf-8") as f:
+            json.dump(manifest, f, indent=2)
+    except Exception as e:
+        print(f"generate_multi_year_maps failed: {e}")
 
     # Console prints (brief)
     print(f"Targets: K={targets.F.shape[0]}, sd_evd={targets.sd_evd:.4f}, mu_shock={targets.mu_shock:.4f}, sd_shock={targets.sd_shock:.4f}, resid_scale={targets.resid_scale:.4f}, nat_mu={targets.nat_mu:.4f}, nat_sd={targets.nat_sd:.4f}")
-    print(f"2028: clusters={summary['2028']['cluster_sizes']}, avg_shock_keep={summary['2028']['avg_shock_frac']:.3f}")
-    print(f"2032: clusters={summary['2032']['cluster_sizes']}, avg_shock_keep={summary['2032']['avg_shock_frac']:.3f}")
+    # print(f"2028: clusters={summary['2028']['cluster_sizes']}, avg_shock_keep={summary['2028']['avg_shock_frac']:.3f}")
+    # print(f"2032: clusters={summary['2032']['cluster_sizes']}, avg_shock_keep={summary['2032']['avg_shock_frac']:.3f}")
 
 
 if __name__ == "__main__":
     # Simple CLI via environment variables is possible; for now just run defaults
     main()
     
-    # NOTE: put the following prompts into powershell
+    import subprocess
+    # run ./yapms-map-export/run_batch.py
+    #print("Running yapms-map-export batch script...")
+    #subprocess.run(["python", "./yapms-map-export/run_batch.py"], check=True)
+
