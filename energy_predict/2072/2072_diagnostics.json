@@ -1,0 +1,45 @@
+{
+  "year": 2072,
+  "energy_percentiles": {
+    "p5": 0.625,
+    "p25": 0.625,
+    "p50": 0.625,
+    "p75": 0.625,
+    "p95": 0.625
+  },
+  "avg_shock_frac": 0.21122222222222223,
+  "cluster_sizes": [
+    213,
+    230,
+    145,
+    227,
+    185
+  ],
+  "mean_energy_by_cluster": [
+    0.625,
+    0.625,
+    0.625,
+    0.625,
+    0.625
+  ],
+  "K_factors": 7,
+  "sd_evd": 0.001748490212973688,
+  "mu_shock": 0.2169683257918552,
+  "sd_shock": 0.1498859348169306,
+  "resid_scale": 0.01737230254085105,
+  "example_margin": null,
+  "nat_baseline": 0.04328129892228279,
+  "nat_mu": -0.003045985305201565,
+  "nat_sd": 0.0859579155382838,
+  "nat_idio_scale": 0.0347674646178561,
+  "pv_shift_by_cluster": [
+    0.0455410986059819,
+    0.03640781739425968,
+    0.04144869754949698,
+    0.03909545798290416,
+    0.04325004718559524
+  ],
+  "nat_party_constraint": null,
+  "nat_min_delta_required": null,
+  "nat_max_delta_required": null
+}

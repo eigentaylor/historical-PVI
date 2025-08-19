@@ -1,0 +1,174 @@
+Centroid 1 for 2076
+abbr,relative_margin
+🔴NE-03		R+54.6,	1	RED
+	final (D+3.0):	🔴 R+51.6
+	change: D+6.2 (Δ from baseline), was R+60.8
+🔴AR		R+54.1,	6	RED
+	final (D+3.0):	🔴 R+51.1
+	change: R+1.4 (Δ from baseline), was R+52.7
+🔴WY		R+51.1,	3	RED
+	final (D+3.0):	🔴 R+48.0
+	change: D+5.2 (Δ from baseline), was R+56.3
+🔴WV		R+49.3,	4	RED
+	final (D+3.0):	🔴 R+46.2
+	change: D+2.7 (Δ from baseline), was R+52.0
+🔴OK		R+41.0,	7	RED
+	final (D+3.0):	🔴 R+37.9
+	change: D+2.5 (Δ from baseline), was R+43.5
+🔴ND		R+36.9,	3	RED
+	final (D+3.0):	🔴 R+33.8
+	change: D+9.7 (Δ from baseline), was R+46.6
+🔴AL		R+36.6,	9	RED
+	final (D+3.0):	🔴 R+33.6
+	change: R+2.4 (Δ from baseline), was R+34.3
+🔴KY		R+36.4,	8	RED
+	final (D+3.0):	🔴 R+33.3
+	change: D+0.1 (Δ from baseline), was R+36.5
+🔴ID		R+35.5,	4	RED
+	final (D+3.0):	🔴 R+32.5
+	change: D+5.5 (Δ from baseline), was R+41.0
+🔴TN		R+35.2,	11	RED
+	final (D+3.0):	🔴 R+32.2
+	change: R+3.4 (Δ from baseline), was R+31.8
+🔴SC		R+32.5,	9	RED
+	final (D+3.0):	🔴 R+29.4
+	change: R+2.8 (Δ from baseline), was R+29.6
+🔴LA		R+27.9,	8	RED
+	final (D+3.0):	🔴 R+24.8
+	change: R+0.4 (Δ from baseline), was R+27.5
+🔴MS		R+27.2,	6	RED
+	final (D+3.0):	🔴 R+24.2
+	change: R+2.2 (Δ from baseline), was R+25.1
+🔴SD		R+26.9,	3	RED
+	final (D+3.0):	🔴 R+23.8
+	change: D+7.5 (Δ from baseline), was R+34.4
+🔴MO		R+24.9,	10	RED
+	final (D+3.0):	🔴 R+21.8
+	change: D+0.8 (Δ from baseline), was R+25.7
+🔴FL		R+24.8,	30	RED
+	final (D+3.0):	🔴 R+21.8
+	change: R+2.0 (Δ from baseline), was R+22.8
+🔴ME-02		R+24.5,	1	RED
+	final (D+3.0):	🔴 R+21.4
+	change: D+1.9 (Δ from baseline), was R+26.3
+🔴GA		R+24.3,	16	RED
+	final (D+3.0):	🔴 R+21.3
+	change: R+4.1 (Δ from baseline), was R+20.2
+🔴TX		R+21.0,	40	RED
+	final (D+3.0):	🔴 R+18.0
+	change: D+0.3 (Δ from baseline), was R+21.3
+🔴IN		R+17.6,	11	RED
+	final (D+3.0):	🔴 R+14.6
+	change: D+1.3 (Δ from baseline), was R+18.9
+🔴NE-AL		R+16.1,	2	RED
+	final (D+3.0):	🔴 R+13.0
+	change: D+5.3 (Δ from baseline), was R+21.4
+🔴MT		R+14.8,	4	Red
+	final (D+3.0):	🔴 R+11.8
+	change: D+6.9 (Δ from baseline), was R+21.7
+🔴NC		R+14.4,	16	Red
+	final (D+3.0):	🔴 R+11.4
+	change: R+1.6 (Δ from baseline), was R+12.8
+🔴KS		R+14.3,	6	Red
+	final (D+3.0):	🔴 R+11.2
+	change: D+1.9 (Δ from baseline), was R+16.2
+🔴OH		R+12.8,	17	Red
+	final (D+3.0):	🔴 R+9.7
+	change: D+0.4 (Δ from baseline), was R+13.2
+🔴UT		R+11.1,	6	Red
+	final (D+3.0):	🔴 R+8.1
+	change: D+4.2 (Δ from baseline), was R+15.4
+🔴AK		R+8.2,	3	red
+	final (D+3.0):	🔴 R+5.1
+	change: D+1.9 (Δ from baseline), was R+10.1
+🔴NE-01		R+7.2,	1	red
+	final (D+3.0):	🔴 R+4.2
+	change: D+6.3 (Δ from baseline), was R+13.5
+🔴NV		R+7.0,	6	red
+	final (D+3.0):	🔴 R+4.0
+	change: D+1.3 (Δ from baseline), was R+8.3
+🔴NH		R+6.1,	4	red
+	final (D+3.0):	🔴 R+3.0
+	change: D+1.0 (Δ from baseline), was R+7.1
+🔴ME-AL		R+5.5,	2	red
+	final (D+3.0):	🔴 R+2.5
+	change: D+0.7 (Δ from baseline), was R+6.2
+🔴MI		R+5.2,	15	red
+	final (D+3.0):	🔴 R+2.2
+	change: R+0.5 (Δ from baseline), was R+4.7
+🟣AZ		R+1.4,	11	blue
+	final (D+3.0):	🔵 D+1.6
+	change: R+0.2 (Δ from baseline), was R+1.2
+🟣IA		R+0.5,	6	blue
+	final (D+3.0):	🔵 D+2.5
+	change: D+5.3 (Δ from baseline), was R+5.8
+🟣VA		D+2.1,	13	blue
+	final (D+3.0):	🔵 D+5.2
+	change: R+1.6 (Δ from baseline), was D+3.7
+🟣PA		D+3.7,	19	Blue
+	final (D+3.0):	🔵 D+6.8
+	change: R+0.4 (Δ from baseline), was D+4.1
+🟣DE		D+4.4,	3	Blue
+	final (D+3.0):	🔵 D+7.4
+	change: R+2.1 (Δ from baseline), was D+6.4
+🟣NJ		D+4.8,	14	Blue
+	final (D+3.0):	🔵 D+7.8
+	change: R+2.3 (Δ from baseline), was D+7.0
+🔵WI		D+6.6,	10	Blue
+	final (D+3.0):	🔵 D+9.6
+	change: D+2.6 (Δ from baseline), was D+4.0
+🔵NM		D+7.3,	5	Blue
+	final (D+3.0):	🔵 D+10.3
+	change: D+1.5 (Δ from baseline), was D+5.8
+🔵MN		D+7.5,	10	Blue
+	final (D+3.0):	🔵 D+10.5
+	change: D+1.3 (Δ from baseline), was D+6.2
+🔵NY		D+9.9,	28	BLUE
+	final (D+3.0):	🔵 D+13.0
+	change: R+1.8 (Δ from baseline), was D+11.7
+🔵CT		D+11.3,	7	BLUE
+	final (D+3.0):	🔵 D+14.4
+	change: R+0.8 (Δ from baseline), was D+12.1
+🔵RI		D+11.4,	4	BLUE
+	final (D+3.0):	🔵 D+14.5
+	change: R+1.3 (Δ from baseline), was D+12.7
+🔵CO		D+11.6,	10	BLUE
+	final (D+3.0):	🔵 D+14.7
+	change: D+2.7 (Δ from baseline), was D+8.9
+🔵IL		D+12.2,	19	BLUE
+	final (D+3.0):	🔵 D+15.2
+	change: R+1.0 (Δ from baseline), was D+13.1
+🔵ME-01		D+13.4,	1	BLUE
+	final (D+3.0):	🔵 D+16.4
+	change: R+0.6 (Δ from baseline), was D+13.9
+🔵NE-02		D+13.5,	1	BLUE
+	final (D+3.0):	🔵 D+16.6
+	change: D+3.4 (Δ from baseline), was D+10.1
+🔵CA		D+17.6,	54	BLUE
+	final (D+3.0):	🔵 D+20.7
+	change: R+2.3 (Δ from baseline), was D+19.9
+🔵OR		D+19.4,	8	BLUE
+	final (D+3.0):	🔵 D+22.5
+	change: D+2.0 (Δ from baseline), was D+17.4
+🔵HI		D+21.1,	4	BLUE
+	final (D+3.0):	🔵 D+24.2
+	change: D+2.1 (Δ from baseline), was D+19.0
+🔵WA		D+24.1,	12	BLUE
+	final (D+3.0):	🔵 D+27.2
+	change: D+0.9 (Δ from baseline), was D+23.3
+🔵MA		D+27.9,	11	BLUE
+	final (D+3.0):	🔵 D+30.9
+	change: R+1.0 (Δ from baseline), was D+28.9
+🔵VT		D+30.3,	3	BLUE
+	final (D+3.0):	🔵 D+33.3
+	change: D+0.5 (Δ from baseline), was D+29.8
+🔵MD		D+31.6,	10	BLUE
+	final (D+3.0):	🔵 D+34.7
+	change: R+3.8 (Δ from baseline), was D+35.5
+🔵DC		D+107.7,	3	BLUE
+	final (D+3.0):	🔵 D+110.7
+	change: R+3.5 (Δ from baseline), was D+111.1
+
+Shocks (|predicted - baseline| ≥ 0.080): 1 states (0.018)
+abbr, Δ(pred-baseline), baseline → predicted
+🔵ND		D+9.7,	R+46.6 → R+36.9

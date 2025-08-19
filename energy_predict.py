@@ -37,8 +37,18 @@ SEED = 17
 KMEANS_K = 5
 CSV_PATH = "presidential_margins.csv"
 OUT_DIR = "energy_predict"
-NAT_CLIP = 0.12  # soft bounds for national margin delta proposals
+NAT_CLIP = 0.25  # soft bounds for national margin delta proposals
 HIST_BINS = np.linspace(-0.5, 0.5, 21)  # edges for margin histogram (20 bins)
+
+# Default alpha knobs for energy components (tunable)
+ALPHA_EV = 0.0
+ALPHA_VAR = 0.0
+ALPHA_SHOCK = 0.0
+ALPHA_RESID = 0.0
+ALPHA_EV_MARGIN = 1.0
+ALPHA_EV_QUAD = 0.2
+ALPHA_HIST_STATE = 0.2
+ALPHA_HIST_EV = 0.0
 
 # At-large groups: these at-large labels are derived from their districts and should
 # be excluded from sampling; final predicted values will be set to the average of
@@ -440,76 +450,30 @@ def energy_delta(
     alpha_hist_state: float = 0.0,
     alpha_hist_ev: float = 0.0,
 ) -> float:
-    """Compute E_TOTAL(d) with components as specified.
+    """Compute total energy for delta vector d by delegating to energy_components.
 
-    Returns scalar energy.
+    Keeps a single canonical implementation (energy_components) and returns
+    the scalar E_TOTAL to preserve existing callers. Note that several
+    optional components (E_EV_MARGIN, E_EV_QUAD, E_HIST_STATE, E_HIST_EV)
+    are controlled by their respective alpha_* knobs. If those alphas are
+    left at their defaults (0.0) the components will be computed but
+    multiplied by zero, producing 0.0 in the returned total.
     """
-    # EV term
-    evd = float(np.dot(w_target, d))
-    z_ev = (evd - targets.mu_evd) / targets.sd_evd
-    E_EV = (z_ev * z_ev) * alpha_ev
-
-    # Optional: EV-weighted margin term based on baseline + d
-    E_EV_MARGIN = 0.0
-    E_EV_QUAD = 0.0
-    E_HIST_STATE = 0.0
-    E_HIST_EV = 0.0
-    if m_baseline is not None:
-        margins = m_baseline + d
-        # EV-weighted margin (compare to historical mu/sd)
-        ev_margin = float(np.dot(w_target, margins))
-        z_em = (ev_margin - targets.mu_ev_margin) / targets.sd_ev_margin
-        E_EV_MARGIN = (z_em * z_em) * alpha_ev_margin
-
-        # Quadratic signed EV concentration term: sum w_i * sign(m_i) * (|m_i|/mu_ev_abs)^2
-        mu_abs = max(targets.mu_ev_abs, 1e-6)
-        signed = np.sign(margins) * (np.abs(margins) / mu_abs) ** 2
-        ev_quad_raw = float(np.sum(w_target * signed))
-        E_EV_QUAD = (ev_quad_raw * ev_quad_raw) * alpha_ev_quad
-
-        # Histogram match terms
-        try:
-            sim_counts, _ = np.histogram(margins, bins=targets.hist_bins)
-            # ev-weighted sim histogram
-            nb = len(targets.hist_bins) - 1
-            sim_ev = np.zeros(nb, dtype=float)
-            inds = np.digitize(margins, targets.hist_bins) - 1
-            inds = np.clip(inds, 0, nb - 1)
-            wnorm = w_target / float(np.sum(w_target)) if np.sum(w_target) > 0 else w_target
-            for ii, wi in zip(inds, wnorm):
-                sim_ev[ii] += wi
-
-            # z-squared distance using historical mean+sd
-            z_state = (sim_counts - targets.hist_state_mean) / targets.hist_state_sd
-            E_HIST_STATE = float(np.sum(z_state * z_state) / max(len(z_state), 1)) * alpha_hist_state
-            z_ev_hist = (sim_ev - targets.hist_ev_mean) / targets.hist_ev_sd
-            E_HIST_EV = float(np.sum(z_ev_hist * z_ev_hist) / max(len(z_ev_hist), 1)) * alpha_hist_ev
-        except Exception:
-            E_HIST_STATE = 0.0
-            E_HIST_EV = 0.0
-
-    # Variance term (weighted; downweight ME/NE districts)
-    z = d / targets.state_sigma
-    w = targets.state_weights
-    den = float(np.sum(w)) if np.sum(w) > 0 else float(len(z))
-    E_VAR = float(np.sum(w * (z * z)) / den) * alpha_var
-
-    # Shock fraction term (weighted by state_weights)
-    # shock_mask = (np.abs(d) >= TAU).astype(float)
-    # frac = float(np.sum(w * shock_mask) / den)
-    # z_shock = (frac - targets.mu_shock) / targets.sd_shock
-    E_SHOCK = 0 #(z_shock * z_shock) * alpha_shock
-    # we are trying not to penalize shocks, as they happen actually quite often
-
-    # Residual (orthogonal to factor subspace)
-    v = d - targets.mean_Xc
-    r = _proj_residual(v, targets.F)
-    denom = math.sqrt(len(d)) * targets.resid_scale
-    if denom <= 1e-9:
-        denom = 1e-6
-    E_RESID = float((np.linalg.norm(r) / denom) ** 2) * alpha_resid
-
-    return E_EV + E_VAR + E_SHOCK + E_RESID + E_EV_MARGIN + E_EV_QUAD + E_HIST_STATE + E_HIST_EV
+    comps = energy_components(
+        d,
+        targets,
+        w_target,
+        m_baseline=m_baseline,
+        alpha_ev=alpha_ev,
+        alpha_var=alpha_var,
+        alpha_shock=alpha_shock,
+        alpha_resid=alpha_resid,
+        alpha_ev_margin=alpha_ev_margin,
+        alpha_ev_quad=alpha_ev_quad,
+        alpha_hist_state=alpha_hist_state,
+        alpha_hist_ev=alpha_hist_ev,
+    )
+    return float(comps.get("E_TOTAL", comps.get("E_EV", 0.0)))
 
 
 def energy_components(
@@ -517,26 +481,79 @@ def energy_components(
     targets: Targets,
     w_target: np.ndarray,
     m_baseline: Optional[np.ndarray] = None,
-    alpha_ev: float = 1.0,
-    alpha_var: float = 1.0,
-    alpha_shock: float = 1.0,
-    alpha_resid: float = 1.0,
-    alpha_ev_margin: float = 0.0,
-    alpha_ev_quad: float = 0.0,
-    alpha_hist_state: float = 0.0,
-    alpha_hist_ev: float = 0.0,
+    alpha_ev: float = ALPHA_EV,
+    alpha_var: float = ALPHA_VAR,
+    alpha_shock: float = ALPHA_SHOCK,
+    alpha_resid: float = ALPHA_RESID,
+    alpha_ev_margin: float = ALPHA_EV_MARGIN,
+    alpha_ev_quad: float = ALPHA_EV_QUAD,
+    alpha_hist_state: float = ALPHA_HIST_STATE,
+    alpha_hist_ev: float = ALPHA_HIST_EV,
 ) -> Dict[str, float]:
     """Return a dict of energy components for a delta vector d.
 
-    This is numerically aligned with energy_delta for fully-observed vectors.
-    For deltas containing NaNs (as can happen with historical 4-year pairs for
-    states that didn't exist yet), computations are done in a NaN-aware manner:
-      - EV term uses available-state weights renormalized to their own sum.
-      - VAR term averages z^2 over available states only.
-      - SHOCK term uses the fraction over available states only.
-      - RESID term imputes missing entries with the column mean (so v = 0 there),
-        and uses sqrt(n_avail) in the denominator.
-    """
+        This function computes a set of scalar diagnostics that together form a
+        total "energy" score for a proposed vector of state deltas (d). The
+        returned dictionary contains the following keys (E_*):
+
+        - E_EV : EV-weighted national-delta term. Measures how the EV-weighted
+            mean of the proposed delta deviates from the historical EV-weighted
+            mean of 4-year deltas (targets.mu_evd). This is a z^2 term scaled by
+            targets.sd_evd and multiplied by `alpha_ev`.
+
+        - E_VAR : Per-state variance term. Computes a weighted average of
+            (d_i / sigma_i)^2 across states (sigma_i from historical per-state
+            volatility). `state_weights` can downweight certain units (e.g., ME/NE
+            districts). This term penalizes unusually large per-state moves and is
+            controlled by `alpha_var`.
+
+        - E_SHOCK : Fraction-of-shocks term. Computes the weighted fraction of
+            states whose |d_i| exceeds the shock threshold `TAU`, compares that
+            fraction to the historical mean `targets.mu_shock` and returns a
+            z^2-style penalty (controlled by `alpha_shock`). In the current
+            implementation this term is disabled (set to 0) because shocks are
+            observed frequently in history and we avoid penalizing them by default.
+
+        - E_RESID : Residual term orthogonal to the learned factor subspace.
+            Projects the centered delta vector onto the orthogonal complement of
+            the factor rows (targets.F) and measures the norm of that residual
+            relative to an empirical residual scale (targets.resid_scale). This
+            discourages proposals that lie outside the historical factor subspace
+            and is controlled by `alpha_resid`.
+
+        The following components are optional histogram / margin concentration
+        penalties that require `m_baseline` to be provided and are toggled by
+        their alpha knobs (defaults are 0.0):
+
+        - E_EV_MARGIN : EV-weighted margin term. Computes the EV-weighted mean of
+            the final margins (m_baseline + d) and compares it to the historical
+            EV-weighted mean margin (targets.mu_ev_margin) via a z^2 penalty.
+            Multiply by `alpha_ev_margin` to enable.
+
+        - E_EV_QUAD : Quadratic signed EV concentration. A signed, squared
+            concentration index that rewards or penalizes concentration of margin
+            signs and magnitudes across EV weights. Useful to encourage maps with
+            historically-typical concentration patterns. Controlled by
+            `alpha_ev_quad`.
+
+        - E_HIST_STATE / E_HIST_EV : Histogram-match terms. These compare the
+            distribution of simulated state margins (state-count histogram) and the
+            EV-weighted histogram of simulated margins against historical means and
+            standard deviations (targets.hist_state_mean / hist_ev_mean). They are
+            useful to encourage maps whose distribution of margins resembles
+            historical cycles. Enable with `alpha_hist_state` and `alpha_hist_ev`.
+
+        Numerics and NaN handling:
+            - For vectors containing NaNs (historical 4-year delta rows), the EV
+                computations renormalize weights over available states. The VAR and
+                SHOCK terms operate only over available states. The RESID term
+                imputes missing entries with the column mean (so those positions
+                contribute zero to the centered residual).
+
+        Returns a dict containing all individual E_* terms plus `E_TOTAL`,
+        `evd` (the EV-weighted delta), `ev_margin` (if m_baseline provided),
+        `shock_frac` and `n_avail`.
+        """
     d = np.asarray(d, dtype=float)
     S = d.size
     mask = ~np.isnan(d)
@@ -608,7 +625,7 @@ def energy_components(
     else:
         frac = 0.0
     z_shock = (frac - targets.mu_shock) / targets.sd_shock
-    E_SHOCK = 0 #(z_shock * z_shock) * alpha_shock
+    E_SHOCK = (z_shock * z_shock) * alpha_shock
 
     # Residual (orthogonal to factor subspace), imputing missing with column mean
     v = np.zeros_like(d)
@@ -652,15 +669,24 @@ def sample_deltas(
     seed: int = SEED,
     clip: float = CLIP_D,
     idio_scale: Optional[float] = None,
-    alpha_ev: float = 1.0,
-    alpha_var: float = 1.0,
-    alpha_shock: float = 1.0,
-    alpha_resid: float = 1.0,
-    # new knobs (default off)
-    alpha_ev_margin: float = 0.0,
-    alpha_ev_quad: float = 0.0,
-    alpha_hist_state: float = 0.0,
-    alpha_hist_ev: float = 0.0,
+    alpha_ev: float = ALPHA_EV,
+    alpha_var: float = ALPHA_VAR,
+    alpha_shock: float = ALPHA_SHOCK,
+    alpha_resid: float = ALPHA_RESID,
+    # new knobs (defaults from top-level tuning)
+    alpha_ev_margin: float = ALPHA_EV_MARGIN,
+    alpha_ev_quad: float = ALPHA_EV_QUAD,
+    # New selection options:
+    # - selection_mode: 'lowest' (default) keep N_keep proposals with lowest E_TOTAL
+    # - selection_mode: 'component_range' keep proposals that best match historical
+    #   component ranges derived from hist_df (passed below). When using
+    #   'component_range' provide hist_df or precomputed ranges.
+    selection_mode: str = "component_range",
+    hist_df: Optional[pd.DataFrame] = None,
+    comp_q_low: float = 0.05,
+    comp_q_high: float = 0.95,
+    alpha_hist_state: float = ALPHA_HIST_STATE,
+    alpha_hist_ev: float = ALPHA_HIST_EV,
 ) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
     """Draw factor+noise proposals, score by energy, return lowest-energy subset.
 
@@ -682,26 +708,70 @@ def sample_deltas(
     proposals = d_factor + eps
     proposals = np.clip(proposals, -clip, clip)
 
-    # Score energies
-    energies = np.array([
-        energy_delta(
-            proposals[i],
-            targets,
-            w_target,
-            m_baseline,
-            alpha_ev,
-            alpha_var,
-            alpha_shock,
-            alpha_resid,
-            alpha_ev_margin=alpha_ev_margin,
-            alpha_ev_quad=alpha_ev_quad,
-            alpha_hist_state=alpha_hist_state,
-            alpha_hist_ev=alpha_hist_ev,
-        )
+    # Compute full energy components for each proposal (we'll always need E_TOTAL
+    # but may also use the individual components when selection_mode != 'lowest')
+    comps_list: List[Dict[str, float]] = [
+        energy_components(proposals[i], targets, w_target, m_baseline=m_baseline)
         for i in range(N_draw)
-    ])
+    ]
+    energies = np.array([float(c.get("E_TOTAL", 0.0)) for c in comps_list])
 
-    # Keep N_keep lowest
+    if selection_mode == "component_range":
+        # Need historical ranges per component. Prefer hist_df if provided; otherwise
+        # attempt to read from OUT_DIR/historical_energies.csv if present in cwd.
+        if hist_df is None:
+            try:
+                hist_path = os.path.join(os.getcwd(), OUT_DIR, "historical_energies.csv")
+                if os.path.exists(hist_path):
+                    hist_df = pd.read_csv(hist_path, index_col=0)
+            except Exception:
+                hist_df = None
+
+        # Determine which energy keys to consider (exclude E_TOTAL itself)
+        sample_keys = [k for k in comps_list[0].keys() if k.startswith("E_") and k != "E_TOTAL"] if comps_list else []
+
+        if hist_df is not None and not hist_df.empty:
+            # Use quantile-based ranges per component
+            ranges = {}
+            for k in sample_keys:
+                if k in hist_df.columns:
+                    lo = float(hist_df[k].quantile(comp_q_low))
+                    hi = float(hist_df[k].quantile(comp_q_high))
+                else:
+                    # fallback: use min/max from historical values we have (or +-inf)
+                    vals = hist_df.get(k)
+                    if vals is None:
+                        lo, hi = (-np.inf, np.inf)
+                    else:
+                        lo = float(vals.min())
+                        hi = float(vals.max())
+                ranges[k] = (lo, hi)
+        else:
+            # No historical info -> treat everything as acceptable range
+            ranges = {k: (-np.inf, np.inf) for k in sample_keys}
+
+        # Score proposals by fraction of components that lie within historical ranges
+        comp_scores = np.zeros(N_draw, dtype=float)
+        for i, cdict in enumerate(comps_list):
+            cnt = 0
+            tot = 0
+            for k, (lo, hi) in ranges.items():
+                if k in cdict:
+                    tot += 1
+                    val = float(cdict[k])
+                    if val >= lo and val <= hi:
+                        cnt += 1
+            comp_scores[i] = (cnt / tot) if tot > 0 else 0.0
+
+        # Keep proposals with highest comp_scores (prefer more components inside hist range).
+        # Tie-breaker: lower E_TOTAL
+        order = np.lexsort((energies, -comp_scores))
+        idx_keep = order[::-1][:N_keep]  # highest scores first
+        keep = proposals[idx_keep]
+        keep_E = comp_scores[idx_keep]
+        return keep, keep_E, idx_keep
+
+    # Default behavior: keep N_keep lowest by E_TOTAL
     idx = np.argsort(energies)[:N_keep]
     keep = proposals[idx]
     keep_E = energies[idx]
@@ -868,7 +938,8 @@ def compute_historical_energies(pivot_m: pd.DataFrame, ev_w: pd.DataFrame, state
             # fallback to uniform
             w = np.ones(len(states), dtype=float) / len(states)
 
-        comps = energy_components(d, targets, w, m_baseline=m, alpha_ev=1.0)
+        # Use top-level alpha knobs (defaults applied inside energy_components)
+        comps = energy_components(d, targets, w, m_baseline=m)
         comps['year'] = int(y)
         rows.append(comps)
 
@@ -878,16 +949,22 @@ def compute_historical_energies(pivot_m: pd.DataFrame, ev_w: pd.DataFrame, state
     csv_out = os.path.join(out_root, 'historical_energies.csv')
     df.to_csv(csv_out)
 
-    # plot total energy and E_EV_MARGIN if present
-    plt.figure(figsize=(8, 4))
-    if 'E_TOTAL' in df.columns:
-        plt.plot(df.index, df['E_TOTAL'], marker='o', label='E_TOTAL')
-    if 'E_EV_MARGIN' in df.columns:
-        plt.plot(df.index, df['E_EV_MARGIN'], marker='x', label='E_EV_MARGIN')
+    # Plot all energy components (any column starting with 'E_'), including E_TOTAL.
+    plt.figure(figsize=(10, 4.5))
+    energy_cols = [c for c in df.columns if c.startswith('E_')]
+    # remove any which are all zero
+    energy_cols = [c for c in energy_cols if df[c].sum() != 0]
+    # sensible default markers to help differentiate short series
+    markers = ['o', 's', '^', 'x', 'd', '*', '+', 'v', '>', '<']
+    for i, col in enumerate(energy_cols):
+        mk = markers[i % len(markers)]
+        plt.plot(df.index, df[col], marker=mk, label=col)
     plt.xlabel('year')
+    # set x ticks to every presidential election year
+    plt.xticks([yr for yr in df.index if yr % 4 == 0])
     plt.ylabel('energy')
     plt.title('Historical energies per year')
-    plt.legend()
+    plt.legend(ncol=2, fontsize='small')
     plt.grid(True)
     png_out = os.path.join(out_root, 'historical_energies.png')
     plt.tight_layout()
@@ -914,11 +991,13 @@ def run_sampler_for_year(
     example_margin: Optional[float] = None,
     nat_baseline: Optional[float] = None,
     nat_party: Optional[str] = None,
-    # sensible defaults for new energy terms (off by default but tunable)
-    alpha_ev_margin: float = 1.0,
-    alpha_ev_quad: float = 0.2,
-    alpha_hist_state: float = 0.2,
-    alpha_hist_ev: float = 0.2,
+    # sensible defaults for new energy terms (tunables taken from top-level knobs)
+    alpha_ev_margin: float = ALPHA_EV_MARGIN,
+    alpha_ev_quad: float = ALPHA_EV_QUAD,
+    alpha_hist_state: float = ALPHA_HIST_STATE,
+    alpha_hist_ev: float = ALPHA_HIST_EV,
+    # option to use medoids instead of centroids
+    use_medoids: bool = False,
 ) -> Dict:
     os.makedirs(out_root, exist_ok=True)
 
@@ -972,10 +1051,6 @@ def run_sampler_for_year(
             N_draw=n_draw,
             N_keep=n_keep,
             seed=seed,
-            alpha_ev_margin=alpha_ev_margin,
-            alpha_ev_quad=alpha_ev_quad,
-            alpha_hist_state=alpha_hist_state,
-            alpha_hist_ev=alpha_hist_ev,
         )
         maps_sample = maps_from_deltas(m_baseline_sample, keep_d)
         # Expand sample maps back to full-state vector by filling at-large entries with district averages
@@ -989,10 +1064,6 @@ def run_sampler_for_year(
             N_draw=n_draw,
             N_keep=n_keep,
             seed=seed,
-            alpha_ev_margin=alpha_ev_margin,
-            alpha_ev_quad=alpha_ev_quad,
-            alpha_hist_state=alpha_hist_state,
-            alpha_hist_ev=alpha_hist_ev,
         )
         maps = maps_from_deltas(m_baseline, keep_d)
 
@@ -1063,6 +1134,25 @@ def run_sampler_for_year(
     labels, centroids = cluster_maps(maps, k=kmeans_k, seed=seed)
     cluster_sizes = [int(np.sum(labels == i)) for i in range(kmeans_k)]
     mean_E_by_cluster = [float(np.mean(keep_E[labels == i])) if np.any(labels == i) else float("nan") for i in range(kmeans_k)]
+
+    # Optionally replace centroids with medoids (a cluster member closest to centroid)
+    if use_medoids:
+        try:
+            new_centroids = np.zeros_like(centroids)
+            for i in range(kmeans_k):
+                mask = labels == i
+                if np.any(mask):
+                    members = maps[mask]
+                    center = centroids[i]
+                    dists = np.linalg.norm(members - center, axis=1)
+                    best = np.argmin(dists)
+                    new_centroids[i] = members[best]
+                else:
+                    new_centroids[i] = centroids[i]
+            centroids = new_centroids
+        except Exception:
+            # fallback to original centroids on any failure
+            pass
 
     # Per-cluster national PV shift (baseline + mean sampled nat delta for that cluster)
     if nat_baseline is None:
@@ -1147,9 +1237,8 @@ def run_sampler_for_year(
                 pred = float(c[idx])
                 swing_emoji = utils.emoji_from_lean(dval, use_swing=True)
                 txt_lines.append(f"{swing_emoji}{abbr}\t\t{utils.lean_str(dval)},\t{utils.lean_str(base)} → {utils.lean_str(pred)}")
+
         txt_path = os.path.join(out_root, f"{year_label}_centroid_{i+1}.txt")
-        with open(txt_path, "w", encoding="utf-8") as f:
-            f.write("\n".join(txt_lines))
 
         # EV counts under PV shifts for this centroid
         D0, R0 = ev_counts_for_map(c, ev_vec, pv_shift=0.0)
@@ -1180,6 +1269,70 @@ def run_sampler_for_year(
             tp_report = tipping_report_for_map(states, c, ev_vec, tp_title)
             with open(tp_path, "w", encoding="utf-8") as f:
                 f.write(tp_report)
+
+        # Energy diagnostics for this centroid: compute components for delta = centroid - baseline
+        try:
+            delta_for_energy = c - m_baseline
+            comps = energy_components(delta_for_energy, targets, w_target, m_baseline=m_baseline)
+        except Exception:
+            comps = {}
+
+        # Load historical energies if available to compute ranges
+        hist_df = None
+        try:
+            hist_path = os.path.join(out_root, "historical_energies.csv")
+            if os.path.exists(hist_path):
+                hist_df = pd.read_csv(hist_path, index_col=0)
+            else:
+                hist_path2 = os.path.join(os.getcwd(), OUT_DIR, "historical_energies.csv")
+                if os.path.exists(hist_path2):
+                    hist_df = pd.read_csv(hist_path2, index_col=0)
+        except Exception:
+            hist_df = None
+
+        # Determine sample keys and ranges
+        sample_keys = [k for k in comps.keys() if k.startswith("E_")]
+        ranges = {}
+        if hist_df is not None and not hist_df.empty:
+            for k in sample_keys:
+                if k in hist_df.columns:
+                    lo = float(hist_df[k].quantile(0.05))
+                    hi = float(hist_df[k].quantile(0.95))
+                else:
+                    vals = hist_df.get(k)
+                    if vals is None:
+                        lo, hi = (float("-inf"), float("inf"))
+                    else:
+                        lo = float(vals.min())
+                        hi = float(vals.max())
+                ranges[k] = (lo, hi)
+        else:
+            ranges = {k: (float("-inf"), float("inf")) for k in sample_keys}
+
+        # Append energy diagnostics to txt_lines
+        txt_lines.append("")
+        txt_lines.append("Energy diagnostics (value vs historical 5%-95% range):")
+        for k in sample_keys:
+            val = comps.get(k, float("nan"))
+            lo, hi = ranges.get(k, (float("-inf"), float("inf")))
+            in_range = "IN" if (not np.isnan(val) and val >= lo and val <= hi) else "OUT"
+            # format safely
+            def fmt(x):
+                try:
+                    if np.isinf(x):
+                        return str(x)
+                    return f"{x:.6g}"
+                except Exception:
+                    return str(x)
+            txt_lines.append(f"{k}: {fmt(val)}  hist[{fmt(lo)},{fmt(hi)}]  {in_range}")
+
+        # Write the centroid TXT with diagnostics
+        try:
+            with open(txt_path, "w", encoding="utf-8") as f:
+                f.write("\n".join(txt_lines))
+        except Exception:
+            # ignore write errors (non-fatal)
+            pass
 
         results.append({
             "centroid_index": i + 1,
@@ -1256,10 +1409,11 @@ def main(
         n_keep_local: int = N_KEEP,
         kmeans_k_local: int = KMEANS_K,
         pick: str = "largest",
-        alpha_ev_margin_local: float = 1.0,
-        alpha_ev_quad_local: float = 0.2,
-        alpha_hist_state_local: float = 0.2,
-        alpha_hist_ev_local: float = 0.2,
+        use_medoids: bool = False,
+    alpha_ev_margin_local: float = ALPHA_EV_MARGIN,
+    alpha_ev_quad_local: float = ALPHA_EV_QUAD,
+    alpha_hist_state_local: float = ALPHA_HIST_STATE,
+    alpha_hist_ev_local: float = ALPHA_HIST_EV,
         nat_party: Optional[str] = None
     ) -> Dict:
         final_dir = os.path.join(out_root_local, "final_maps")
@@ -1288,11 +1442,10 @@ def main(
                 kmeans_k=kmeans_k_local,
                 example_margin=None,
                 nat_baseline=cur_nat,
-                alpha_ev_margin=alpha_ev_margin_local,
-                alpha_ev_quad=alpha_ev_quad_local,
-                alpha_hist_state=alpha_hist_state_local,
-                alpha_hist_ev=alpha_hist_ev_local,
-                nat_party=nat_party
+                use_medoids=use_medoids,
+                # alpha knobs intentionally omitted here; run_sampler_for_year
+                # will use its defaults (set from top-level ALPHA_* constants)
+                nat_party='D' if yr < 2036 else None
             )
 
             labels_arr = np.array(out["labels"]) if isinstance(out["labels"], list) else out["labels"]
@@ -1363,7 +1516,7 @@ def main(
     try:
         manifest = generate_multi_year_maps(
             start_year=2028,
-            end_year=2080,
+            end_year=2040,
             step=4,
             baseline_margin=m_2024,
             ev_vec_local=ev_2024,
@@ -1374,8 +1527,7 @@ def main(
             seed_local=seed,
             n_draw_local=n_draw,
             n_keep_local=n_keep,
-            kmeans_k_local=kmeans_k,
-            nat_party='D'
+            kmeans_k_local=kmeans_k
         )
         # write a short summary next to main outputs
         with open(os.path.join(out_dir, "final_maps_manifest.json"), "w", encoding="utf-8") as f:

@@ -2,87 +2,42 @@
   "generated": [
     {
       "year": 2028,
-      "chosen_centroid_index": 2,
+      "chosen_centroid_index": 3,
       "csv": "energy_predict\\final_maps\\2028_chosen_centroid.csv",
       "txt": "energy_predict\\final_maps\\2028_chosen_centroid.txt",
       "tipping": "energy_predict\\final_maps\\2028_chosen_tipping.txt",
-      "pv_shift": 0.03506135557210159,
-      "cluster_size": 227
+      "pv_shift": 0.03822825140617639,
+      "cluster_size": 233
     },
     {
       "year": 2032,
-      "chosen_centroid_index": 3,
+      "chosen_centroid_index": 5,
       "csv": "energy_predict\\final_maps\\2032_chosen_centroid.csv",
       "txt": "energy_predict\\final_maps\\2032_chosen_centroid.txt",
       "tipping": "energy_predict\\final_maps\\2032_chosen_tipping.txt",
-      "pv_shift": 0.06894086794200094,
-      "cluster_size": 230
+      "pv_shift": 0.07291955661495496,
+      "cluster_size": 253
     },
     {
       "year": 2036,
-      "chosen_centroid_index": 2,
+      "chosen_centroid_index": 4,
       "csv": "energy_predict\\final_maps\\2036_chosen_centroid.csv",
       "txt": "energy_predict\\final_maps\\2036_chosen_centroid.txt",
       "tipping": "energy_predict\\final_maps\\2036_chosen_tipping.txt",
-      "pv_shift": 0.10649219941057858,
-      "cluster_size": 226
+      "pv_shift": 0.07200341545893207,
+      "cluster_size": 242
     },
     {
       "year": 2040,
-      "chosen_centroid_index": 2,
+      "chosen_centroid_index": 4,
       "csv": "energy_predict\\final_maps\\2040_chosen_centroid.csv",
       "txt": "energy_predict\\final_maps\\2040_chosen_centroid.txt",
       "tipping": "energy_predict\\final_maps\\2040_chosen_tipping.txt",
-      "pv_shift": 0.13907614428519494,
-      "cluster_size": 234
-    },
-    {
-      "year": 2044,
-      "chosen_centroid_index": 5,
-      "csv": "energy_predict\\final_maps\\2044_chosen_centroid.csv",
-      "txt": "energy_predict\\final_maps\\2044_chosen_centroid.txt",
-      "tipping": "energy_predict\\final_maps\\2044_chosen_tipping.txt",
-      "pv_shift": 0.17173260206340102,
-      "cluster_size": 235
-    },
-    {
-      "year": 2048,
-      "chosen_centroid_index": 4,
-      "csv": "energy_predict\\final_maps\\2048_chosen_centroid.csv",
-      "txt": "energy_predict\\final_maps\\2048_chosen_centroid.txt",
-      "tipping": "energy_predict\\final_maps\\2048_chosen_tipping.txt",
-      "pv_shift": 0.2023826672293594,
-      "cluster_size": 212
-    },
-    {
-      "year": 2052,
-      "chosen_centroid_index": 3,
-      "csv": "energy_predict\\final_maps\\2052_chosen_centroid.csv",
-      "txt": "energy_predict\\final_maps\\2052_chosen_centroid.txt",
-      "tipping": "energy_predict\\final_maps\\2052_chosen_tipping.txt",
-      "pv_shift": 0.2374614884875807,
-      "cluster_size": 232
-    },
-    {
-      "year": 2056,
-      "chosen_centroid_index": 5,
-      "csv": "energy_predict\\final_maps\\2056_chosen_centroid.csv",
-      "txt": "energy_predict\\final_maps\\2056_chosen_centroid.txt",
-      "tipping": "energy_predict\\final_maps\\2056_chosen_tipping.txt",
-      "pv_shift": 0.26949617919378455,
-      "cluster_size": 215
-    },
-    {
-      "year": 2060,
-      "chosen_centroid_index": 2,
-      "csv": "energy_predict\\final_maps\\2060_chosen_centroid.csv",
-      "txt": "energy_predict\\final_maps\\2060_chosen_centroid.txt",
-      "tipping": "energy_predict\\final_maps\\2060_chosen_tipping.txt",
-      "pv_shift": 0.30369158517360695,
-      "cluster_size": 235
+      "pv_shift": 0.06713886992779139,
+      "cluster_size": 242
     }
   ],
   "start_year": 2028,
-  "end_year": 2060,
+  "end_year": 2040,
   "step": 4
 }
