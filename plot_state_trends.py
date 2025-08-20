@@ -12,7 +12,7 @@ subplot_mode = True  # Set to True for subplot, False for single plot
 USE_FUTURE = False  # Set to True to use the future simulation data
 
 # Optional: only include data from this year onward (None means use all years)
-start_year = 2000  # e.g. 2000 to only plot years >= 2000
+start_year = None  # e.g. 2000 to only plot years >= 2000
 # Optional end year (None means up to the latest available)
 end_year = None  # e.g. 2024 to limit to years <= 2024
 if end_year is None:
@@ -287,7 +287,57 @@ for state in states:
 
     # Finalize and save
     plt.tight_layout()
-    filename = f'{state}_trend_subplot.png' if subplot_mode else f'{state}_trend.png'
+    filename = f'{state}_trend.png'
     fig.savefig(os.path.join(output_dir, filename))
     plt.close(fig)
+
+# --- NATIONAL summary plot -------------------------------------------------
+# Create a left line plot of the raw national margins and a right bar plot of
+# the year-to-year deltas. Keep styling similar to the state plots and write
+# the file to the same `output_dir` as the state images.
+try:
+    # Aggregate national margin by year (use mean in case of duplicates)
+    national_series = df.groupby('year')['national_margin'].mean().sort_index()
+    nat_years = national_series.index.values
+    nat_margins = national_series.values
+
+    if len(nat_years) == 0:
+        print('No national data available to plot.')
+    else:
+        # compute year-to-year deltas
+        nat_deltas = np.diff(np.asarray(nat_margins))
+        years_for_delta = nat_years[1:]
+
+        # create a simple 1x2 layout (line | bar)
+        fig_n, (ax_n_line, ax_n_bar, _) = create_figure_axes(False, figsize=(12, 6))
+
+        # Left: raw national margins (reuse style_line_axis by passing the same
+        # series as both pres_margin and national_margin so labels/styles match)
+        pres_colors_nat = style_line_axis(ax_n_line, nat_years, nat_margins, nat_margins, 'NATIONAL')
+
+        # Right: bar plot of deltas only (styled similarly to delta plotting)
+        if len(nat_deltas) == 0:
+            ax_n_bar.text(0.5, 0.5, 'No delta data', ha='center')
+        else:
+            x_idx = np.arange(len(nat_deltas))
+            colors = ['deepskyblue' if d > 0 else 'red' for d in nat_deltas]
+            bars = ax_n_bar.bar(x_idx, nat_deltas, width=0.4, label='National Margin Delta', color=colors)
+            ax_n_bar.bar_label(bars, labels=[utils.lean_str(v) for v in nat_deltas], padding=3, fontsize=8, color='white')
+            ax_n_bar.set_title('Change in National Margin')
+            ax_n_bar.set_xlabel('Year')
+            ax_n_bar.set_ylabel('Delta')
+            y_vals = ax_n_bar.get_yticks()
+            ax_n_bar.set_yticklabels([utils.lean_str(y_val) if y_val != 0 else '0' for y_val in y_vals], color='white')
+            ax_n_bar.axhline(0, color='red', linestyle='--', linewidth=1)
+            ax_n_bar.grid(True, alpha=0.3)
+            ax_n_bar.set_xticks(x_idx)
+            ax_n_bar.set_xticklabels(years_for_delta, rotation=45)
+
+        plt.tight_layout()
+        nat_filename = 'NATIONAL_trend.png'
+        fig_n.savefig(os.path.join(output_dir, nat_filename))
+        plt.close(fig_n)
+        print(f'Wrote national summary plot to {os.path.join(output_dir, nat_filename)}')
+except Exception as e:
+    print(f'Could not create NATIONAL plot: {e}')
 
