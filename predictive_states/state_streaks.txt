@@ -1,0 +1,214 @@
+Listing all streaks with length >= 4 elections across 32 total elections
+
+STATE NV
+PV streaks (total 27) (start,end,length): [(1912, 1972, 16), (1980, 1996, 5), (2004, 2024, 6)]
+EC streaks (total 25) (start,end,length): [(1912, 1972, 16), (1980, 2012, 9)]
+
+STATE MO
+PV streaks (total 23) (start,end,length): [(1904, 1952, 13), (1960, 1996, 10)]
+EC streaks (total 25) (start,end,length): [(1904, 1952, 13), (1960, 2004, 12)]
+
+STATE OH
+PV streaks (total 20) (start,end,length): [(1900, 1940, 11), (1964, 1996, 9)]
+EC streaks (total 25) (start,end,length): [(1900, 1940, 11), (1964, 2016, 14)]
+
+STATE IL
+PV streaks (total 28) (start,end,length): [(1900, 1912, 4), (1920, 1972, 14), (1980, 2000, 6), (2008, 2020, 4)]
+EC streaks (total 23) (start,end,length): [(1900, 1912, 4), (1920, 1972, 14), (1980, 1996, 5)]
+
+STATE NJ
+PV streaks (total 27) (start,end,length): [(1900, 1912, 4), (1920, 1944, 7), (1952, 1972, 6), (1980, 2000, 6), (2008, 2020, 4)]
+EC streaks (total 22) (start,end,length): [(1900, 1912, 4), (1920, 1944, 7), (1952, 1972, 6), (1980, 1996, 5)]
+
+STATE NM
+PV streaks (total 27) (start,end,length): [(1912, 1972, 16), (1980, 2020, 11)]
+EC streaks (total 21) (start,end,length): [(1912, 1972, 16), (1980, 1996, 5)]
+
+STATE FL
+PV streaks (total 15) (start,end,length): [(1928, 1956, 8), (1964, 1988, 7)]
+EC streaks (total 21) (start,end,length): [(1928, 1956, 8), (1964, 1988, 7), (1996, 2016, 6)]
+
+STATE MD
+PV streaks (total 25) (start,end,length): [(1900, 1944, 12), (1952, 1964, 4), (1984, 2000, 5), (2008, 2020, 4)]
+EC streaks (total 20) (start,end,length): [(1900, 1944, 12), (1952, 1964, 4), (1984, 1996, 4)]
+
+STATE TN
+PV streaks (total 17) (start,end,length): [(1928, 1956, 8), (1964, 1996, 9)]
+EC streaks (total 19) (start,end,length): [(1928, 1956, 8), (1964, 2004, 11)]
+
+STATE MI
+PV streaks (total 15) (start,end,length): [(1920, 1936, 5), (1952, 1964, 4), (1980, 2000, 6)]
+EC streaks (total 19) (start,end,length): [(1920, 1936, 5), (1952, 1964, 4), (1980, 1996, 5), (2008, 2024, 5)]
+
+STATE WI
+PV streaks (total 14) (start,end,length): [(1900, 1912, 4), (1928, 1940, 4), (1964, 1984, 6)]
+EC streaks (total 19) (start,end,length): [(1900, 1912, 4), (1928, 1940, 4), (1964, 1984, 6), (2008, 2024, 5)]
+
+STATE MT
+PV streaks (total 18) (start,end,length): [(1904, 1956, 14), (1980, 1992, 4)]
+EC streaks (total 18) (start,end,length): [(1904, 1956, 14), (1980, 1992, 4)]
+
+STATE KY
+PV streaks (total 16) (start,end,length): [(1924, 1948, 7), (1964, 1996, 9)]
+EC streaks (total 18) (start,end,length): [(1924, 1948, 7), (1964, 2004, 11)]
+
+STATE CA
+PV streaks (total 21) (start,end,length): [(1916, 1956, 11), (1980, 2000, 6), (2008, 2020, 4)]
+EC streaks (total 16) (start,end,length): [(1916, 1956, 11), (1980, 1996, 5)]
+
+STATE DE
+PV streaks (total 21) (start,end,length): [(1900, 1912, 4), (1952, 2000, 13), (2008, 2020, 4)]
+EC streaks (total 16) (start,end,length): [(1900, 1912, 4), (1952, 1996, 12)]
+
+STATE PA
+PV streaks (total 12) (start,end,length): [(1952, 1964, 4), (1972, 2000, 8)]
+EC streaks (total 16) (start,end,length): [(1952, 1964, 4), (1972, 1996, 7), (2008, 2024, 5)]
+
+STATE WV
+PV streaks (total 12) (start,end,length): [(1900, 1912, 4), (1920, 1948, 8)]
+EC streaks (total 16) (start,end,length): [(1900, 1912, 4), (1920, 1948, 8), (1992, 2004, 4)]
+
+STATE NY
+PV streaks (total 19) (start,end,length): [(1900, 1912, 4), (1920, 1944, 7), (1952, 1964, 4), (2008, 2020, 4)]
+EC streaks (total 15) (start,end,length): [(1900, 1912, 4), (1920, 1944, 7), (1952, 1964, 4)]
+
+STATE CO
+PV streaks (total 16) (start,end,length): [(1912, 1936, 7), (1980, 1992, 4), (2004, 2020, 5)]
+EC streaks (total 15) (start,end,length): [(1912, 1936, 7), (1980, 1992, 4), (2000, 2012, 4)]
+
+STATE TX
+PV streaks (total 15) (start,end,length): [(1928, 1964, 10), (1972, 1988, 5)]
+EC streaks (total 15) (start,end,length): [(1928, 1964, 10), (1972, 1988, 5)]
+
+STATE NH
+PV streaks (total 17) (start,end,length): [(1900, 1928, 8), (1980, 1996, 5), (2008, 2020, 4)]
+EC streaks (total 14) (start,end,length): [(1900, 1928, 8), (1980, 2000, 6)]
+
+STATE ID
+PV streaks (total 14) (start,end,length): [(1904, 1956, 14)]
+EC streaks (total 14) (start,end,length): [(1904, 1956, 14)]
+
+STATE NC
+PV streaks (total 14) (start,end,length): [(1928, 1948, 6), (1960, 1988, 8)]
+EC streaks (total 14) (start,end,length): [(1928, 1948, 6), (1960, 1988, 8)]
+
+STATE AR
+PV streaks (total 12) (start,end,length): [(1932, 1948, 5), (1972, 1996, 7)]
+EC streaks (total 14) (start,end,length): [(1932, 1948, 5), (1972, 2004, 9)]
+
+STATE CT
+PV streaks (total 18) (start,end,length): [(1900, 1912, 4), (1952, 1964, 4), (1980, 2000, 6), (2008, 2020, 4)]
+EC streaks (total 13) (start,end,length): [(1900, 1912, 4), (1952, 1964, 4), (1980, 1996, 5)]
+
+STATE MA
+PV streaks (total 17) (start,end,length): [(1900, 1912, 4), (1932, 1964, 9), (2008, 2020, 4)]
+EC streaks (total 13) (start,end,length): [(1900, 1912, 4), (1932, 1964, 9)]
+
+STATE RI
+PV streaks (total 17) (start,end,length): [(1900, 1912, 4), (1932, 1964, 9), (2008, 2020, 4)]
+EC streaks (total 13) (start,end,length): [(1900, 1912, 4), (1932, 1964, 9)]
+
+STATE IA
+PV streaks (total 15) (start,end,length): [(1900, 1912, 4), (1920, 1936, 5), (1992, 2012, 6)]
+EC streaks (total 13) (start,end,length): [(1900, 1912, 4), (1920, 1936, 5), (2004, 2016, 4)]
+
+STATE LA
+PV streaks (total 11) (start,end,length): [(1932, 1944, 4), (1972, 1996, 7)]
+EC streaks (total 13) (start,end,length): [(1932, 1944, 4), (1972, 2004, 9)]
+
+STATE VA
+PV streaks (total 13) (start,end,length): [(1928, 1956, 8), (2004, 2020, 5)]
+EC streaks (total 12) (start,end,length): [(1928, 1956, 8), (2000, 2012, 4)]
+
+STATE AZ
+PV streaks (total 12) (start,end,length): [(1912, 1956, 12)]
+EC streaks (total 12) (start,end,length): [(1912, 1956, 12)]
+
+STATE OR
+PV streaks (total 15) (start,end,length): [(1900, 1912, 4), (1920, 1944, 7), (2008, 2020, 4)]
+EC streaks (total 11) (start,end,length): [(1900, 1912, 4), (1920, 1944, 7)]
+
+STATE WA
+PV streaks (total 15) (start,end,length): [(1916, 1956, 11), (2008, 2020, 4)]
+EC streaks (total 11) (start,end,length): [(1916, 1956, 11)]
+
+STATE UT
+PV streaks (total 11) (start,end,length): [(1916, 1956, 11)]
+EC streaks (total 11) (start,end,length): [(1916, 1956, 11)]
+
+STATE WY
+PV streaks (total 11) (start,end,length): [(1900, 1940, 11)]
+EC streaks (total 11) (start,end,length): [(1900, 1940, 11)]
+
+STATE AL
+PV streaks (total 10) (start,end,length): [(1932, 1948, 5), (1972, 1988, 5)]
+EC streaks (total 10) (start,end,length): [(1932, 1948, 5), (1972, 1988, 5)]
+
+STATE KS
+PV streaks (total 10) (start,end,length): [(1900, 1936, 10)]
+EC streaks (total 10) (start,end,length): [(1900, 1936, 10)]
+
+STATE ND
+PV streaks (total 10) (start,end,length): [(1900, 1936, 10)]
+EC streaks (total 10) (start,end,length): [(1900, 1936, 10)]
+
+STATE SC
+PV streaks (total 10) (start,end,length): [(1932, 1944, 4), (1968, 1988, 6)]
+EC streaks (total 10) (start,end,length): [(1932, 1944, 4), (1968, 1988, 6)]
+
+STATE ME
+PV streaks (total 14) (start,end,length): [(1900, 1912, 4), (1980, 2000, 6), (2008, 2020, 4)]
+EC streaks (total 9) (start,end,length): [(1900, 1912, 4), (1980, 1996, 5)]
+
+STATE IN
+PV streaks (total 9) (start,end,length): [(1900, 1912, 4), (1920, 1936, 5)]
+EC streaks (total 9) (start,end,length): [(1900, 1912, 4), (1920, 1936, 5)]
+
+STATE MS
+PV streaks (total 9) (start,end,length): [(1932, 1944, 4), (1972, 1988, 5)]
+EC streaks (total 9) (start,end,length): [(1932, 1944, 4), (1972, 1988, 5)]
+
+STATE OK
+PV streaks (total 8) (start,end,length): [(1928, 1956, 8)]
+EC streaks (total 8) (start,end,length): [(1928, 1956, 8)]
+
+STATE NE
+PV streaks (total 7) (start,end,length): [(1912, 1936, 7)]
+EC streaks (total 7) (start,end,length): [(1912, 1936, 7)]
+
+STATE MN
+PV streaks (total 10) (start,end,length): [(1920, 1940, 6), (2008, 2020, 4)]
+EC streaks (total 6) (start,end,length): [(1920, 1940, 6)]
+
+STATE VT
+PV streaks (total 10) (start,end,length): [(1980, 2000, 6), (2008, 2020, 4)]
+EC streaks (total 5) (start,end,length): [(1980, 1996, 5)]
+
+STATE GA
+PV streaks (total 5) (start,end,length): [(1932, 1948, 5)]
+EC streaks (total 5) (start,end,length): [(1932, 1948, 5)]
+
+STATE SD
+PV streaks (total 5) (start,end,length): [(1920, 1936, 5)]
+EC streaks (total 5) (start,end,length): [(1920, 1936, 5)]
+
+STATE DC
+PV streaks (total 4) (start,end,length): [(2008, 2020, 4)]
+EC streaks (>= 4): none
+
+STATE HI
+PV streaks (total 4) (start,end,length): [(2008, 2020, 4)]
+EC streaks (>= 4): none
+
+STATE AK
+PV streaks (>= 4): none
+EC streaks (>= 4): none
+
+STATE ME-02
+PV streaks (>= 4): none
+EC streaks (>= 4): none
+
+STATE NE-02
+PV streaks (>= 4): none
+EC streaks (>= 4): none
+
